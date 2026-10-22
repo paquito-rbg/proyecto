@@ -1,5 +1,6 @@
 
-<label>¿Tienes hijos?</label>
+<label>¿Tienes hijos? echo por luis felipe ambrosio velazquez
+</label>
 <select id="hijos" onchange="mostrarHijos()">
   <option value="">Selecciona</option>
   <option value="si">Sí</option>

@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amor & Familia | Comunidad y Citas para Mamás Solteras</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans & Playfair Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        serif: ['"Playfair Display"', 'serif'],
+                    },
+                    colors: {
+                        coral: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            200: '#fecdd3',
+                            400: '#fb7185',
+                            500: '#f43f5e',
+                            600: '#e11d48',
+                        },
+                        plum: {
+                            800: '#311042',
+                            900: '#1f092b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Animaciones y utilidades personalizadas */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        .animate-float {
+            animation: floatSlow 4s ease-in-out infinite;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #fff1f2;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #fecdd3;
+            border-radius: 9999px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #fb7185;
+        }
+        .glass-header {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-rose-50/70 via-white to-indigo-50/40 text-slate-800 font-sans min-h-screen flex flex-col selection:bg-rose-500 selection:text-white">
+
+    <!-- Notificación Toast Flotante -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- Barra de Navegación -->
+    <header class="sticky top-0 z-40 glass-header border-b border-rose-100/80 transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Logo -->
+            <a href="#" class="flex items-center gap-3 group focus:outline-none">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-rose-500 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-rose-500/25 group-hover:scale-105 transition-transform">
+                    <i data-lucide="heart-handshake" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <span class="text-xl font-bold tracking-tight bg-gradient-to-r from-rose-600 via-pink-600 to-indigo-900 bg-clip-text text-transparent font-serif">
+                        Amor & Familia
+                    </span>
+                    <span class="block text-[11px] font-semibold uppercase tracking-widest text-rose-500 -mt-1">
+                        Mamás Conectadas
+                    </span>
+                </div>
+            </a>
+
+            <!-- Enlaces Desktop -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
+                <a href="#explorar" class="hover:text-rose-600 transition-colors flex items-center gap-1.5">
+                    <i data-lucide="compass" class="w-4 h-4 text-rose-500"></i> Explorar Perfiles
+                </a>
+                <a href="#seguridad" class="hover:text-rose-600 transition-colors flex items-center gap-1.5">
+                    <i data-lucide="shield-check" class="w-4 h-4 text-indigo-500"></i> Consejos y Seguridad
+                </a>
+                <a href="#testimonios" class="hover:text-rose-600 transition-colors flex items-center gap-1.5">
+                    <i data-lucide="sparkles" class="w-4 h-4 text-amber-500"></i> Historias Reales
+                </a>
+            </nav>
+
+            <!-- Acciones Derecha -->
+            <div class="flex items-center gap-2.5 sm:gap-3">
+                <!-- Botón Mis Favoritos / Matches -->
+                <button onclick="toggleMatchesDrawer()" class="relative p-2.5 sm:px-4 sm:py-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 font-semibold text-sm flex items-center gap-2 transition-all border border-rose-200/60" title="Mis Conexiones y Favoritos">
+                    <i data-lucide="heart" class="w-4 h-4 fill-rose-500 text-rose-500"></i>
+                    <span class="hidden sm:inline">Favoritos</span>
+                    <span id="favorites-badge" class="px-1.5 py-0.5 text-xs rounded-full bg-rose-500 text-white font-bold">2</span>
+                </button>
+
+                <!-- Botón Mensajes / Chat -->
+                <button onclick="openChatDrawer()" class="relative p-2.5 sm:px-4 sm:py-2.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-900 font-semibold text-sm flex items-center gap-2 transition-all border border-indigo-200/60" title="Abrir Mensajes">
+                    <i data-lucide="message-circle-heart" class="w-4 h-4 text-indigo-600"></i>
+                    <span class="hidden sm:inline">Mensajes</span>
+                    <span id="unread-badge" class="w-2.5 h-2.5 rounded-full bg-emerald-500 ring-4 ring-emerald-500/20"></span>
+                </button>
+
+                <!-- Botón Crear Perfil -->
+                <button onclick="openCreateProfileModal()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-semibold text-sm shadow-md shadow-rose-500/20 flex items-center gap-2 transition-all active:scale-95">
+                    <i data-lucide="user-plus" class="w-4 h-4"></i>
+                    <span>Crear mi Perfil</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sección Hero -->
+    <section class="relative overflow-hidden pt-8 pb-16 md:py-20 border-b border-rose-100">
+        <!-- Elementos decorativos de fondo -->
+        <div class="absolute -top-24 -left-24 w-96 h-96 bg-rose-200/40 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute top-1/2 -right-24 w-96 h-96 bg-indigo-200/40 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <!-- Columna de Texto -->
+                <div class="lg:col-span-7 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-rose-100/80 border border-rose-200 text-rose-700 text-xs font-bold uppercase tracking-wider mb-6">
+                        <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+                        Comunidad 100% Verificada y Empática
+                    </div>
+
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-slate-900 leading-tight mb-6">
+                        Ser mamá es tu mayor orgullo; <span class="bg-gradient-to-r from-rose-500 via-pink-600 to-indigo-700 bg-clip-text text-transparent italic">volver a enamorarte</span>, tu nueva aventura.
+                    </h1>
+
+                    <p class="text-lg text-slate-600 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                        Conecta con mamás solteras y personas que comprenden, valoran y celebran la vida en familia. Sin prejuicios, a tu propio ritmo y con total seguridad.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                        <a href="#explorar" class="w-full sm:w-auto px-7 py-4 rounded-2xl bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold text-base shadow-xl shadow-rose-500/25 flex items-center justify-center gap-2.5 transition-all hover:-translate-y-0.5">
+                            <i data-lucide="sparkles" class="w-5 h-5"></i>
+                            Explorar Perfiles Ahora
+                        </a>
+                        <button onclick="openCreateProfileModal()" class="w-full sm:w-auto px-7 py-4 rounded-2xl bg-white hover:bg-rose-50 text-slate-800 font-bold text-base border-2 border-rose-200 shadow-sm flex items-center justify-center gap-2.5 transition-all">
+                            <i data-lucide="camera" class="w-5 h-5 text-rose-500"></i>
+                            Unirme Gratis
+                        </button>
+                    </div>
+
+                    <!-- Estadísticas de Confianza -->
+                    <div class="mt-10 pt-8 border-t border-rose-200/60 grid grid-cols-3 gap-4 max-w-lg mx-auto lg:mx-0">
+                        <div>
+                            <p class="text-2xl sm:text-3xl font-bold text-indigo-950 font-serif">+14,500</p>
+                            <p class="text-xs sm:text-sm text-slate-500 font-medium">Mamás y Solteros Afines</p>
+                        </div>
+                        <div>
+                            <p class="text-2xl sm:text-3xl font-bold text-rose-600 font-serif">98%</p>
+                            <p class="text-xs sm:text-sm text-slate-500 font-medium">Perfiles Verificados</p>
+                        </div>
+                        <div>
+                            <p class="text-2xl sm:text-3xl font-bold text-indigo-950 font-serif">+3,200</p>
+                            <p class="text-xs sm:text-sm text-slate-500 font-medium">Familias Felices</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna Visual / Tarjeta Destacada -->
+                <div class="lg:col-span-5 relative">
+                    <div class="relative mx-auto max-w-md">
+                        <!-- Tarjeta principal ilustrativa -->
+                        <div class="rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-white relative group">
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=900&q=80" alt="Mamá sonriendo" class="w-full h-[420px] object-cover object-center group-hover:scale-105 transition-transform duration-700" onerror="this.src='https://placehold.co/600x750/ffe4e6/9f1239?text=Amor+y+Familia'">
+                            <div class="absolute inset-0 bg-gradient-to-t from-indigo-950/90 via-indigo-950/30 to-transparent"></div>
+
+                            <div class="absolute bottom-0 inset-x-0 p-6 text-white">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="px-3 py-1 rounded-full bg-emerald-500/90 backdrop-blur-md text-xs font-bold flex items-center gap-1">
+                                        <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> Perfil Verificado
+                                    </span>
+                                    <span class="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-semibold">
+                                        Mamá de 1 niño (6 años)
+                                    </span>
+                                </div>
+                                <h3 class="text-2xl font-bold font-serif">Valeria Montes, 32</h3>
+                                <p class="text-sm text-rose-100 line-clamp-2 mt-1">
+                                    "Arquitecta, amante del café de olla y los domingos de parque con mi pequeño Mateo. Busco un compañero leal para construir recuerdos bonitos."
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Insignia flotante izquierda -->
+                        <div class="animate-float absolute -left-4 sm:-left-8 top-8 bg-white/95 backdrop-blur-md p-3.5 rounded-2xl shadow-xl border border-rose-100 flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center">
+                                <i data-lucide="calendar-heart" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold text-slate-800">Horarios Flexibles</p>
+                                <p class="text-[11px] text-slate-500">Citas que respetan tu rol</p>
+                            </div>
+                        </div>
+
+                        <!-- Insignia flotante derecha -->
+                        <div class="animate-float absolute -right-4 sm:-right-6 bottom-28 bg-white/95 backdrop-blur-md p-3.5 rounded-2xl shadow-xl border border-indigo-100 flex items-center gap-3" style="animation-delay: 1.5s;">
+                            <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center">
+                                <i data-lucide="shield-heart" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold text-slate-800">Espacio Seguro</p>
+                                <p class="text-[11px] text-slate-500">Cero tolerancia a faltas</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Principal: Filtros Interactivos y Galería de Perfiles -->
+    <main id="explorar" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 flex-1 w-full">
+        <!-- Encabezado de Sección -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+            <div>
+                <span class="text-xs font-bold uppercase tracking-widest text-rose-500 block mb-1">Conecta con afinidad</span>
+                <h2 class="text-3xl sm:text-4xl font-serif font-bold text-slate-900">Descubre Mamás Increíbles</h2>
+            </div>
+            <p class="text-sm text-slate-600 max-w-md">
+                Usa los filtros inteligentes para encontrar personas que compartan tu estilo de crianza, metas en común y cercanía.
+            </p>
+        </div>
+
+        <!-- Panel de Filtros Interactivos -->
+        <div class="bg-white rounded-3xl p-5 sm:p-6 shadow-lg shadow-rose-900/5 border border-rose-100 mb-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                <!-- Búsqueda por Nombre o Bio -->
+                <div class="lg:col-span-1">
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Buscar palabra clave</label>
+                    <div class="relative">
+                        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                        <input type="text" id="filter-search" oninput="applyFilters()" placeholder="Nombre, ciudad, hobby..." class="w-full pl-10 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:bg-white transition-all">
+                    </div>
+                </div>
+
+                <!-- Rango de Edad -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Rango de Edad</label>
+                    <select id="filter-age" onchange="applyFilters()" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:bg-white transition-all">
+                        <option value="all">Todas las edades</option>
+                        <option value="20-29">20 a 29 años</option>
+                        <option value="30-37">30 a 37 años</option>
+                        <option value="38-55">38+ años</option>
+                    </select>
+                </div>
+
+                <!-- Número de Hijos -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Número de Hijos</label>
+                    <select id="filter-children" onchange="applyFilters()" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:bg-white transition-all">
+                        <option value="all">Sin preferencia</option>
+                        <option value="1">1 hijo(a)</option>
+                        <option value="2">2 hijos</option>
+                        <option value="3+">3 o más hijos</option>
+                    </select>
+                </div>
+
+                <!-- Ubicación / Cercanía -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Ubicación / Región</label>
+                    <select id="filter-location" onchange="applyFilters()" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:bg-white transition-all">
+                        <option value="all">Todas las ubicaciones</option>
+                        <option value="CDMX y Área Metropolitana">CDMX y Área Metropolitana</option>
+                        <option value="Guadalajara, Jal.">Guadalajara, Jal.</option>
+                        <option value="Monterrey, N.L.">Monterrey, N.L.</option>
+                        <option value="Querétaro, Qro.">Querétaro, Qro.</option>
+                        <option value="Puebla, Pue.">Puebla, Pue.</option>
+                    </select>
+                </div>
+
+                <!-- Qué tipo de relación buscan -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">¿Qué buscan?</label>
+                    <select id="filter-goal" onchange="applyFilters()" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:bg-white transition-all">
+                        <option value="all">Cualquier intención</option>
+                        <option value="Relación seria y familia">Relación seria y familia</option>
+                        <option value="Conocer gente y fluir">Conocer gente y fluir</option>
+                        <option value="Compañero de aventuras y salidas">Compañero de salidas</option>
+                        <option value="Amistad entre mamás y citas">Amistad y citas</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Filtro Rápido por Píldoras de Intereses -->
+            <div class="mt-5 pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="text-xs font-bold text-slate-500 mr-1 flex items-center gap-1">
+                        <i data-lucide="tag" class="w-3.5 h-3.5 text-rose-500"></i> Intereses:
+                    </span>
+                    <button onclick="setInterestFilter('all')" data-interest="all" class="interest-chip px-3 py-1.5 rounded-full text-xs font-semibold transition-all bg-rose-500 text-white shadow-sm">
+                        Todos
+                    </button>
+                    <button onclick="setInterestFilter('Salidas familiares')" data-interest="Salidas familiares" class="interest-chip px-3 py-1.5 rounded-full text-xs font-semibold transition-all bg-rose-50 text-rose-700 hover:bg-rose-100">
+                        🎠 Salidas familiares
+                    </button>
+                    <button onclick="setInterestFilter('Emprendimiento')" data-interest="Emprendimiento" class="interest-chip px-3 py-1.5 rounded-full text-xs font-semibold transition-all bg-rose-50 text-rose-700 hover:bg-rose-100">
+                        💼 Emprendimiento
+                    </button>
+                    <button onclick="setInterestFilter('Cine')" data-interest="Cine" class="interest-chip px-3 py-1.5 rounded-full text-xs font-semibold transition-all bg-rose-50 text-rose-700 hover:bg-rose-100">
+                        🍿 Cine y Series
+                    </button>
+                    <button onclick="setInterestFilter('Viajes')" data-interest="Viajes" class="interest-chip px-3 py-1.5 rounded-full text-xs font-semibold transition-all bg-rose-50 text-rose-700 hover:bg-rose-100">
+                        ✈️ Viajes
+                    </button>
+                    <button onclick="setInterestFilter('Cocina')" data-interest="Cocina" class="interest-chip px-3 py-1.5 rounded-full text-xs font-semibold transition-all bg-rose-50 text-rose-700 hover:bg-rose-100">
+                        🍝 Cocina y Postres
+                    </button>
+                    <button onclick="setInterestFilter('Bienestar')" data-interest="Bienestar" class="interest-chip px-3 py-1.5 rounded-full text-xs font-semibold transition-all bg-rose-50 text-rose-700 hover:bg-rose-100">
+                        🧘‍♀️ Yoga y Bienestar
+                    </button>
+                </div>
+
+                <div class="flex items-center gap-3 ml-auto">
+                    <span id="results-counter" class="text-xs font-bold text-slate-500">Mostrando 8 perfiles</span>
+                    <button onclick="resetAllFilters()" class="text-xs font-bold text-rose-600 hover:text-rose-700 underline">
+                        Limpiar filtros
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenedor Grid de Perfiles -->
+        <div id="profiles-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Renderizado dinámicamente desde JavaScript -->
+        </div>
+
+        <!-- Estado Vacío si no hay coincidencias -->
+        <div id="empty-state" class="hidden bg-white rounded-3xl p-12 text-center border border-rose-100 my-8 max-w-lg mx-auto shadow-sm">
+            <div class="w-16 h-16 rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center mx-auto mb-4">
+                <i data-lucide="search-x" class="w-8 h-8"></i>
+            </div>
+            <h3 class="text-xl font-bold font-serif text-slate-800 mb-2">No encontramos perfiles con esos filtros</h3>
+            <p class="text-sm text-slate-500 mb-6">Intenta ampliar el rango de edad, cambiar la ciudad o explorar otros intereses.</p>
+            <button onclick="resetAllFilters()" class="px-5 py-2.5 rounded-xl bg-rose-500 hover:bg-rose-600 text-white font-semibold text-sm transition-all">
+                Ver todos los perfiles
+            </button>
+        </div>
+    </main>
+
+    <!-- Sección de Consejos de Seguridad y Citas para Mamás -->
+    <section id="seguridad" class="py-16 bg-gradient-to-br from-indigo-950 via-plum-900 to-indigo-900 text-white relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <span class="px-3.5 py-1 rounded-full bg-rose-500/20 border border-rose-400/30 text-rose-300 text-xs font-bold uppercase tracking-widest">
+                    Guía de Bienestar y Confianza
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-serif font-bold mt-3 mb-4">
+                    Consejos de Seguridad y Citas para Mamás
+                </h2>
+                <p class="text-indigo-200 text-sm sm:text-base">
+                    Tu tranquilidad y la de tus hijos es lo primero. Hemos diseñado estas recomendaciones junto a especialistas en relaciones familiares.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Consejo 1 -->
+                <div class="bg-white/10 backdrop-blur-md border border-white/15 rounded-3xl p-6 hover:bg-white/15 transition-all">
+                    <div class="w-12 h-12 rounded-2xl bg-rose-500/20 border border-rose-400/30 flex items-center justify-center text-rose-300 mb-4">
+                        <i data-lucide="clock-4" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2 font-serif">Presenta a tus hijos a tu propio ritmo</h3>
+                    <p class="text-sm text-indigo-100/90 leading-relaxed">
+                        No hay prisa. Los expertos recomiendan esperar a que exista un vínculo estable y de confianza antes de involucrar a tus pequeños en la relación.
+                    </p>
+                </div>
+
+                <!-- Consejo 2 -->
+                <div class="bg-white/10 backdrop-blur-md border border-white/15 rounded-3xl p-6 hover:bg-white/15 transition-all">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-400/30 flex items-center justify-center text-amber-300 mb-4">
+                        <i data-lucide="coffee" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2 font-serif">Primeras citas en lugares públicos</h3>
+                    <p class="text-sm text-indigo-100/90 leading-relaxed">
+                        Elige cafeterías, restaurantes concurridos o paseos diurnos. Comparte siempre la ubicación en tiempo real con una amiga o familiar de confianza.
+                    </p>
+                </div>
+
+                <!-- Consejo 3 -->
+                <div class="bg-white/10 backdrop-blur-md border border-white/15 rounded-3xl p-6 hover:bg-white/15 transition-all">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center text-emerald-300 mb-4">
+                        <i data-lucide="message-square-heart" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2 font-serif">Habla con claridad sobre tus tiempos</h3>
+                    <p class="text-sm text-indigo-100/90 leading-relaxed">
+                        Una pareja ideal comprenderá que los imprevistos escolares o de salud ocurren. La empatía frente a tu agenda materna es la mejor señal.
+                    </p>
+                </div>
+
+                <!-- Consejo 4 -->
+                <div class="bg-white/10 backdrop-blur-md border border-white/15 rounded-3xl p-6 hover:bg-white/15 transition-all">
+                    <div class="w-12 h-12 rounded-2xl bg-sky-500/20 border border-sky-400/30 flex items-center justify-center text-sky-300 mb-4">
+                        <i data-lucide="lock" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2 font-serif">Protege la privacidad familiar</h3>
+                    <p class="text-sm text-indigo-100/90 leading-relaxed">
+                        Evita publicar fotos del uniforme escolar de tus hijos, dirección exacta o rutinas diarias hasta conocer profundamente a la otra persona.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Testimonios de Éxito -->
+    <section id="testimonios" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-12">
+            <span class="text-xs font-bold uppercase tracking-widest text-rose-500">El amor florece de nuevo</span>
+            <h2 class="text-3xl sm:text-4xl font-serif font-bold text-slate-900 mt-1">Historias que Inspiran</h2>
+            <p class="text-sm sm:text-base text-slate-600 mt-2">
+                Conoce a mamás que dieron el primer paso en nuestra comunidad y hoy comparten su vida con alguien especial.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Testimonio 1 -->
+            <div class="bg-white rounded-3xl p-7 shadow-md border border-rose-100 flex flex-col justify-between relative">
+                <div>
+                    <div class="flex items-center gap-1 text-amber-400 mb-4">
+                        <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+                    </div>
+                    <p class="text-slate-600 text-sm italic leading-relaxed mb-6">
+                        "En otras apps sentía que decir que tenía dos hijos enfriaba la conversación. Aquí conocí a Daniel, papá soltero también. Hoy nuestros domingos son de juegos de mesa y risas en familia."
+                    </p>
+                </div>
+                <div class="flex items-center gap-3.5 pt-4 border-t border-rose-50">
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80" alt="Claudia" class="w-12 h-12 rounded-full object-cover ring-2 ring-rose-300">
+                    <div>
+                        <h4 class="font-bold text-slate-900 text-sm">Claudia & Daniel</h4>
+                        <p class="text-xs text-rose-600 font-medium">Juntos desde hace 1 año • CDMX</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonio 2 -->
+            <div class="bg-white rounded-3xl p-7 shadow-md border border-rose-100 flex flex-col justify-between relative">
+                <div>
+                    <div class="flex items-center gap-1 text-amber-400 mb-4">
+                        <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+                    </div>
+                    <p class="text-slate-600 text-sm italic leading-relaxed mb-6">
+                        "Me encantó lo respetuosa que es la comunidad. Empecé buscando amistades con otras mamás emprendedoras y terminé encontrando a mi pareja actual, quien adora a mi pequeña Sofi."
+                    </p>
+                </div>
+                <div class="flex items-center gap-3.5 pt-4 border-t border-rose-50">
+                    <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=200&q=80" alt="Mariana" class="w-12 h-12 rounded-full object-cover ring-2 ring-rose-300">
+                    <div>
+                        <h4 class="font-bold text-slate-900 text-sm">Mariana & Alejandro</h4>
+                        <p class="text-xs text-rose-600 font-medium">Comprometidos • Guadalajara</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonio 3 -->
+            <div class="bg-white rounded-3xl p-7 shadow-md border border-rose-100 flex flex-col justify-between relative">
+                <div>
+                    <div class="flex items-center gap-1 text-amber-400 mb-4">
+                        <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+                    </div>
+                    <p class="text-slate-600 text-sm italic leading-relaxed mb-6">
+                        "Después de 4 años dedicada al 100% a mi bebé, me animé a abrir mi perfil. La calidez y claridad sobre qué busca cada persona hace que todo fluya con honestidad desde el primer mensaje."
+                    </p>
+                </div>
+                <div class="flex items-center gap-3.5 pt-4 border-t border-rose-50">
+                    <img src="https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?auto=format&fit=crop&w=200&q=80" alt="Lucía" class="w-12 h-12 rounded-full object-cover ring-2 ring-rose-300">
+                    <div>
+                        <h4 class="font-bold text-slate-900 text-sm">Lucía & Roberto</h4>
+                        <p class="text-xs text-rose-600 font-medium">8 meses saliendo • Monterrey</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-rose-100 py-10 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-xl bg-rose-500 flex items-center justify-center text-white">
+                    <i data-lucide="heart" class="w-4 h-4 fill-white"></i>
+                </div>
+                <span class="font-serif font-bold text-slate-800">Amor & Familia • Mamás Conectadas</span>
+            </div>
+            <p class="text-xs text-slate-500 text-center">
+                © 2026 Amor & Familia. Diseñado con empatía, respeto y seguridad para las mamás solteras de habla hispana.
+            </p>
+        </div>
+    </footer>
+
+    <!-- ==========================================
+         MODAL 1: VER DETALLE DE PERFIL COMPLETO
+    =========================================== -->
+    <div id="profile-detail-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl border border-rose-100 animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] flex flex-col">
+            <div id="profile-modal-content" class="overflow-y-auto custom-scrollbar">
+                <!-- Poblado dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         MODAL 2: CREAR MI PERFIL DINÁMICO
+    =========================================== -->
+    <div id="create-profile-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl max-w-xl w-full overflow-hidden shadow-2xl border border-rose-100 max-h-[92vh] flex flex-col">
+            <!-- Cabecera del Modal -->
+            <div class="px-6 py-5 bg-gradient-to-r from-rose-500 to-indigo-700 text-white flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+                        <i data-lucide="sparkles" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold font-serif">Crear mi Perfil en la Comunidad</h3>
+                        <p class="text-xs text-rose-100">Preséntate y aparece al instante en la galería</p>
+                    </div>
+                </div>
+                <button onclick="closeCreateProfileModal()" class="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Formulario -->
+            <form id="create-profile-form" onsubmit="handleCreateProfile(event)" class="p-6 overflow-y-auto custom-scrollbar space-y-5">
+                <!-- Selector de Foto (Avatares predefinidos o URL personalizada) -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">1. Elige una foto de perfil o pega el enlace de tu foto</label>
+                    <div class="flex items-center gap-3 mb-3 overflow-x-auto pb-2">
+                        <button type="button" onclick="selectPresetPhoto('https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80')" class="preset-avatar shrink-0 w-14 h-14 rounded-2xl overflow-hidden ring-4 ring-rose-500 transition-all">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" class="w-full h-full object-cover" alt="Avatar 1">
+                        </button>
+                        <button type="button" onclick="selectPresetPhoto('https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=600&q=80')" class="preset-avatar shrink-0 w-14 h-14 rounded-2xl overflow-hidden ring-2 ring-transparent hover:ring-rose-300 transition-all">
+                            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=200&q=80" class="w-full h-full object-cover" alt="Avatar 2">
+                        </button>
+                        <button type="button" onclick="selectPresetPhoto('https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=80')" class="preset-avatar shrink-0 w-14 h-14 rounded-2xl overflow-hidden ring-2 ring-transparent hover:ring-rose-300 transition-all">
+                            <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=200&q=80" class="w-full h-full object-cover" alt="Avatar 3">
+                        </button>
+                        <button type="button" onclick="selectPresetPhoto('https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=600&q=80')" class="preset-avatar shrink-0 w-14 h-14 rounded-2xl overflow-hidden ring-2 ring-transparent hover:ring-rose-300 transition-all">
+                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80" class="w-full h-full object-cover" alt="Avatar 4">
+                        </button>
+                        <button type="button" onclick="selectPresetPhoto('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80')" class="preset-avatar shrink-0 w-14 h-14 rounded-2xl overflow-hidden ring-2 ring-transparent hover:ring-rose-300 transition-all">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80" class="w-full h-full object-cover" alt="Avatar 5">
+                        </button>
+                    </div>
+                    <input type="url" id="new-photo" value="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80" placeholder="https://..." class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-600 focus:outline-none focus:ring-2 focus:ring-rose-500">
+                </div>
+
+                <!-- Nombre, Edad y Profesión -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="sm:col-span-2">
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Tu Nombre *</label>
+                        <input type="text" id="new-name" required placeholder="Ej. Carolina Méndez" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Edad *</label>
+                        <input type="number" id="new-age" required min="18" max="75" value="31" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500">
+                    </div>
+                </div>
+
+                <!-- Ubicación y Profesión -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Ciudad / Ubicación *</label>
+                        <select id="new-location" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500">
+                            <option value="CDMX y Área Metropolitana">CDMX y Área Metropolitana</option>
+                            <option value="Guadalajara, Jal.">Guadalajara, Jal.</option>
+                            <option value="Monterrey, N.L.">Monterrey, N.L.</option>
+                            <option value="Querétaro, Qro.">Querétaro, Qro.</option>
+                            <option value="Puebla, Pue.">Puebla, Pue.</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Ocupación / Profesión *</label>
+                        <input type="text" id="new-occupation" required placeholder="Ej. Diseñadora / Repostera" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500">
+                    </div>
+                </div>
+
+                <!-- Hijos y Edades -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Cantidad de Hijos *</label>
+                        <select id="new-children-count" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500">
+                            <option value="1">1 hijo(a)</option>
+                            <option value="2">2 hijos</option>
+                            <option value="3+">3 o más hijos</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Edades de tus hijos *</label>
+                        <input type="text" id="new-children-ages" required placeholder="Ej. 1 niña de 5 años" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500">
+                    </div>
+                </div>
+
+                <!-- Qué busca en una pareja -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">¿Qué buscas en una pareja? *</label>
+                    <select id="new-goal" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500">
+                        <option value="Relación seria y familia">Relación seria y formar familia</option>
+                        <option value="Conocer gente y fluir">Conocer gente con calma y fluir</option>
+                        <option value="Compañero de aventuras y salidas">Compañero de aventuras y salidas</option>
+                        <option value="Amistad entre mamás y citas">Amistad entre mamás y citas</option>
+                    </select>
+                </div>
+
+                <!-- Intereses seleccionables -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Selecciona tus intereses principales</label>
+                    <div class="flex flex-wrap gap-2" id="new-interests-container">
+                        <label class="cursor-pointer">
+                            <input type="checkbox" name="interest" value="Salidas familiares" checked class="peer sr-only">
+                            <span class="px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 peer-checked:bg-rose-500 peer-checked:text-white transition-all inline-block">🎠 Salidas familiares</span>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="checkbox" name="interest" value="Emprendimiento" checked class="peer sr-only">
+                            <span class="px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 peer-checked:bg-rose-500 peer-checked:text-white transition-all inline-block">💼 Emprendimiento</span>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="checkbox" name="interest" value="Cine" class="peer sr-only">
+                            <span class="px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 peer-checked:bg-rose-500 peer-checked:text-white transition-all inline-block">🍿 Cine</span>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="checkbox" name="interest" value="Viajes" class="peer sr-only">
+                            <span class="px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 peer-checked:bg-rose-500 peer-checked:text-white transition-all inline-block">✈️ Viajes</span>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="checkbox" name="interest" value="Cocina" class="peer sr-only">
+                            <span class="px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 peer-checked:bg-rose-500 peer-checked:text-white transition-all inline-block">🍝 Cocina</span>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="checkbox" name="interest" value="Bienestar" class="peer sr-only">
+                            <span class="px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 peer-checked:bg-rose-500 peer-checked:text-white transition-all inline-block">🧘‍♀️ Bienestar</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Biografía -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Sobre mí y lo que me hace feliz *</label>
+                    <textarea id="new-bio" required rows="3" placeholder="Cuéntanos un poco sobre ti, tus pasatiempos con tus hijos y qué valoras en una relación..." class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500"></textarea>
+                </div>
+
+                <!-- Botón Publicar -->
+                <div class="pt-2 flex items-center justify-end gap-3">
+                    <button type="button" onclick="closeCreateProfileModal()" class="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold text-sm shadow-lg shadow-rose-500/25 flex items-center gap-2 transition-all">
+                        <i data-lucide="check-circle" class="w-4 h-4"></i>
+                        Publicar mi Perfil
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         DRAWER LATERAL 1: FAVORITOS / MATCHES
+    =========================================== -->
+    <div id="matches-drawer" class="fixed inset-0 z-50 hidden">
+        <div onclick="toggleMatchesDrawer()" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm"></div>
+        <div class="fixed inset-y-0 right-0 max-w-md w-full bg-white shadow-2xl z-10 flex flex-col">
+            <div class="p-6 bg-gradient-to-r from-rose-500 to-pink-600 text-white flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <i data-lucide="heart" class="w-6 h-6 fill-white"></i>
+                    <div>
+                        <h3 class="text-lg font-bold font-serif">Mis Conexiones y Favoritos</h3>
+                        <p class="text-xs text-rose-100">Personas con las que has conectado</p>
+                    </div>
+                </div>
+                <button onclick="toggleMatchesDrawer()" class="p-1.5 rounded-lg bg-white/10 hover:bg-white/20">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div id="matches-list" class="p-6 flex-1 overflow-y-auto custom-scrollbar space-y-4">
+                <!-- Poblado dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         DRAWER LATERAL 2: CHAT SIMULADO EN TIEMPO REAL
+    =========================================== -->
+    <div id="chat-drawer" class="fixed inset-0 z-50 hidden">
+        <div onclick="closeChatDrawer()" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm"></div>
+        <div class="fixed inset-y-0 right-0 max-w-lg w-full bg-white shadow-2xl z-10 flex flex-col">
+            <!-- Cabecera del Chat -->
+            <div class="px-5 py-4 bg-indigo-950 text-white flex items-center justify-between border-b border-indigo-900">
+                <div class="flex items-center gap-3">
+                    <img id="chat-active-avatar" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80" alt="Avatar" class="w-11 h-11 rounded-full object-cover ring-2 ring-rose-400">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h3 id="chat-active-name" class="font-bold text-base">Valeria Montes</h3>
+                            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                        </div>
+                        <p id="chat-active-subtitle" class="text-xs text-indigo-200">En línea • Mamá de 1 niño</p>
+                    </div>
+                </div>
+                <button onclick="closeChatDrawer()" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Selector rápido de conversaciones activas -->
+            <div id="chat-contacts-bar" class="px-4 py-2.5 bg-indigo-900/95 text-white flex items-center gap-2 overflow-x-auto border-b border-indigo-800">
+                <!-- Poblado dinámicamente -->
+            </div>
+
+            <!-- Mensajes -->
+            <div id="chat-messages" class="flex-1 p-5 overflow-y-auto custom-scrollbar space-y-4 bg-rose-50/40">
+                <!-- Poblado dinámicamente -->
+            </div>
+
+            <!-- Rompehielos sugeridos -->
+            <div class="px-4 py-2 bg-white border-t border-rose-100 flex items-center gap-2 overflow-x-auto">
+                <span class="text-[11px] font-bold text-rose-500 shrink-0">Rompehielos:</span>
+                <button onclick="sendQuickIcebreaker('¡Hola! Qué bonito perfil, ¿cómo va tu semana? 🌸')" class="text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 px-3 py-1 rounded-full shrink-0 transition-colors">
+                    ¡Hola! ¿Cómo va tu semana? 🌸
+                </button>
+                <button onclick="sendQuickIcebreaker('¡Me encantó que también disfrutes las salidas familiares! ¿Qué planes les gustan más?')" class="text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 px-3 py-1 rounded-full shrink-0 transition-colors">
+                    ¿Qué planes familiares les gustan? 🎠
+                </button>
+                <button onclick="sendQuickIcebreaker('¿Te gustaría tomar un café tranquilo algún día de estos? ☕')" class="text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 px-3 py-1 rounded-full shrink-0 transition-colors">
+                    ¿Tomamos un café? ☕
+                </button>
+            </div>
+
+            <!-- Input de Envío -->
+            <form onsubmit="handleSendMessage(event)" class="p-4 bg-white border-t border-slate-200 flex items-center gap-2.5">
+                <input type="text" id="chat-input" placeholder="Escribe un mensaje cálido y respetuoso..." class="flex-1 px-4 py-3 rounded-2xl bg-slate-100 border border-transparent focus:border-rose-400 focus:bg-white text-sm focus:outline-none transition-all">
+                <button type="submit" class="px-5 py-3 rounded-2xl bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold text-sm shadow-md shadow-rose-500/20 flex items-center gap-1.5 transition-all">
+                    <span>Enviar</span>
+                    <i data-lucide="send" class="w-4 h-4"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         LÓGICA JAVASCRIPT DE LA APLICACIÓN
+    =========================================== -->
+    <script>
+        // Base de datos inicial de perfiles detallados
+        let profiles = [
+            {
+                id: 1,
+                name: "Valeria Montes",
+                age: 32,
+                occupation: "Arquitecta Interiorista",
+                location: "CDMX y Área Metropolitana",
+                childrenCount: "1",
+                childrenAges: "1 niño de 6 años (Mateo)",
+                goal: "Relación seria y familia",
+                bio: "Apasionada del diseño, el café de olla por las mañanas y las tardes de bicicleta con mi hijo Mateo. Busco un hombre maduro, cariñoso y con sentido del humor para construir equipo.",
+                interests: ["Salidas familiares", "Viajes", "Cine", "Cocina"],
+                photo: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=700&q=80",
+                verified: true,
+                online: true,
+                availability: "Fines de semana y tardes"
+            },
+            {
+                id: 2,
+                name: "Renata Guzmán",
+                age: 28,
+                occupation: "Fundadora de Pastelería Artesanal",
+                location: "Guadalajara, Jal.",
+                childrenCount: "1",
+                childrenAges: "1 niña de 4 años (Lía)",
+                goal: "Conocer gente y fluir",
+                bio: "Mamá emprendedora. Entre hornear pasteles y pintar con acuarelas con mi princesa de 4 años, disfruto mucho las charlas sinceras, la música acústica y salir a pueblitos mágicos.",
+                interests: ["Emprendimiento", "Cocina", "Salidas familiares"],
+                photo: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=700&q=80",
+                verified: true,
+                online: true,
+                availability: "Entre semana por la mañana"
+            },
+            {
+                id: 3,
+                name: "Camila Elizondo",
+                age: 35,
+                occupation: "Pediatra",
+                location: "Monterrey, N.L.",
+                childrenCount: "2",
+                childrenAges: "2 hijos (7 y 10 años)",
+                goal: "Relación seria y familia",
+                bio: "Amo mi profesión y ser mamá de dos pequeños exploradores. Nos encanta acampar, hacer carnes asadas en domingo y ver películas de animación. Valoro la lealtad y la estabilidad emocional.",
+                interests: ["Salidas familiares", "Viajes", "Bienestar"],
+                photo: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=700&q=80",
+                verified: true,
+                online: false,
+                availability: "Viernes y sábados"
+            },
+            {
+                id: 4,
+                name: "Ximena Villalobos",
+                age: 30,
+                occupation: "Consultora de Marketing Digital",
+                location: "Querétaro, Qro.",
+                childrenCount: "1",
+                childrenAges: "1 bebé de 2 años",
+                goal: "Compañero de aventuras y salidas",
+                bio: "Trabajo desde casa, practico yoga para recargar energía y disfruto cada etapa de mi bebé. Me encantaría conocer a alguien paciente, alegre y que disfrute tanto un plan tranquilo como una buena cena.",
+                interests: ["Emprendimiento", "Bienestar", "Cine"],
+                photo: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=700&q=80",
+                verified: true,
+                online: true,
+                availability: "Horarios flexibles"
+            },
+            {
+                id: 5,
+                name: "Fernanda Ríos",
+                age: 39,
+                occupation: "Abogada Corporativa",
+                location: "CDMX y Área Metropolitana",
+                childrenCount: "2",
+                childrenAges: "2 adolescentes (12 y 14 años)",
+                goal: "Relación seria y familia",
+                bio: "Mis hijos ya son más grandes, lo que me da libertad para viajar más, ir al teatro y disfrutar de una copa de vino en buena compañía. Busco una relación cómplice, madura y recíproca.",
+                interests: ["Viajes", "Cine", "Cocina"],
+                photo: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=700&q=80",
+                verified: true,
+                online: true,
+                availability: "Noches y fines de semana"
+            },
+            {
+                id: 6,
+                name: "Natalia Orozco",
+                age: 26,
+                occupation: "Maestra de Preescolar",
+                location: "Puebla, Pue.",
+                childrenCount: "1",
+                childrenAges: "1 niño de 3 años",
+                goal: "Amistad entre mamás y citas",
+                bio: "Creativa, paciente y soñadora. Creo firmemente en la crianza respetuosa y el amor bonito. Me gusta pasear por Cholula, tomar fotos y reír hasta que duela la panza.",
+                interests: ["Salidas familiares", "Cine", "Bienestar"],
+                photo: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=700&q=80",
+                verified: true,
+                online: false,
+                availability: "Tardes libres"
+            },
+            {
+                id: 7,
+                name: "Paola Santillán",
+                age: 41,
+                occupation: "Dueña de Estudio de Yoga",
+                location: "Guadalajara, Jal.",
+                childrenCount: "3+",
+                childrenAges: "3 hijos (8, 11 y 15 años)",
+                goal: "Conocer gente y fluir",
+                bio: "Mi casa siempre está llena de vida, música y mascotas. Vivo en paz, disfruto cocinar platillos saludables y busco un compañero con gran corazón que ame la vida en familia.",
+                interests: ["Bienestar", "Cocina", "Salidas familiares", "Emprendimiento"],
+                photo: "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?auto=format&fit=crop&w=700&q=80",
+                verified: true,
+                online: true,
+                availability: "Mañanas y domingos"
+            },
+            {
+                id: 8,
+                name: "Alejandra Duarte",
+                age: 34,
+                occupation: "Ingeniera de Software",
+                location: "Monterrey, N.L.",
+                childrenCount: "1",
+                childrenAges: "1 niña de 8 años",
+                goal: "Relación seria y familia",
+                bio: "Mamá geek y amante de la naturaleza. Mi hija y yo armamos sets de LEGO y salimos a caminar a Chipinque los sábados. Busco un hombre honesto, trabajador y cariñoso.",
+                interests: ["Viajes", "Cine", "Salidas familiares", "Emprendimiento"],
+                photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=700&q=80",
+                verified: true,
+                online: true,
+                availability: "Fines de semana"
+            }
+        ];
+
+        // Estado de favoritos / matches e historial de mensajes
+        let favoriteIds = [1, 2];
+        let selectedInterest = 'all';
+        let activeChatProfileId = 1;
+
+        let chatHistories = {
+            1: [
+                { sender: 'them', text: '¡Hola! Qué gusto coincidir por aquí 😊 Vi que también te gustan los planes tranquilos de fin de semana.', time: '18:40' },
+                { sender: 'me', text: '¡Hola Valeria! Sí, totalmente. Un buen café y pasear al aire libre siempre es gran plan.', time: '18:42' },
+                { sender: 'them', text: '¡Exacto! Con Mateo solemos ir al parque los sábados por la mañana. ¿Qué tal va tu semana?', time: '18:43' }
+            ],
+            2: [
+                { sender: 'them', text: '¡Hola! Gracias por conectar 🌸 Justo hoy saqué una tanda de roles de canela en la pastelería.', time: 'Ayer' }
+            ]
+        };
+
+        // Respuestas automáticas cálidas y contextuales para el simulador de chat
+        const simulatedReplies = [
+            "¡Qué lindo leer eso! La verdad valoro mucho la sinceridad desde el principio 💕 ¿Cómo suele ser tu fin de semana ideal?",
+            "¡Me encanta la idea! Como mamá a veces tengo horarios estructurados, pero siempre hago espacio para una buena plática y un café ☕✨",
+            "¡Totalmente de acuerdo! Para mí la tranquilidad de mis hijos y construir algo sano paso a paso es lo más importante.",
+            "¡Qué genial coincidencia! 😊 Cuéntame más de ti, ¿qué es lo que más disfrutas hacer en tus ratos libres?"
+        ];
+
+        // Renderizar tarjetas de perfiles
+        function renderProfiles(list) {
+            const grid = document.getElementById('profiles-grid');
+            const emptyState = document.getElementById('empty-state');
+            const counter = document.getElementById('results-counter');
+
+            counter.textContent = `Mostrando ${list.length} ${list.length === 1 ? 'perfil' : 'perfiles'}`;
+
+            if (list.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            grid.innerHTML = list.map(profile => {
+                const isFav = favoriteIds.includes(profile.id);
+                return `
+                    <article class="bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-xl border border-rose-100/90 transition-all duration-300 flex flex-col group">
+                        <!-- Imagen de Perfil -->
+                        <div class="relative h-72 overflow-hidden bg-rose-100">
+                            <img src="${profile.photo}" alt="${profile.name}" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x700/ffe4e6/9f1239?text=${encodeURIComponent(profile.name)}'">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/15 to-transparent"></div>
+
+                            <!-- Badge En Línea & Verificada -->
+                            <div class="absolute top-3.5 left-3.5 flex items-center gap-1.5">
+                                <span class="px-2.5 py-1 rounded-full bg-white/90 backdrop-blur-md text-slate-800 text-[11px] font-bold flex items-center gap-1 shadow-sm">
+                                    <span class="w-2 h-2 rounded-full ${profile.online ? 'bg-emerald-500' : 'bg-amber-400'}"></span>
+                                    ${profile.online ? 'Activa ahora' : 'Conectada hoy'}
+                                </span>
+                            </div>
+
+                            <!-- Botón Favorito / Like flotante -->
+                            <button onclick="toggleFavorite(${profile.id})" class="absolute top-3.5 right-3.5 w-10 h-10 rounded-full ${isFav ? 'bg-rose-500 text-white' : 'bg-white/90 text-rose-500 hover:bg-rose-50'} backdrop-blur-md flex items-center justify-center shadow-lg transition-all active:scale-90" title="Me gusta / Conectar">
+                                <i data-lucide="heart" class="w-5 h-5 ${isFav ? 'fill-white' : ''}"></i>
+                            </button>
+
+                            <!-- Información sobre la foto -->
+                            <div class="absolute bottom-3.5 left-4 right-4 text-white">
+                                <div class="flex items-center gap-1.5">
+                                    <h3 class="text-xl font-bold font-serif">${profile.name}, ${profile.age}</h3>
+                                    ${profile.verified ? '<i data-lucide="badge-check" class="w-5 h-5 text-sky-400 fill-sky-400/20 shrink-0" title="Perfil Verificado"></i>' : ''}
+                                </div>
+                                <p class="text-xs text-rose-100 flex items-center gap-1 mt-0.5">
+                                    <i data-lucide="map-pin" class="w-3.5 h-3.5 text-rose-300 shrink-0"></i> ${profile.location}
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Cuerpo de la Tarjeta -->
+                        <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+                            <div class="space-y-3">
+                                <!-- Info Hijos y Meta -->
+                                <div class="flex flex-wrap gap-1.5">
+                                    <span class="px-2.5 py-1 rounded-lg bg-rose-50 text-rose-700 text-xs font-semibold flex items-center gap-1">
+                                        <i data-lucide="baby" class="w-3.5 h-3.5"></i> ${profile.childrenAges}
+                                    </span>
+                                    <span class="px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-800 text-xs font-semibold flex items-center gap-1">
+                                        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> ${profile.goal}
+                                    </span>
+                                </div>
+
+                                <!-- Profesión -->
+                                <p class="text-xs font-semibold text-slate-500 flex items-center gap-1.5">
+                                    <i data-lucide="briefcase" class="w-3.5 h-3.5 text-slate-400"></i> ${profile.occupation}
+                                </p>
+
+                                <!-- Biografía breve -->
+                                <p class="text-sm text-slate-600 line-clamp-3 leading-relaxed">
+                                    "${profile.bio}"
+                                </p>
+
+                                <!-- Etiquetas de Intereses -->
+                                <div class="flex flex-wrap gap-1.5 pt-1">
+                                    ${profile.interests.map(interest => `
+                                        <span class="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[11px] font-medium">
+                                            ${interest}
+                                        </span>
+                                    `).join('')}
+                                </div>
+                            </div>
+
+                            <!-- Botones de Acción -->
+                            <div class="pt-3 border-t border-slate-100 grid grid-cols-2 gap-2.5">
+                                <button onclick="openProfileDetail(${profile.id})" class="px-3 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors">
+                                    <i data-lucide="eye" class="w-4 h-4"></i>
+                                    Ver Perfil
+                                </button>
+                                <button onclick="startChatWith(${profile.id})" class="px-3 py-2.5 rounded-xl bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-semibold text-xs shadow-sm shadow-rose-500/20 flex items-center justify-center gap-1.5 transition-all">
+                                    <i data-lucide="message-circle-heart" class="w-4 h-4"></i>
+                                    Mensaje
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        // Aplicar filtros combinados
+        function applyFilters() {
+            const search = document.getElementById('filter-search').value.toLowerCase().trim();
+            const ageRange = document.getElementById('filter-age').value;
+            const childrenCount = document.getElementById('filter-children').value;
+            const location = document.getElementById('filter-location').value;
+            const goal = document.getElementById('filter-goal').value;
+
+            const filtered = profiles.filter(p => {
+                const matchesSearch = !search ||
+                    p.name.toLowerCase().includes(search) ||
+                    p.bio.toLowerCase().includes(search) ||
+                    p.occupation.toLowerCase().includes(search) ||
+                    p.location.toLowerCase().includes(search);
+
+                let matchesAge = true;
+                if (ageRange === '20-29') matchesAge = p.age >= 20 && p.age <= 29;
+                else if (ageRange === '30-37') matchesAge = p.age >= 30 && p.age <= 37;
+                else if (ageRange === '38-55') matchesAge = p.age >= 38;
+
+                const matchesChildren = childrenCount === 'all' || p.childrenCount === childrenCount;
+                const matchesLocation = location === 'all' || p.location === location;
+                const matchesGoal = goal === 'all' || p.goal === goal;
+                const matchesInterest = selectedInterest === 'all' || p.interests.includes(selectedInterest);
+
+                return matchesSearch && matchesAge && matchesChildren && matchesLocation && matchesGoal && matchesInterest;
+            });
+
+            renderProfiles(filtered);
+        }
+
+        // Filtro por chip de interés
+        function setInterestFilter(interest) {
+            selectedInterest = interest;
+            document.querySelectorAll('.interest-chip').forEach(btn => {
+                if (btn.getAttribute('data-interest') === interest) {
+                    btn.className = "interest-chip px-3 py-1.5 rounded-full text-xs font-semibold transition-all bg-rose-500 text-white shadow-sm";
+                } else {
+                    btn.className = "interest-chip px-3 py-1.5 rounded-full text-xs font-semibold transition-all bg-rose-50 text-rose-700 hover:bg-rose-100";
+                }
+            });
+            applyFilters();
+        }
+
+        // Reiniciar todos los filtros
+        function resetAllFilters() {
+            document.getElementById('filter-search').value = '';
+            document.getElementById('filter-age').value = 'all';
+            document.getElementById('filter-children').value = 'all';
+            document.getElementById('filter-location').value = 'all';
+            document.getElementById('filter-goal').value = 'all';
+            setInterestFilter('all');
+        }
+
+        // Alternar "Me gusta / Conectar"
+        function toggleFavorite(profileId) {
+            const profile = profiles.find(p => p.id === profileId);
+            if (!profile) return;
+
+            const index = favoriteIds.indexOf(profileId);
+            if (index === -1) {
+                favoriteIds.push(profileId);
+                if (!chatHistories[profileId]) {
+                    chatHistories[profileId] = [
+                        { sender: 'them', text: `¡Hola! Qué alegría que hayamos conectado en Amor & Familia 💖 ¿Cómo estás?`, time: 'Ahora' }
+                    ];
+                }
+                showToast(`¡Conectaste con ${profile.name}! Añadida a tus Favoritos.`, 'heart');
+            } else {
+                favoriteIds.splice(index, 1);
+                showToast(`Quitaste a ${profile.name} de tus favoritos.`, 'info');
+            }
+
+            updateFavoritesBadge();
+            applyFilters();
+            renderMatchesList();
+        }
+
+        function updateFavoritesBadge() {
+            document.getElementById('favorites-badge').textContent = favoriteIds.length;
+        }
+
+        // Modal de detalle de perfil
+        function openProfileDetail(profileId) {
+            const profile = profiles.find(p => p.id === profileId);
+            if (!profile) return;
+
+            const isFav = favoriteIds.includes(profile.id);
+            const modal = document.getElementById('profile-detail-modal');
+            const content = document.getElementById('profile-modal-content');
+
+            content.innerHTML = `
+                <div class="relative h-80 sm:h-96 bg-rose-100">
+                    <img src="${profile.photo}" alt="${profile.name}" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-indigo-950/90 via-indigo-950/30 to-transparent"></div>
+                    <button onclick="closeProfileDetail()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center backdrop-blur-md transition-colors">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                    <div class="absolute bottom-5 left-6 right-6 text-white">
+                        <div class="flex flex-wrap items-center gap-2 mb-2">
+                            <span class="px-3 py-1 rounded-full bg-emerald-500 text-xs font-bold flex items-center gap-1">
+                                <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Identidad Verificada
+                            </span>
+                            <span class="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-semibold">
+                                ${profile.location}
+                            </span>
+                        </div>
+                        <h2 class="text-3xl font-bold font-serif">${profile.name}, ${profile.age} años</h2>
+                        <p class="text-sm text-rose-200 font-medium">${profile.occupation}</p>
+                    </div>
+                </div>
+
+                <div class="p-6 sm:p-8 space-y-6">
+                    <!-- Bloques informativos de familia y metas -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                        <div class="p-3.5 rounded-2xl bg-rose-50 border border-rose-100">
+                            <p class="text-[11px] font-bold uppercase text-rose-500">Sus Hijos</p>
+                            <p class="text-sm font-bold text-slate-800 mt-0.5">${profile.childrenAges}</p>
+                        </div>
+                        <div class="p-3.5 rounded-2xl bg-indigo-50 border border-indigo-100">
+                            <p class="text-[11px] font-bold uppercase text-indigo-500">Qué busca</p>
+                            <p class="text-sm font-bold text-slate-800 mt-0.5">${profile.goal}</p>
+                        </div>
+                        <div class="p-3.5 rounded-2xl bg-amber-50 border border-amber-100">
+                            <p class="text-[11px] font-bold uppercase text-amber-600">Disponibilidad</p>
+                            <p class="text-sm font-bold text-slate-800 mt-0.5">${profile.availability || 'Fines de semana'}</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Historia y estilo de vida</h4>
+                        <p class="text-slate-700 leading-relaxed text-sm sm:text-base bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                            "${profile.bio}"
+                        </p>
+                    </div>
+
+                    <div>
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2.5">Intereses y actividades favoritas</h4>
+                        <div class="flex flex-wrap gap-2">
+                            ${profile.interests.map(i => `
+                                <span class="px-3.5 py-1.5 rounded-full bg-rose-50 text-rose-700 text-xs font-semibold border border-rose-200/60">
+                                    ✨ ${i}
+                                </span>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-end gap-3">
+                        <button onclick="toggleFavorite(${profile.id}); closeProfileDetail();" class="w-full sm:w-auto px-5 py-3 rounded-xl ${isFav ? 'bg-rose-100 text-rose-700' : 'bg-rose-50 hover:bg-rose-100 text-rose-600'} font-bold text-sm flex items-center justify-center gap-2 transition-colors">
+                            <i data-lucide="heart" class="w-4 h-4 ${isFav ? 'fill-rose-600' : ''}"></i>
+                            ${isFav ? 'En tus Favoritos' : 'Añadir a Favoritos'}
+                        </button>
+                        <button onclick="closeProfileDetail(); startChatWith(${profile.id});" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold text-sm shadow-lg shadow-rose-500/25 flex items-center justify-center gap-2 transition-all">
+                            <i data-lucide="message-circle-heart" class="w-4 h-4"></i>
+                            Enviar Mensaje a ${profile.name.split(' ')[0]}
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            lucide.createIcons();
+        }
+
+        function closeProfileDetail() {
+            const modal = document.getElementById('profile-detail-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // Drawer de Favoritos / Matches
+        function toggleMatchesDrawer() {
+            const drawer = document.getElementById('matches-drawer');
+            if (drawer.classList.contains('hidden')) {
+                renderMatchesList();
+                drawer.classList.remove('hidden');
+            } else {
+                drawer.classList.add('hidden');
+            }
+        }
+
+        function renderMatchesList() {
+            const container = document.getElementById('matches-list');
+            const favProfiles = profiles.filter(p => favoriteIds.includes(p.id));
+
+            if (favProfiles.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12">
+                        <div class="w-14 h-14 rounded-2xl bg-rose-50 text-rose-400 flex items-center justify-center mx-auto mb-3">
+                            <i data-lucide="heart-off" class="w-7 h-7"></i>
+                        </div>
+                        <p class="font-bold text-slate-700">Aún no tienes favoritos guardados</p>
+                        <p class="text-xs text-slate-500 mt-1">Pulsa el corazón en cualquier perfil para conectar.</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            container.innerHTML = favProfiles.map(p => `
+                <div class="p-3.5 rounded-2xl border border-rose-100 bg-rose-50/40 flex items-center justify-between gap-3 hover:bg-rose-50 transition-colors">
+                    <div class="flex items-center gap-3">
+                        <img src="${p.photo}" alt="${p.name}" class="w-14 h-14 rounded-2xl object-cover">
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-sm">${p.name}, ${p.age}</h4>
+                            <p class="text-xs text-rose-600 font-medium">${p.childrenAges}</p>
+                            <p class="text-[11px] text-slate-500">${p.location}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <button onclick="toggleMatchesDrawer(); startChatWith(${p.id});" class="px-3 py-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold flex items-center gap-1 shadow-sm">
+                            <i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Chat
+                        </button>
+                        <button onclick="toggleFavorite(${p.id})" class="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-white transition-colors" title="Quitar">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            lucide.createIcons();
+        }
+
+        // Sistema de Chat Simulado
+        function startChatWith(profileId) {
+            activeChatProfileId = profileId;
+            if (!favoriteIds.includes(profileId)) {
+                favoriteIds.push(profileId);
+                updateFavoritesBadge();
+                applyFilters();
+            }
+            if (!chatHistories[profileId]) {
+                const p = profiles.find(item => item.id === profileId);
+                chatHistories[profileId] = [
+                    { sender: 'them', text: `¡Hola! Soy ${p ? p.name.split(' ')[0] : ''}, qué gusto conectar contigo por aquí 🌸`, time: 'Ahora' }
+                ];
+            }
+            openChatDrawer();
+        }
+
+        function openChatDrawer() {
+            const drawer = document.getElementById('chat-drawer');
+            drawer.classList.remove('hidden');
+            renderChatWindow();
+        }
+
+        function closeChatDrawer() {
+            document.getElementById('chat-drawer').classList.add('hidden');
+        }
+
+        function renderChatWindow() {
+            const activeProfile = profiles.find(p => p.id === activeChatProfileId) || profiles[0];
+            document.getElementById('chat-active-avatar').src = activeProfile.photo;
+            document.getElementById('chat-active-name').textContent = activeProfile.name;
+            document.getElementById('chat-active-subtitle').textContent = `${activeProfile.location} • ${activeProfile.childrenAges}`;
+
+            // Renderizar barra superior de contactos en el chat
+            const contactsBar = document.getElementById('chat-contacts-bar');
+            const chatIds = Array.from(new Set([...favoriteIds, activeChatProfileId]));
+            contactsBar.innerHTML = chatIds.map(id => {
+                const prof = profiles.find(p => p.id === id);
+                if (!prof) return '';
+                const isCurrent = id === activeChatProfileId;
+                return `
+                    <button onclick="startChatWith(${prof.id})" class="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold shrink-0 transition-all ${isCurrent ? 'bg-rose-500 text-white shadow-sm' : 'bg-white/10 text-indigo-100 hover:bg-white/20'}">
+                        <img src="${prof.photo}" class="w-5 h-5 rounded-full object-cover">
+                        <span>${prof.name.split(' ')[0]}</span>
+                    </button>
+                `;
+            }).join('');
+
+            // Renderizar burbujas de mensaje
+            const messagesContainer = document.getElementById('chat-messages');
+            const history = chatHistories[activeChatProfileId] || [];
+
+            messagesContainer.innerHTML = history.map(msg => {
+                if (msg.sender === 'me') {
+                    return `
+                        <div class="flex justify-end">
+                            <div class="max-w-[80%] bg-gradient-to-r from-rose-500 to-pink-600 text-white rounded-2xl rounded-br-xs px-4 py-2.5 shadow-sm">
+                                <p class="text-sm leading-relaxed">${msg.text}</p>
+                                <span class="block text-[10px] text-rose-100 text-right mt-1">${msg.time}</span>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    return `
+                        <div class="flex items-end gap-2.5">
+                            <img src="${activeProfile.photo}" class="w-7 h-7 rounded-full object-cover shrink-0">
+                            <div class="max-w-[80%] bg-white text-slate-800 rounded-2xl rounded-bl-xs px-4 py-2.5 shadow-sm border border-rose-100">
+                                <p class="text-sm leading-relaxed">${msg.text}</p>
+                                <span class="block text-[10px] text-slate-400 mt-1">${msg.time}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+            }).join('');
+
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            lucide.createIcons();
+        }
+
+        function handleSendMessage(e) {
+            e.preventDefault();
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            appendUserMessage(text);
+            input.value = '';
+        }
+
+        function sendQuickIcebreaker(text) {
+            appendUserMessage(text);
+        }
+
+        function appendUserMessage(text) {
+            if (!chatHistories[activeChatProfileId]) {
+                chatHistories[activeChatProfileId] = [];
+            }
+
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            chatHistories[activeChatProfileId].push({
+                sender: 'me',
+                text: text,
+                time: timeStr
+            });
+
+            renderChatWindow();
+
+            // Respuesta simulada automática
+            const targetId = activeChatProfileId;
+            setTimeout(() => {
+                const randomReply = simulatedReplies[Math.floor(Math.random() * simulatedReplies.length)];
+                chatHistories[targetId].push({
+                    sender: 'them',
+                    text: randomReply,
+                    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                });
+                if (!document.getElementById('chat-drawer').classList.contains('hidden')) {
+                    renderChatWindow();
+                }
+            }, 1100);
+        }
+
+        // Modal Crear Perfil
+        function openCreateProfileModal() {
+            const modal = document.getElementById('create-profile-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeCreateProfileModal() {
+            const modal = document.getElementById('create-profile-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function selectPresetPhoto(url) {
+            document.getElementById('new-photo').value = url;
+            document.querySelectorAll('.preset-avatar').forEach(btn => {
+                const img = btn.querySelector('img');
+                if (img && url.includes(img.src.split('?')[0])) {
+                    btn.className = "preset-avatar shrink-0 w-14 h-14 rounded-2xl overflow-hidden ring-4 ring-rose-500 transition-all";
+                } else {
+                    btn.className = "preset-avatar shrink-0 w-14 h-14 rounded-2xl overflow-hidden ring-2 ring-transparent hover:ring-rose-300 transition-all";
+                }
+            });
+        }
+
+        function handleCreateProfile(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('new-name').value.trim();
+            const age = parseInt(document.getElementById('new-age').value, 10) || 30;
+            const location = document.getElementById('new-location').value;
+            const occupation = document.getElementById('new-occupation').value.trim();
+            const childrenCount = document.getElementById('new-children-count').value;
+            const childrenAges = document.getElementById('new-children-ages').value.trim();
+            const goal = document.getElementById('new-goal').value;
+            const bio = document.getElementById('new-bio').value.trim();
+            const photo = document.getElementById('new-photo').value.trim() || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80";
+
+            const checkedInterests = Array.from(document.querySelectorAll('#new-interests-container input[name="interest"]:checked'))
+                .map(cb => cb.value);
+
+            const newProfile = {
+                id: Date.now(),
+                name,
+                age,
+                occupation,
+                location,
+                childrenCount,
+                childrenAges,
+                goal,
+                bio,
+                interests: checkedInterests.length > 0 ? checkedInterests : ["Salidas familiares", "Viajes"],
+                photo,
+                verified: true,
+                online: true,
+                availability: "Horarios flexibles"
+            };
+
+            // Agregar al inicio de la galería
+            profiles.unshift(newProfile);
+            resetAllFilters();
+            closeCreateProfileModal();
+            document.getElementById('create-profile-form').reset();
+
+            showToast(`¡Bienvenida ${name}! Tu perfil ya está publicado en la galería.`, 'sparkles');
+            document.getElementById('explorar').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Notificación Toast amigable (sin usar alert)
+        function showToast(message, iconName = 'heart') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = "pointer-events-auto bg-indigo-950 text-white px-4 py-3 rounded-2xl shadow-xl border border-rose-400/30 flex items-center gap-3 text-sm font-medium transition-all duration-300";
+            toast.innerHTML = `
+                <div class="w-8 h-8 rounded-xl bg-rose-500 flex items-center justify-center text-white shrink-0">
+                    <i data-lucide="${iconName}" class="w-4 h-4"></i>
+                </div>
+                <span>${message}</span>
+            `;
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        // Inicializar aplicación al cargar la ventana
+        window.onload = function () {
+            renderProfiles(profiles);
+            updateFavoritesBadge();
+            lucide.createIcons();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Random</title>
+</head>
+<body>
+  <button onclick="mostrarNumero()">Generar número aleatorio</button>
+  <p id="resultado"></p>
+
+  <script>
+    function numeroAleatorio(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function mostrarNumero() {
+      document.getElementById("resultado").textContent =
+        "Número aleatorio: " + numeroAleatorio(1, 100);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,1820 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex MotoHaus | Agencia & Showroom Multimarca Premium</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Russo One, Oswald & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Russo+One&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        display: ['"Oswald"', 'sans-serif'],
+                        racing: ['"Russo One"', 'sans-serif'],
+                    },
+                    colors: {
+                        showroom: {
+                            950: '#070707',
+                            900: '#0D0D0D',
+                            800: '#171717',
+                            700: '#242424',
+                            600: '#333333',
+                        },
+                        racing: {
+                            red: '#E63946',
+                            orange: '#FF6B00',
+                            silver: '#D4D4D8'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0D0D0D;
+            color: #F4F4F5;
+            background-image: 
+                radial-gradient(circle at 12% 10%, rgba(230, 57, 70, 0.08) 0%, transparent 38%),
+                radial-gradient(circle at 88% 82%, rgba(255, 107, 0, 0.08) 0%, transparent 38%);
+        }
+        .carbon-surface {
+            background-color: #141414;
+            background-image: linear-gradient(45deg, #1a1a1a 25%, transparent 25%), 
+                              linear-gradient(-45deg, #1a1a1a 25%, transparent 25%), 
+                              linear-gradient(45deg, transparent 75%, #1a1a1a 75%), 
+                              linear-gradient(-45deg, transparent 75%, #1a1a1a 75%);
+            background-size: 8px 8px;
+            background-position: 0 0, 0 4px, 4px -4px, -4px 0;
+        }
+        .glass-header {
+            background: rgba(13, 13, 13, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+        .card-glow:hover {
+            box-shadow: 0 12px 35px -8px rgba(255, 107, 0, 0.28), 0 4px 15px -4px rgba(230, 57, 70, 0.25);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0D0D0D;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #333333;
+            border-radius: 9999px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #FF6B00;
+        }
+        input[type="range"] {
+            accent-color: #FF6B00;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-racing-orange selection:text-black">
+
+    <!-- Contenedor de Notificaciones Toast -->
+    <div id="toast-container" class="fixed bottom-24 right-5 z-50 flex flex-col gap-2.5 pointer-events-none"></div>
+
+    <!-- Barra Superior Informativa de Agencia -->
+    <div class="bg-showroom-950 border-b border-showroom-700/80 text-xs text-zinc-400 py-2 px-4">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-4">
+                <span class="flex items-center gap-1.5 text-zinc-200 font-semibold">
+                    <i data-lucide="shield-check" class="w-3.5 h-3.5 text-racing-orange"></i> Agencia Multimarca Certificada • Garantía Escrita
+                </span>
+                <span class="hidden md:flex items-center gap-1.5">
+                    <i data-lucide="map-pin" class="w-3.5 h-3.5 text-racing-red"></i> Sucursales: CDMX Sur • Zona Norte (Tecámac / Satélite) • Querétaro
+                </span>
+            </div>
+            <div class="flex items-center gap-4 ml-auto">
+                <span class="text-emerald-400 font-bold flex items-center gap-1">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> Entrega Inmediata & Placas el Mismo Día
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navegación Principal -->
+    <header class="sticky top-0 z-40 glass-header border-b border-showroom-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-3">
+            <!-- Logo Apex MotoHaus -->
+            <a href="#" class="flex items-center gap-3 group focus:outline-none">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-racing-red to-racing-orange flex items-center justify-center text-white shadow-lg shadow-racing-red/30 group-hover:scale-105 transition-transform">
+                    <i data-lucide="gauge" class="w-7 h-7"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-xl sm:text-2xl font-racing tracking-wider text-white uppercase">
+                            APEX<span class="text-racing-orange">MOTO</span>HAUS
+                        </span>
+                    </div>
+                    <span class="block text-[10px] font-bold uppercase tracking-widest text-zinc-400">
+                        Showroom Multimarca & Finanzas
+                    </span>
+                </div>
+            </a>
+
+            <!-- Enlaces Desktop -->
+            <nav class="hidden lg:flex items-center gap-6 text-sm font-bold uppercase tracking-wider text-zinc-300 font-display">
+                <a href="#showroom" class="hover:text-racing-orange transition-colors flex items-center gap-1.5">
+                    <i data-lucide="layout-grid" class="w-4 h-4 text-racing-red"></i> Catálogo
+                </a>
+                <a href="#cotizador" class="hover:text-racing-orange transition-colors flex items-center gap-1.5">
+                    <i data-lucide="calculator" class="w-4 h-4 text-racing-orange"></i> Financiamiento
+                </a>
+                <a href="#toma-cuenta" class="hover:text-racing-orange transition-colors flex items-center gap-1.5">
+                    <i data-lucide="repeat" class="w-4 h-4 text-emerald-400"></i> Toma a Cuenta
+                </a>
+                <a href="#citas-servicio" class="hover:text-racing-orange transition-colors flex items-center gap-1.5">
+                    <i data-lucide="wrench" class="w-4 h-4 text-sky-400"></i> Test Ride & Taller
+                </a>
+            </nav>
+
+            <!-- Botones de Acción -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <!-- Botón Comparador -->
+                <button onclick="openCompareModal()" class="relative p-2.5 sm:px-3.5 sm:py-2.5 rounded-xl bg-showroom-800 hover:bg-showroom-700 text-zinc-100 font-bold text-xs sm:text-sm flex items-center gap-2 transition-all border border-showroom-600" title="Comparador Lado a Lado">
+                    <i data-lucide="git-compare" class="w-4 h-4 text-racing-orange"></i>
+                    <span class="hidden sm:inline font-display tracking-wide uppercase">Comparar</span>
+                    <span id="compare-badge" class="px-1.5 py-0.5 text-xs rounded-full bg-racing-orange text-black font-extrabold">2</span>
+                </button>
+
+                <!-- Botón Agendar Test Ride Rápido -->
+                <a href="#citas-servicio" class="px-3.5 sm:px-4 py-2.5 rounded-xl bg-gradient-to-r from-racing-red to-racing-orange hover:from-red-600 hover:to-orange-500 text-white font-display font-bold uppercase tracking-wider text-xs sm:text-sm shadow-lg shadow-racing-red/25 flex items-center gap-2 transition-all active:scale-95">
+                    <i data-lucide="calendar-check" class="w-4 h-4"></i>
+                    <span>Agendar Test Ride</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sección Hero Showroom -->
+    <section class="relative overflow-hidden py-10 md:py-16 border-b border-showroom-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+                <!-- Columna Izquierda -->
+                <div class="lg:col-span-7 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-showroom-800 border border-racing-orange/40 text-racing-orange text-xs font-bold uppercase tracking-widest mb-5">
+                        <i data-lucide="zap" class="w-3.5 h-3.5"></i> Modelos 2026 Disponibles • Tasas Preferenciales
+                    </div>
+
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-racing uppercase tracking-tight text-white leading-none mb-5">
+                        ESTRENA TU PRÓXIMA <span class="bg-gradient-to-r from-racing-red via-racing-orange to-amber-400 bg-clip-text text-transparent">MÁQUINA HOY MISMO.</span>
+                    </h1>
+
+                    <p class="text-base sm:text-lg text-zinc-300 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                        El showroom multimarca más completo de México. Motos <strong class="text-white">0 km y Seminuevas Certificadas</strong> con enganche desde el <strong class="text-racing-orange">10%</strong>, estudio de personalización (wraps y escapes) y toma de tu moto actual a cuenta.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                        <a href="#showroom" class="w-full sm:w-auto px-7 py-4 rounded-2xl bg-gradient-to-r from-racing-red to-racing-orange hover:from-red-600 hover:to-orange-500 text-white font-display font-bold uppercase tracking-wider text-base shadow-xl shadow-racing-red/25 flex items-center justify-center gap-2.5 transition-all hover:-translate-y-0.5">
+                            <i data-lucide="sparkles" class="w-5 h-5"></i>
+                            Explorar Showroom (8 Modelos)
+                        </a>
+                        <a href="#cotizador" class="w-full sm:w-auto px-7 py-4 rounded-2xl bg-showroom-800 hover:bg-showroom-700 text-zinc-100 font-display font-bold uppercase tracking-wider text-base border border-showroom-600 flex items-center justify-center gap-2.5 transition-all">
+                            <i data-lucide="calculator" class="w-5 h-5 text-racing-orange"></i>
+                            Simular Mi Crédito
+                        </a>
+                    </div>
+
+                    <!-- Beneficios de Agencia -->
+                    <div class="mt-10 pt-7 border-t border-showroom-700 grid grid-cols-3 gap-4 max-w-xl mx-auto lg:mx-0">
+                        <div class="bg-showroom-800/90 p-3.5 rounded-2xl border border-showroom-700">
+                            <p class="text-2xl sm:text-3xl font-racing text-racing-orange">10%</p>
+                            <p class="text-xs text-zinc-400 font-medium uppercase tracking-wider">Enganche Mínimo</p>
+                        </div>
+                        <div class="bg-showroom-800/90 p-3.5 rounded-2xl border border-showroom-700">
+                            <p class="text-2xl sm:text-3xl font-racing text-racing-red">24 Hrs</p>
+                            <p class="text-xs text-zinc-400 font-medium uppercase tracking-wider">Aprobación y Entrega</p>
+                        </div>
+                        <div class="bg-showroom-800/90 p-3.5 rounded-2xl border border-showroom-700">
+                            <p class="text-2xl sm:text-3xl font-racing text-emerald-400">7 Marcas</p>
+                            <p class="text-xs text-zinc-400 font-medium uppercase tracking-wider">En un Mismo Piso</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Moto Estrella del Mes -->
+                <div class="lg:col-span-5">
+                    <div class="rounded-3xl overflow-hidden shadow-2xl border-2 border-racing-orange/50 carbon-surface relative group">
+                        <img src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=900&q=80" alt="Moto Destacada" class="w-full h-[420px] object-cover object-center group-hover:scale-105 transition-transform duration-700" onerror="this.src='https://placehold.co/700x500/171717/ff6b00?text=Apex+MotoHaus'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-showroom-950 via-showroom-950/45 to-transparent"></div>
+
+                        <div class="absolute top-4 left-4 right-4 flex items-center justify-between">
+                            <span class="px-3 py-1 rounded-full bg-showroom-900/90 border border-emerald-500/40 text-emerald-400 text-xs font-bold flex items-center gap-1.5 backdrop-blur-md">
+                                <i data-lucide="award" class="w-3.5 h-3.5"></i> Edición Especial Apex
+                            </span>
+                            <span class="px-3 py-1 rounded-full bg-racing-red text-white text-xs font-display font-bold uppercase tracking-wider shadow-lg">
+                                🔥 Entrega Hoy
+                            </span>
+                        </div>
+
+                        <div class="absolute bottom-0 inset-x-0 p-6">
+                            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                                <span class="px-2.5 py-0.5 rounded-md bg-racing-orange text-black text-xs font-extrabold uppercase">
+                                    Naked • 280cc • 0 km
+                                </span>
+                                <span class="text-lg font-racing text-white">$48,999 MXN</span>
+                            </div>
+                            <h3 class="text-2xl font-racing text-white uppercase">Italika 280Z • Custom Black & Red</h3>
+                            <p class="text-xs text-zinc-300 mt-1 mb-4">
+                                Incluye paquete estético opcional de agencia: Wrap Negro Mate con detalles Rojo Racing, sliders de chasis y primer servicio sin costo.
+                            </p>
+                            <div class="grid grid-cols-2 gap-2.5">
+                                <button onclick="openBikeDetail(1)" class="py-2.5 px-4 rounded-xl bg-white/15 hover:bg-white/25 backdrop-blur-md text-white font-display font-bold uppercase text-xs tracking-wider transition-all">
+                                    Personalizar Acabado
+                                </button>
+                                <button onclick="loadBikeIntoCalculator(1)" class="py-2.5 px-4 rounded-xl bg-gradient-to-r from-racing-red to-racing-orange text-white font-display font-bold uppercase text-xs tracking-wider transition-all">
+                                    Desde $1,190 / mes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================================
+         SECCIÓN 1: CATÁLOGO Y SHOWROOM CON FILTROS EN TIEMPO REAL
+    =========================================================== -->
+    <main id="showroom" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 w-full">
+        <!-- Encabezado de Sección -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+            <div>
+                <span class="text-xs font-bold uppercase tracking-widest text-racing-orange block mb-1">Inventario Disponible en Piso</span>
+                <h2 class="text-3xl sm:text-4xl font-racing uppercase text-white tracking-wide">Showroom Multimarca</h2>
+            </div>
+
+            <!-- Selector rápido de Condición: Todas / 0km / Seminuevas -->
+            <div class="inline-flex p-1.5 rounded-2xl bg-showroom-800 border border-showroom-700">
+                <button onclick="setConditionFilter('all')" data-cond="all" class="cond-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all bg-racing-orange text-black">
+                    Todas (8)
+                </button>
+                <button onclick="setConditionFilter('Nueva 0km')" data-cond="Nueva 0km" class="cond-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all text-zinc-300 hover:text-white">
+                    Nuevas 0 km
+                </button>
+                <button onclick="setConditionFilter('Seminueva Certificada')" data-cond="Seminueva Certificada" class="cond-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all text-zinc-300 hover:text-white">
+                    Seminuevas Certificadas
+                </button>
+            </div>
+        </div>
+
+        <!-- Consola de Filtros del Showroom -->
+        <div class="bg-showroom-800 rounded-3xl p-5 sm:p-6 shadow-2xl border border-showroom-700 mb-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                <!-- 1. Buscador por Marca o Modelo -->
+                <div>
+                    <label class="block text-[11px] font-bold text-zinc-400 uppercase tracking-wider mb-1.5">Buscar Modelo o Marca</label>
+                    <div class="relative">
+                        <i data-lucide="search" class="w-4 h-4 text-zinc-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                        <input type="text" id="filter-search" oninput="applyShowroomFilters()" placeholder="Ej. 280Z, Pulsar N250, R6..." class="w-full pl-10 pr-3 py-2.5 bg-showroom-900 border border-showroom-600 rounded-xl text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-racing-orange transition-all">
+                    </div>
+                </div>
+
+                <!-- 2. Filtro por Marca -->
+                <div>
+                    <label class="block text-[11px] font-bold text-zinc-400 uppercase tracking-wider mb-1.5">Marca</label>
+                    <select id="filter-brand" onchange="applyShowroomFilters()" class="w-full px-3.5 py-2.5 bg-showroom-900 border border-showroom-600 rounded-xl text-sm text-white focus:outline-none focus:border-racing-orange">
+                        <option value="all">Todas las marcas</option>
+                        <option value="Italika">Italika</option>
+                        <option value="Bajaj">Bajaj</option>
+                        <option value="CFMoto">CFMoto</option>
+                        <option value="Morbidelli">Morbidelli</option>
+                        <option value="Yamaha">Yamaha</option>
+                        <option value="KTM">KTM</option>
+                        <option value="BMW">BMW Motorrad</option>
+                    </select>
+                </div>
+
+                <!-- 3. Filtro por Categoría -->
+                <div>
+                    <label class="block text-[11px] font-bold text-zinc-400 uppercase tracking-wider mb-1.5">Categoría</label>
+                    <select id="filter-category" onchange="applyShowroomFilters()" class="w-full px-3.5 py-2.5 bg-showroom-900 border border-showroom-600 rounded-xl text-sm text-white focus:outline-none focus:border-racing-orange">
+                        <option value="all">Todas las categorías</option>
+                        <option value="Naked">Naked / Streetfighter</option>
+                        <option value="Deportiva">Deportiva / Supersport</option>
+                        <option value="Doble Propósito / Adventure">Doble Propósito / Adventure</option>
+                        <option value="Trabajo / Urbana">Trabajo / Urbana</option>
+                        <option value="Cruiser">Cruiser</option>
+                    </select>
+                </div>
+
+                <!-- 4. Filtro por Cilindrada -->
+                <div>
+                    <label class="block text-[11px] font-bold text-zinc-400 uppercase tracking-wider mb-1.5">Cilindrada (CC)</label>
+                    <select id="filter-cc" onchange="applyShowroomFilters()" class="w-full px-3.5 py-2.5 bg-showroom-900 border border-showroom-600 rounded-xl text-sm text-white focus:outline-none focus:border-racing-orange">
+                        <option value="all">Cualquier cilindrada</option>
+                        <option value="low">Hasta 250 cc</option>
+                        <option value="mid">251 cc a 450 cc</option>
+                        <option value="high">Más de 500 cc</option>
+                    </select>
+                </div>
+
+                <!-- 5. Rango de Precio Máximo -->
+                <div>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <label class="text-[11px] font-bold text-zinc-400 uppercase tracking-wider">Presupuesto Máx.</label>
+                        <span id="price-filter-label" class="text-xs font-extrabold text-racing-orange">$350,000 MXN</span>
+                    </div>
+                    <input type="range" id="filter-max-price" min="45000" max="350000" step="5000" value="350000" oninput="applyShowroomFilters()" class="w-full h-2 bg-showroom-900 rounded-lg cursor-pointer mt-2">
+                </div>
+            </div>
+
+            <!-- Barra Inferior del Filtro -->
+            <div class="mt-4 pt-4 border-t border-showroom-700 flex flex-wrap items-center justify-between gap-3">
+                <p class="text-xs text-zinc-400">
+                    💡 <strong class="text-zinc-200">Tip del Showroom:</strong> Selecciona hasta <strong class="text-racing-orange">3 motos</strong> con el botón <span class="px-1.5 py-0.5 rounded bg-showroom-900 border border-showroom-600 text-[11px]">Comparar</span> para ver sus diferencias técnicas lado a lado.
+                </p>
+                <div class="flex items-center gap-4 ml-auto">
+                    <span id="showroom-counter" class="text-xs font-bold text-zinc-300 uppercase tracking-wider">Mostrando 8 unidades</span>
+                    <button onclick="resetShowroomFilters()" class="text-xs font-bold text-racing-red hover:text-racing-orange underline uppercase tracking-wider">
+                        Restablecer Filtros
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grid de Motocicletas del Showroom -->
+        <div id="bikes-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Renderizado dinámicamente por JS -->
+        </div>
+
+        <!-- Estado Vacío -->
+        <div id="showroom-empty" class="hidden bg-showroom-800 rounded-3xl p-12 text-center border border-showroom-700 my-8 max-w-lg mx-auto">
+            <div class="w-16 h-16 rounded-2xl bg-showroom-900 text-racing-orange flex items-center justify-center mx-auto mb-4 border border-showroom-600">
+                <i data-lucide="search-x" class="w-8 h-8"></i>
+            </div>
+            <h3 class="text-xl font-racing uppercase text-white mb-2">Sin unidades con esos parámetros</h3>
+            <p class="text-sm text-zinc-400 mb-6">Amplía el presupuesto máximo o cambia la marca/categoría para ver más motocicletas en piso.</p>
+            <button onclick="resetShowroomFilters()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-racing-red to-racing-orange text-white font-display font-bold uppercase tracking-wider text-sm">
+                Ver Todo el Inventario
+            </button>
+        </div>
+    </main>
+
+    <!-- ==========================================================
+         SECCIÓN 2: COTIZADOR Y SIMULADOR DE FINANCIAMIENTO EN TIEMPO REAL
+    =========================================================== -->
+    <section id="cotizador" class="py-16 bg-showroom-950 border-t border-b border-showroom-700 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-widest text-racing-orange block mb-1">Apex Financial Services</span>
+                    <h2 class="text-3xl sm:text-4xl font-racing uppercase text-white">Cotizador y Simulador de Crédito</h2>
+                </div>
+                <p class="text-sm text-zinc-400 max-w-md">
+                    Ajusta tu enganche o aplica el valor de tu moto actual en Toma a Cuenta para calcular tus mensualidades al instante.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <!-- Panel Izquierdo: Controles Interactivos -->
+                <div class="lg:col-span-7 bg-showroom-800 rounded-3xl p-6 sm:p-8 border border-showroom-700 space-y-6 shadow-2xl">
+                    <!-- 1. Selección de Moto -->
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-zinc-300 mb-2">1. Selecciona el Modelo a Cotizar</label>
+                        <select id="calc-bike-select" onchange="updateFinanceSimulation()" class="w-full px-4 py-3 bg-showroom-900 border border-showroom-600 rounded-2xl text-base font-bold text-white focus:outline-none focus:border-racing-orange">
+                            <!-- Poblado por JS -->
+                        </select>
+                    </div>
+
+                    <!-- 2. Deslizador de Enganche (10% a 70%) -->
+                    <div class="p-5 rounded-2xl bg-showroom-900 border border-showroom-700 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <label class="text-xs font-bold uppercase tracking-wider text-zinc-300">2. Porcentaje de Enganche (10% - 70%)</label>
+                            <span id="calc-downpayment-badge" class="px-3 py-1 rounded-lg bg-racing-orange text-black font-extrabold text-sm">
+                                25% ($12,250 MXN)
+                            </span>
+                        </div>
+                        <input type="range" id="calc-downpayment-slider" min="10" max="70" step="5" value="25" oninput="updateFinanceSimulation()" class="w-full h-2.5 bg-showroom-800 rounded-lg cursor-pointer">
+                        <div class="flex justify-between text-[11px] text-zinc-500 font-bold">
+                            <span>10% Mínimo</span>
+                            <span>30% Recomendado</span>
+                            <span>50%</span>
+                            <span>70% Máximo</span>
+                        </div>
+                    </div>
+
+                    <!-- 3. Selección de Plazo en Meses -->
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-zinc-300 mb-2.5">3. Plazo del Financiamiento</label>
+                        <div class="grid grid-cols-4 gap-3" id="calc-term-buttons">
+                            <button type="button" onclick="setFinanceTerm(12)" data-term="12" class="term-btn py-3 rounded-xl font-display font-bold text-sm uppercase border border-showroom-600 bg-showroom-900 text-zinc-300 hover:border-racing-orange transition-all">
+                                12 Meses
+                            </button>
+                            <button type="button" onclick="setFinanceTerm(24)" data-term="24" class="term-btn py-3 rounded-xl font-display font-bold text-sm uppercase border border-racing-orange bg-racing-orange text-black shadow-lg shadow-racing-orange/20 transition-all">
+                                24 Meses
+                            </button>
+                            <button type="button" onclick="setFinanceTerm(36)" data-term="36" class="term-btn py-3 rounded-xl font-display font-bold text-sm uppercase border border-showroom-600 bg-showroom-900 text-zinc-300 hover:border-racing-orange transition-all">
+                                36 Meses
+                            </button>
+                            <button type="button" onclick="setFinanceTerm(48)" data-term="48" class="term-btn py-3 rounded-xl font-display font-bold text-sm uppercase border border-showroom-600 bg-showroom-900 text-zinc-300 hover:border-racing-orange transition-all">
+                                48 Meses
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 4. Cobertura de Seguro y Accesorios -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                        <div class="p-4 rounded-2xl bg-showroom-900 border border-showroom-700">
+                            <label class="block text-[11px] font-bold uppercase text-zinc-400 mb-1.5">Tipo de Seguro Incluido</label>
+                            <select id="calc-insurance-type" onchange="updateFinanceSimulation()" class="w-full bg-showroom-800 border border-showroom-600 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none">
+                                <option value="amplia">Cobertura Amplia Biker (+$690/mes)</option>
+                                <option value="limitada">Robo Total + RC (+$420/mes)</option>
+                            </select>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-showroom-900 border border-showroom-700 flex items-center justify-between">
+                            <div>
+                                <p class="text-[11px] font-bold uppercase text-zinc-400">Bono Toma a Cuenta</p>
+                                <p id="calc-tradein-applied" class="text-sm font-extrabold text-emerald-400 mt-0.5">$0 MXN</p>
+                            </div>
+                            <a href="#toma-cuenta" class="px-3 py-1.5 rounded-lg bg-showroom-800 hover:bg-showroom-700 border border-showroom-600 text-xs font-bold text-racing-orange">
+                                Valuar mi Moto
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel Derecho: Ticket de Desglose Financiero y Pre-Aprobación -->
+                <div class="lg:col-span-5 bg-gradient-to-b from-showroom-800 to-showroom-900 rounded-3xl p-6 sm:p-8 border-2 border-racing-orange/50 shadow-2xl relative">
+                    <div class="flex items-center justify-between pb-4 mb-5 border-b border-showroom-700">
+                        <div>
+                            <span class="text-[10px] font-bold uppercase tracking-widest text-racing-orange">Resumen de Cotización</span>
+                            <h3 id="summary-bike-name" class="text-xl font-racing text-white uppercase">Italika 280Z</h3>
+                        </div>
+                        <span id="summary-bike-condition" class="px-2.5 py-1 rounded-md bg-emerald-500/20 text-emerald-300 text-xs font-bold">
+                            Nueva 0km
+                        </span>
+                    </div>
+
+                    <!-- Mensualidad Destacada -->
+                    <div class="p-5 rounded-2xl carbon-surface border border-showroom-600 text-center mb-6">
+                        <p class="text-xs font-bold uppercase tracking-widest text-zinc-400">Mensualidad Total Estimada (Seguro Incluido)</p>
+                        <p id="summary-monthly-payment" class="text-4xl sm:text-5xl font-racing text-racing-orange my-2">$2,480 <span class="text-base text-zinc-300">MXN/mes</span></p>
+                        <p id="summary-term-note" class="text-xs text-zinc-400">Durante 24 meses • Tasa fija anual preferencial 13.9%</p>
+                    </div>
+
+                    <!-- Tabla de Desglose -->
+                    <div class="space-y-3 text-sm mb-6">
+                        <div class="flex justify-between text-zinc-300">
+                            <span>Precio de Contado (IVA Incluido):</span>
+                            <strong id="summary-cash-price" class="text-white">$48,999 MXN</strong>
+                        </div>
+                        <div class="flex justify-between text-zinc-300">
+                            <span>Accesorios Configurados:</span>
+                            <strong id="summary-accessories-price" class="text-racing-orange">+$0 MXN</strong>
+                        </div>
+                        <div class="flex justify-between text-zinc-300">
+                            <span>Enganche Seleccionado:</span>
+                            <strong id="summary-downpayment" class="text-emerald-400">-$12,250 MXN</strong>
+                        </div>
+                        <div class="flex justify-between text-zinc-300">
+                            <span>Abono por Toma a Cuenta:</span>
+                            <strong id="summary-tradein" class="text-emerald-400">-$0 MXN</strong>
+                        </div>
+                        <div class="flex justify-between text-zinc-300">
+                            <span>Comisión por Apertura (2.5%):</span>
+                            <strong id="summary-opening-fee" class="text-zinc-200">$919 MXN</strong>
+                        </div>
+                        <div class="pt-3 border-t border-showroom-700 flex justify-between text-base">
+                            <span class="font-bold text-white">Pago Inicial Total para Estrenar:</span>
+                            <strong id="summary-total-initial" class="font-racing text-racing-orange">$13,169 MXN</strong>
+                        </div>
+                        <div class="flex justify-between text-xs text-zinc-400">
+                            <span>Monto Neto a Financiar:</span>
+                            <span id="summary-financed-amount">$36,749 MXN</span>
+                        </div>
+                    </div>
+
+                    <button onclick="openPreApprovalModal()" class="w-full py-4 rounded-2xl bg-gradient-to-r from-racing-red to-racing-orange hover:from-red-600 hover:to-orange-500 text-white font-display font-bold uppercase tracking-wider text-base shadow-xl shadow-racing-red/25 flex items-center justify-center gap-2 transition-all active:scale-95">
+                        <i data-lucide="file-check-2" class="w-5 h-5"></i>
+                        Generar Folio de Pre-Aprobación
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================================
+         SECCIÓN 3: TOMA A CUENTA (VALUADOR DE TU MOTO ACTUAL)
+    =========================================================== -->
+    <section id="toma-cuenta" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-showroom-800 rounded-3xl border border-showroom-700 overflow-hidden shadow-2xl">
+            <div class="grid grid-cols-1 lg:grid-cols-12">
+                <!-- Columna Formulario de Valuación -->
+                <div class="lg:col-span-7 p-6 sm:p-10">
+                    <span class="text-xs font-bold uppercase tracking-widest text-emerald-400">Renueva sin Complicaciones</span>
+                    <h2 class="text-3xl font-racing uppercase text-white mt-1 mb-2">Toma a Cuenta: Valúa tu Moto Actual</h2>
+                    <p class="text-sm text-zinc-400 mb-6">
+                        Recibimos tu motocicleta actual como enganche directo. Obtén una oferta preliminar en segundos y aplícala directo al cotizador.
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-zinc-300 mb-1">Marca y Modelo de tu Moto</label>
+                            <input type="text" id="trade-model" value="Italika Vort-X 250 / Pulsar NS200" oninput="calculateTradeIn()" class="w-full px-3.5 py-2.5 bg-showroom-900 border border-showroom-600 rounded-xl text-sm text-white focus:outline-none focus:border-racing-orange">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-zinc-300 mb-1">Año Modelo</label>
+                            <select id="trade-year" onchange="calculateTradeIn()" class="w-full px-3.5 py-2.5 bg-showroom-900 border border-showroom-600 rounded-xl text-sm text-white focus:outline-none focus:border-racing-orange">
+                                <option value="2025">2025</option>
+                                <option value="2024" selected>2024</option>
+                                <option value="2023">2023</option>
+                                <option value="2022">2022</option>
+                                <option value="2021">2021</option>
+                                <option value="2020">2020 o anterior</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-zinc-300 mb-1">Cilindrada de tu Moto</label>
+                            <select id="trade-cc" onchange="calculateTradeIn()" class="w-full px-3.5 py-2.5 bg-showroom-900 border border-showroom-600 rounded-xl text-sm text-white focus:outline-none focus:border-racing-orange">
+                                <option value="150">125cc - 180cc</option>
+                                <option value="250" selected>200cc - 300cc</option>
+                                <option value="400">310cc - 500cc</option>
+                                <option value="650">+600cc</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-zinc-300 mb-1">Kilometraje Aproximado</label>
+                            <select id="trade-km" onchange="calculateTradeIn()" class="w-full px-3.5 py-2.5 bg-showroom-900 border border-showroom-600 rounded-xl text-sm text-white focus:outline-none focus:border-racing-orange">
+                                <option value="low">Menos de 5,000 km</option>
+                                <option value="mid" selected>5,000 a 15,000 km</option>
+                                <option value="high">Más de 15,000 km</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <label class="block text-xs font-bold uppercase text-zinc-300 mb-2">Estado Estético y Mecánico</label>
+                        <div class="grid grid-cols-3 gap-3">
+                            <button type="button" onclick="setTradeCondition('excelente')" data-tcond="excelente" class="trade-cond-btn py-2.5 px-3 rounded-xl border border-racing-orange bg-racing-orange text-black font-bold text-xs uppercase">
+                                ✨ Impecable / Factura Original
+                            </button>
+                            <button type="button" onclick="setTradeCondition('bueno')" data-tcond="bueno" class="trade-cond-btn py-2.5 px-3 rounded-xl border border-showroom-600 bg-showroom-900 text-zinc-300 font-bold text-xs uppercase">
+                                👍 Detalles Normales de Uso
+                            </button>
+                            <button type="button" onclick="setTradeCondition('regular')" data-tcond="regular" class="trade-cond-btn py-2.5 px-3 rounded-xl border border-showroom-600 bg-showroom-900 text-zinc-300 font-bold text-xs uppercase">
+                                🔧 Requiere Servicio / Llantas
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna Resultado de Valuación -->
+                <div class="lg:col-span-5 carbon-surface p-6 sm:p-10 border-t lg:border-t-0 lg:border-l border-showroom-700 flex flex-col justify-between">
+                    <div>
+                        <span class="px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-bold uppercase">
+                            Oferta de Compra Inmediata
+                        </span>
+                        <h3 class="text-lg font-bold text-zinc-300 mt-4">Valor Estimado Toma a Cuenta:</h3>
+                        <p id="trade-estimated-value" class="text-4xl sm:text-5xl font-racing text-emerald-400 my-2">$29,500 MXN</p>
+                        <p class="text-xs text-zinc-400 leading-relaxed">
+                            *Sujeto a inspección física de 15 minutos en nuestro taller certificado y validación de número de serie (REPUVE sin reporte).
+                        </p>
+                    </div>
+
+                    <div class="mt-8 space-y-3">
+                        <button onclick="applyTradeInToQuote()" class="w-full py-3.5 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-black font-display font-bold uppercase tracking-wider text-sm shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 transition-all">
+                            <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                            Usar este Monto como Enganche en Cotizador
+                        </button>
+                        <button onclick="clearTradeInFromQuote()" class="w-full py-2.5 rounded-xl bg-showroom-800 hover:bg-showroom-700 text-zinc-400 hover:text-white text-xs font-bold uppercase tracking-wider transition-colors">
+                            Quitar Toma a Cuenta del Cotizador
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================================
+         SECCIÓN 4: AGENDAR PRUEBA DE MANEJO (TEST RIDE) Y CITA DE TALLER
+    =========================================================== -->
+    <section id="citas-servicio" class="py-16 bg-showroom-950 border-t border-showroom-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-10">
+                <span class="text-xs font-bold uppercase tracking-widest text-racing-orange">Experiencia Presencial Apex</span>
+                <h2 class="text-3xl sm:text-4xl font-racing uppercase text-white mt-1">Agenda tu Test Ride o Cita de Taller</h2>
+                <p class="text-sm text-zinc-400 mt-2">
+                    Prueba en pista cerrada o ruta guiada la moto que te gusta, o agenda servicio mecánico y personalización estética (instalación de wrap, sliders o escape).
+                </p>
+            </div>
+
+            <!-- Pestañas Test Ride vs Taller -->
+            <div class="max-w-3xl mx-auto bg-showroom-800 rounded-3xl border border-showroom-700 overflow-hidden shadow-2xl">
+                <div class="grid grid-cols-2 border-b border-showroom-700">
+                    <button id="tab-btn-testride" onclick="switchBookingTab('testride')" class="py-4 font-racing uppercase text-sm tracking-wider bg-racing-orange text-black flex items-center justify-center gap-2 transition-all">
+                        <i data-lucide="compass" class="w-4 h-4"></i> 1. Prueba de Manejo (Test Ride)
+                    </button>
+                    <button id="tab-btn-workshop" onclick="switchBookingTab('workshop')" class="py-4 font-racing uppercase text-sm tracking-wider bg-showroom-900 text-zinc-400 hover:text-white flex items-center justify-center gap-2 transition-all">
+                        <i data-lucide="wrench" class="w-4 h-4"></i> 2. Taller, Garantía & Wrap Studio
+                    </button>
+                </div>
+
+                <!-- Formulario Unificado con Campos Dinámicos -->
+                <form id="booking-form" onsubmit="handleBookingSubmit(event)" class="p-6 sm:p-8 space-y-5">
+                    <input type="hidden" id="booking-type" value="Prueba de Manejo (Test Ride)">
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-zinc-300 mb-1">Tu Nombre Completo *</label>
+                            <input type="text" id="book-name" required placeholder="Ej. Ángel Hernández" class="w-full px-3.5 py-2.5 bg-showroom-900 border border-showroom-600 rounded-xl text-sm text-white focus:outline-none focus:border-racing-orange">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-zinc-300 mb-1">Teléfono / WhatsApp *</label>
+                            <input type="tel" id="book-phone" required placeholder="Ej. 55 4890 1234" class="w-full px-3.5 py-2.5 bg-showroom-900 border border-showroom-600 rounded-xl text-sm text-white focus:outline-none focus:border-racing-orange">
+                        </div>
+                    </div>
+
+                    <!-- Campo Dinámico según Pestaña -->
+                    <div id="booking-dynamic-field">
+                        <label class="block text-xs font-bold uppercase text-zinc-300 mb-1">Motocicleta que deseas probar *</label>
+                        <select id="book-model" class="w-full px-3.5 py-2.5 bg-showroom-900 border border-showroom-600 rounded-xl text-sm text-white focus:outline-none focus:border-racing-orange">
+                            <option value="Italika 280Z (Custom Wrap)">Italika 280Z (Custom Wrap Negro Mate & Rojo)</option>
+                            <option value="Bajaj Pulsar N250 UG">Bajaj Pulsar N250 UG ABS</option>
+                            <option value="CFMoto 250 NK">CFMoto 250 NK</option>
+                            <option value="Morbidelli T250X">Morbidelli T250X Adventure</option>
+                            <option value="Yamaha FZ25 ABS">Yamaha FZ25 ABS</option>
+                            <option value="KTM Duke 390">KTM Duke 390 NG</option>
+                            <option value="Yamaha YZF-R6">Yamaha YZF-R6 (Cita Especial)</option>
+                            <option value="BMW F 850 GS">BMW F 850 GS Adventure</option>
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-zinc-300 mb-1">Sucursal Apex *</label>
+                            <select id="book-branch" class="w-full px-3.5 py-2.5 bg-showroom-900 border border-showroom-600 rounded-xl text-sm text-white focus:outline-none focus:border-racing-orange">
+                                <option value="Apex Zona Norte (Tecámac / Ojo de Agua)">Apex Zona Norte (Tecámac / Ojo de Agua)</option>
+                                <option value="Apex CDMX Sur (Insurgentes / Pedregal)">Apex CDMX Sur (Insurgentes)</option>
+                                <option value="Apex Satélite / Periférico Norte">Apex Satélite / Periférico Norte</option>
+                                <option value="Apex Querétaro (Bernardo Quintana)">Apex Querétaro</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-zinc-300 mb-1">Fecha Preferida *</label>
+                            <input type="date" id="book-date" required value="2026-10-24" class="w-full px-3.5 py-2.5 bg-showroom-900 border border-showroom-600 rounded-xl text-sm text-white focus:outline-none focus:border-racing-orange">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-zinc-300 mb-1">Horario *</label>
+                            <select id="book-time" class="w-full px-3.5 py-2.5 bg-showroom-900 border border-showroom-600 rounded-xl text-sm text-white focus:outline-none focus:border-racing-orange">
+                                <option value="10:00 hrs">10:00 hrs</option>
+                                <option value="12:00 hrs">12:00 hrs</option>
+                                <option value="14:00 hrs">14:00 hrs</option>
+                                <option value="16:30 hrs">16:30 hrs</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-zinc-300 mb-1">Comentarios o Requerimientos Especiales</label>
+                        <input type="text" id="book-notes" placeholder="Ej. Necesito préstamo de casco talla M / Quiero cotizar wrap negro mate..." class="w-full px-3.5 py-2.5 bg-showroom-900 border border-showroom-600 rounded-xl text-sm text-white focus:outline-none focus:border-racing-orange">
+                    </div>
+
+                    <button type="submit" class="w-full py-4 rounded-2xl bg-gradient-to-r from-racing-red to-racing-orange hover:from-red-600 hover:to-orange-500 text-white font-display font-bold uppercase tracking-wider text-sm shadow-xl shadow-racing-red/25 flex items-center justify-center gap-2 transition-all">
+                        <i data-lucide="calendar-check-2" class="w-5 h-5"></i>
+                        Confirmar Cita y Generar Pase QR
+                    </button>
+                </form>
+
+                <!-- Contenedor de Citas Confirmadas en la Sesión -->
+                <div id="confirmed-bookings-container" class="hidden px-6 pb-6 sm:px-8 sm:pb-8">
+                    <div class="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/40 text-emerald-200 text-xs space-y-2" id="confirmed-bookings-list"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Barra Flotante Inferior del Comparador -->
+    <div id="compare-floating-bar" class="fixed bottom-4 inset-x-4 max-w-4xl mx-auto z-40 bg-showroom-900/95 backdrop-blur-md border-2 border-racing-orange/60 rounded-2xl p-3.5 shadow-2xl flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-racing-orange text-black flex items-center justify-center font-extrabold shrink-0">
+                <i data-lucide="git-compare" class="w-5 h-5"></i>
+            </div>
+            <div>
+                <p class="text-xs font-racing uppercase text-white">Comparador Lado a Lado (<span id="compare-bar-count">2</span>/3)</p>
+                <div id="compare-bar-chips" class="flex flex-wrap items-center gap-1.5 mt-1">
+                    <!-- Chips dinámicos -->
+                </div>
+            </div>
+        </div>
+        <div class="flex items-center gap-2 ml-auto">
+            <button onclick="clearComparison()" class="px-3 py-2 rounded-xl bg-showroom-800 hover:bg-showroom-700 text-zinc-400 hover:text-white text-xs font-bold uppercase">
+                Limpiar
+            </button>
+            <button onclick="openCompareModal()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-racing-red to-racing-orange text-white font-display font-bold uppercase tracking-wider text-xs shadow-lg">
+                Ver Tabla Comparativa
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-showroom-950 border-t border-showroom-800 py-10 pb-24 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-racing-red to-racing-orange flex items-center justify-center text-white">
+                    <i data-lucide="gauge" class="w-5 h-5"></i>
+                </div>
+                <span class="font-racing uppercase tracking-wider text-white text-sm">APEX MOTOHAUS • AGENCIA & SHOWROOM MULTIMARCA</span>
+            </div>
+            <p class="text-xs text-zinc-500 text-center">
+                © 2026 Apex MotoHaus México. Precios en MXN con IVA incluido. Sujeto a aprobación de crédito.
+            </p>
+        </div>
+    </footer>
+
+    <!-- ==========================================================
+         MODAL 1: FICHA TÉCNICA DETALLADA Y PERSONALIZADOR RÁPIDO
+    =========================================================== -->
+    <div id="bike-detail-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+        <div class="bg-showroom-800 rounded-3xl max-w-4xl w-full overflow-hidden shadow-2xl border border-showroom-600 max-h-[92vh] flex flex-col">
+            <div id="bike-detail-content" class="overflow-y-auto custom-scrollbar">
+                <!-- Poblado dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================================
+         MODAL 2: COMPARADOR DE MOTOS LADO A LADO (HASTA 3 MOTOS)
+    =========================================================== -->
+    <div id="compare-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+        <div class="bg-showroom-800 rounded-3xl max-w-5xl w-full overflow-hidden shadow-2xl border border-showroom-600 max-h-[92vh] flex flex-col">
+            <div class="px-6 py-5 bg-showroom-950 border-b border-showroom-700 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-racing-orange/20 border border-racing-orange/40 text-racing-orange flex items-center justify-center">
+                        <i data-lucide="git-compare" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-racing uppercase text-white">Comparativa Técnica Lado a Lado</h3>
+                        <p class="text-xs text-zinc-400">Analiza potencia, torque, frenos, consumo y mensualidad</p>
+                    </div>
+                </div>
+                <button onclick="closeCompareModal()" class="p-2 rounded-xl bg-showroom-800 hover:bg-showroom-700 text-zinc-300">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div id="compare-modal-body" class="p-6 overflow-x-auto overflow-y-auto custom-scrollbar">
+                <!-- Tabla generada por JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================================
+         MODAL 3: CERTIFICADO DE PRE-APROBACIÓN DE CRÉDITO
+    =========================================================== -->
+    <div id="preapproval-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+        <div class="bg-showroom-800 rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl border-2 border-racing-orange p-6 sm:p-8">
+            <div id="preapproval-content"></div>
+        </div>
+    </div>
+
+    <!-- ==========================================================
+         LÓGICA JAVASCRIPT DEL CONCESIONARIO APEX MOTOHAUS
+    =========================================================== -->
+    <script>
+        // Catálogo Oficial de Motocicletas con Especificaciones Reales y Precios en MXN
+        const motorcycles = [
+            {
+                id: 1,
+                brand: 'Italika',
+                model: '280Z',
+                year: 2026,
+                price: 48999,
+                condition: 'Nueva 0km',
+                category: 'Naked',
+                cc: 271,
+                hp: '23.8 HP @ 8,500 rpm',
+                torque: '23 Nm @ 6,500 rpm',
+                cooling: 'Líquido / Radiador de Aceite',
+                brakes: 'Disco lobulado delantero y trasero',
+                fuelConsumption: '26 km/l',
+                weight: '148 kg',
+                seatHeight: '790 mm',
+                topSpeed: '138 km/h',
+                colors: [
+                    { name: 'Wrap Negro Mate & Rojo Racing', hex: '#E63946' },
+                    { name: 'Negro Carbono / Gris', hex: '#27272A' },
+                    { name: 'Verde Lima / Negro', hex: '#84CC16' }
+                ],
+                badge: '🔥 Top Ventas • Wrap Incluido',
+                image: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=800&q=80',
+                description: 'La streetfighter de línea Z más buscada por su torque en bajas y medias revoluciones, posición agresiva pero cómoda para ciudad o carretera y estética personalizable.'
+            },
+            {
+                id: 2,
+                brand: 'Bajaj',
+                model: 'Pulsar N250 UG',
+                year: 2026,
+                price: 63499,
+                condition: 'Nueva 0km',
+                category: 'Naked',
+                cc: 249,
+                hp: '24.1 HP @ 8,750 rpm',
+                torque: '21.5 Nm @ 6,500 rpm',
+                cooling: 'Asistido por Aceite',
+                brakes: 'ABS Doble Canal + Control de Tracción',
+                fuelConsumption: '32 km/l',
+                weight: '164 kg',
+                seatHeight: '795 mm',
+                topSpeed: '142 km/h',
+                colors: [
+                    { name: 'Negro Brooklyn con Rojo', hex: '#18181B' },
+                    { name: 'Blanco Perla Racing', hex: '#F4F4F5' },
+                    { name: 'Rojo Escarlata', hex: '#DC2626' }
+                ],
+                badge: '⚡ Horquilla Invertida + ABS',
+                image: 'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&w=800&q=80',
+                description: 'La nueva generación UG incorpora barras invertidas de 37mm, tablero digital con conectividad Bluetooth, embrague antirrebote y tres modos de ABS.'
+            },
+            {
+                id: 3,
+                brand: 'CFMoto',
+                model: '250 NK',
+                year: 2026,
+                price: 69900,
+                condition: 'Nueva 0km',
+                category: 'Naked',
+                cc: 249,
+                hp: '27.5 HP @ 9,750 rpm',
+                torque: '22 Nm @ 7,500 rpm',
+                cooling: 'Líquido DOHC 4 Válvulas',
+                brakes: 'ABS Continental Doble Canal',
+                fuelConsumption: '30 km/l',
+                weight: '151 kg',
+                seatHeight: '795 mm',
+                topSpeed: '148 km/h',
+                colors: [
+                    { name: 'Azul Cian / Naranja Neón', hex: '#06B6D4' },
+                    { name: 'Negro Nebula Mate', hex: '#171717' }
+                ],
+                badge: '🏆 Diseño Kiska • Chasis Ligero',
+                image: 'https://images.unsplash.com/photo-1609630875171-b1321377ee65?auto=format&fit=crop&w=800&q=80',
+                description: 'Diseñada por el estudio europeo Kiska. Destaca por su ligereza (151 kg), pantalla TFT con modos Sport/Rain y excelente relación peso-potencia.'
+            },
+            {
+                id: 4,
+                brand: 'Morbidelli',
+                model: 'T250X Adventure',
+                year: 2026,
+                price: 68900,
+                condition: 'Nueva 0km',
+                category: 'Doble Propósito / Adventure',
+                cc: 249,
+                hp: '24.5 HP @ 9,000 rpm',
+                torque: '21 Nm @ 7,000 rpm',
+                cooling: 'Líquido',
+                brakes: 'ABS Doble Canal Desconectable',
+                fuelConsumption: '29 km/l',
+                weight: '168 kg',
+                seatHeight: '820 mm',
+                topSpeed: '135 km/h',
+                colors: [
+                    { name: 'Gris Titanio / Rojo Italiano', hex: '#52525B' },
+                    { name: 'Negro Rally', hex: '#18181B' }
+                ],
+                badge: '🏔️ Lista para Ruta y Terracería',
+                image: 'https://images.unsplash.com/photo-1591637333184-19aa84b3e01f?auto=format&fit=crop&w=800&q=80',
+                description: 'Herencia italiana para devorar kilómetros. Equipada con rines de rayos, parabrisas alto, defensas laterales de serie y suspensión de largo recorrido.'
+            },
+            {
+                id: 5,
+                brand: 'Yamaha',
+                model: 'FZ25 ABS',
+                year: 2026,
+                price: 84999,
+                condition: 'Nueva 0km',
+                category: 'Trabajo / Urbana',
+                cc: 249,
+                hp: '20.6 HP @ 8,000 rpm',
+                torque: '20.0 Nm @ 6,000 rpm',
+                cooling: 'Aire + Radiador de Aceite BlueCore',
+                brakes: 'ABS Doble Canal',
+                fuelConsumption: '35 km/l',
+                weight: '149 kg',
+                seatHeight: '795 mm',
+                topSpeed: '136 km/h',
+                colors: [
+                    { name: 'Azul Racing Yamaha', hex: '#1D4ED8' },
+                    { name: 'Negro Mate', hex: '#1F2937' }
+                ],
+                badge: '💎 Confiabilidad Japonesa',
+                image: 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=800&q=80',
+                description: 'El motor BlueCore de Yamaha ofrece una durabilidad legendaria, consumo ultra eficiente de 35 km/l y faro proyector Bi-LED para uso diario e intensivo.'
+            },
+            {
+                id: 6,
+                brand: 'KTM',
+                model: 'Duke 390 NG',
+                year: 2026,
+                price: 139900,
+                condition: 'Nueva 0km',
+                category: 'Naked',
+                cc: 399,
+                hp: '44.2 HP @ 8,500 rpm',
+                torque: '39 Nm @ 7,000 rpm',
+                cooling: 'Líquido con Ventilador Doble',
+                brakes: 'ByBre Radial + Cornering ABS / Supermoto',
+                fuelConsumption: '28 km/l',
+                weight: '165 kg',
+                seatHeight: '820 mm',
+                topSpeed: '172 km/h',
+                colors: [
+                    { name: 'Naranja Electronic KTM', hex: '#FF6B00' },
+                    { name: 'Azul Atlántico', hex: '#1E3A8A' }
+                ],
+                badge: '🚀 The Corner Rocket',
+                image: 'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&w=800&q=80',
+                description: 'Chasis multitubular renovado, suspensión WP APEX ajustable, Launch Control de serie y pantalla TFT de 5 pulgadas. Pura adrenalina en curvas.'
+            },
+            {
+                id: 7,
+                brand: 'Yamaha',
+                model: 'YZF-R6 Supersport',
+                year: 2023,
+                price: 265000,
+                condition: 'Seminueva Certificada',
+                category: 'Deportiva',
+                cc: 599,
+                hp: '118.4 HP @ 14,500 rpm',
+                torque: '61.7 Nm @ 10,500 rpm',
+                cooling: 'Líquido 4 Cilindros en Línea DOHC',
+                brakes: 'Doble Disco 320mm Nissin Radial + ABS',
+                fuelConsumption: '18 km/l',
+                weight: '190 kg',
+                seatHeight: '850 mm',
+                topSpeed: '262 km/h',
+                colors: [
+                    { name: 'Negro Raven / Rojo', hex: '#09090B' },
+                    { name: 'Icon Blue', hex: '#2563EB' }
+                ],
+                badge: '🏁 Seminueva Certificada • 6,200 km',
+                image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=800&q=80',
+                description: 'Ícono indiscutible de los 4 cilindros a 16,000 RPM. Unidad certificada con Quickshifter, control de tracción de 6 niveles, factura de agencia y garantía Apex.'
+            },
+            {
+                id: 8,
+                brand: 'BMW',
+                model: 'F 850 GS Adventure',
+                year: 2024,
+                price: 298000,
+                condition: 'Seminueva Certificada',
+                category: 'Doble Propósito / Adventure',
+                cc: 853,
+                hp: '95 HP @ 8,250 rpm',
+                torque: '92 Nm @ 6,250 rpm',
+                cooling: 'Líquido Bicilíndrico en Paralelo',
+                brakes: 'Brembo con BMW Motorrad ABS Pro',
+                fuelConsumption: '23 km/l',
+                weight: '244 kg',
+                seatHeight: '860 mm',
+                topSpeed: '205 km/h',
+                colors: [
+                    { name: 'Triple Black', hex: '#18181B' },
+                    { name: 'Blanco Luminoso Motorsport', hex: '#E4E4E7' }
+                ],
+                badge: '🌍 Equipada con Maletas de Aluminio',
+                image: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=800&q=80',
+                description: 'Lista para cruzar el continente. Incluye Dynamic ESA (suspensión electrónica), puños calefactables, modos de manejo Pro y juego de 3 maletas originales.'
+            }
+        ];
+
+        // Paquetes de Accesorios del Personalizador Rápido
+        const accessoryPackages = [
+            { id: 'sliders', name: 'Sliders / Jaula Protectora de Chasis', price: 2400 },
+            { id: 'exhaust', name: 'Punta de Escape Deportivo Acero/Carbono', price: 3800 },
+            { id: 'wrap', name: 'Wrap Protector Personalizado (Negro Mate / Detalles)', price: 4500 },
+            { id: 'topcase', name: 'Maletero / Top Case 45L con Respaldo Copiloto', price: 3200 },
+            { id: 'gps', name: 'Rastreador GPS Satelital con Paro de Motor', price: 2100 }
+        ];
+
+        // Estado Global de la Aplicación
+        let selectedConditionFilter = 'all';
+        let compareIds = [1, 2]; // Iniciamos con Italika 280Z y Pulsar N250 para demostrar el comparador
+        let activeFinanceTerm = 24;
+        let currentTradeCondition = 'excelente';
+        let currentTradeEstimatedValue = 29500;
+        let appliedTradeInAmount = 0;
+
+        // Estado del Personalizador en el Modal
+        let modalSelectedBikeId = 1;
+        let modalSelectedColor = '';
+        let modalSelectedAccessories = [];
+        let configuredAccessoriesTotal = 0;
+
+        // Formateador de Moneda MXN
+        function formatMXN(amount) {
+            return '$' + Math.round(amount).toLocaleString('es-MX') + ' MXN';
+        }
+
+        // ==========================================================
+        // 1. RENDERIZADO DEL SHOWROOM Y FILTROS EN TIEMPO REAL
+        // ==========================================================
+        function renderShowroom(list) {
+            const grid = document.getElementById('bikes-grid');
+            const empty = document.getElementById('showroom-empty');
+            const counter = document.getElementById('showroom-counter');
+
+            counter.textContent = `Mostrando ${list.length} ${list.length === 1 ? 'unidad' : 'unidades'}`;
+
+            if (list.length === 0) {
+                grid.innerHTML = '';
+                empty.classList.remove('hidden');
+                return;
+            }
+
+            empty.classList.add('hidden');
+            grid.innerHTML = list.map(bike => {
+                const isCompared = compareIds.includes(bike.id);
+                // Cálculo rápido de mensualidad desde (30% enganche, 36 meses)
+                const estMonthly = Math.round(((bike.price * 0.70) * 1.22) / 36);
+
+                return `
+                    <article class="bg-showroom-800 rounded-3xl overflow-hidden border border-showroom-700 card-glow transition-all duration-300 flex flex-col group">
+                        <!-- Imagen y Badges -->
+                        <div class="relative h-56 overflow-hidden bg-showroom-900">
+                            <img src="${bike.image}" alt="${bike.brand} ${bike.model}" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x450/171717/ff6b00?text=${encodeURIComponent(bike.brand + ' ' + bike.model)}'">
+                            <div class="absolute inset-0 bg-gradient-to-t from-showroom-900 via-showroom-900/20 to-transparent"></div>
+
+                            <!-- Condición -->
+                            <div class="absolute top-3.5 left-3.5 flex flex-wrap gap-1.5">
+                                <span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider backdrop-blur-md ${bike.condition === 'Nueva 0km' ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-300' : 'bg-amber-500/20 border border-amber-500/40 text-amber-300'}">
+                                    ${bike.condition}
+                                </span>
+                            </div>
+
+                            <!-- Botón Comparar -->
+                            <button onclick="toggleCompare(${bike.id})" class="absolute top-3.5 right-3.5 px-2.5 py-1.5 rounded-xl text-[11px] font-bold uppercase tracking-wider flex items-center gap-1 backdrop-blur-md transition-all ${isCompared ? 'bg-racing-orange text-black ring-2 ring-white' : 'bg-showroom-950/85 text-zinc-200 hover:bg-racing-red hover:text-white border border-showroom-600'}">
+                                <i data-lucide="git-compare" class="w-3.5 h-3.5"></i>
+                                <span>${isCompared ? 'Comparando' : 'Comparar'}</span>
+                            </button>
+
+                            <!-- Marca, Modelo y Precio sobre Imagen -->
+                            <div class="absolute bottom-3 left-4 right-4">
+                                <span class="text-[11px] font-bold uppercase tracking-widest text-racing-orange block">${bike.brand} • ${bike.year}</span>
+                                <div class="flex items-baseline justify-between gap-2">
+                                    <h3 class="text-xl font-racing text-white uppercase">${bike.model}</h3>
+                                    <span class="text-lg font-racing text-white">${formatMXN(bike.price)}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Especificaciones Clave -->
+                        <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+                            <div class="space-y-3">
+                                <div class="text-[11px] font-bold text-zinc-300 bg-showroom-900 px-3 py-1.5 rounded-xl border border-showroom-700 truncate">
+                                    ${bike.badge}
+                                </div>
+
+                                <!-- Mini Grid de Telemetría -->
+                                <div class="grid grid-cols-2 gap-2 text-xs">
+                                    <div class="p-2.5 rounded-xl bg-showroom-900/80 border border-showroom-700">
+                                        <span class="text-[10px] text-zinc-500 uppercase font-bold block">Cilindrada / Potencia</span>
+                                        <span class="font-bold text-white">${bike.cc} cc • ${bike.hp.split('@')[0]}</span>
+                                    </div>
+                                    <div class="p-2.5 rounded-xl bg-showroom-900/80 border border-showroom-700">
+                                        <span class="text-[10px] text-zinc-500 uppercase font-bold block">Consumo / Peso</span>
+                                        <span class="font-bold text-white">${bike.fuelConsumption} • ${bike.weight}</span>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center justify-between text-xs pt-1">
+                                    <span class="text-zinc-400">Financiamiento desde:</span>
+                                    <span class="font-extrabold text-racing-orange">$${estMonthly.toLocaleString('es-MX')} MXN / mes</span>
+                                </div>
+                            </div>
+
+                            <!-- Acciones -->
+                            <div class="pt-3 border-t border-showroom-700 grid grid-cols-2 gap-2.5">
+                                <button onclick="openBikeDetail(${bike.id})" class="px-3 py-2.5 rounded-xl bg-showroom-700 hover:bg-showroom-600 text-zinc-100 font-display font-bold uppercase tracking-wider text-xs flex items-center justify-center gap-1.5 transition-colors">
+                                    <i data-lucide="sliders" class="w-3.5 h-3.5 text-racing-orange"></i>
+                                    Ficha & Wrap
+                                </button>
+                                <button onclick="loadBikeIntoCalculator(${bike.id})" class="px-3 py-2.5 rounded-xl bg-gradient-to-r from-racing-red to-racing-orange hover:from-red-600 hover:to-orange-500 text-white font-display font-bold uppercase tracking-wider text-xs shadow-md shadow-racing-red/20 flex items-center justify-center gap-1.5 transition-all">
+                                    <i data-lucide="calculator" class="w-3.5 h-3.5"></i>
+                                    Cotizar
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        function applyShowroomFilters() {
+            const search = document.getElementById('filter-search').value.toLowerCase().trim();
+            const brand = document.getElementById('filter-brand').value;
+            const category = document.getElementById('filter-category').value;
+            const ccRange = document.getElementById('filter-cc').value;
+            const maxPrice = parseInt(document.getElementById('filter-max-price').value, 10);
+
+            document.getElementById('price-filter-label').textContent = formatMXN(maxPrice);
+
+            const filtered = motorcycles.filter(b => {
+                const matchesSearch = !search ||
+                    b.brand.toLowerCase().includes(search) ||
+                    b.model.toLowerCase().includes(search) ||
+                    b.category.toLowerCase().includes(search) ||
+                    b.description.toLowerCase().includes(search);
+
+                const matchesBrand = brand === 'all' || b.brand === brand;
+                const matchesCategory = category === 'all' || b.category === category;
+                const matchesCondition = selectedConditionFilter === 'all' || b.condition === selectedConditionFilter;
+                const matchesPrice = b.price <= maxPrice;
+
+                let matchesCC = true;
+                if (ccRange === 'low') matchesCC = b.cc <= 250;
+                else if (ccRange === 'mid') matchesCC = b.cc > 250 && b.cc <= 450;
+                else if (ccRange === 'high') matchesCC = b.cc > 450;
+
+                return matchesSearch && matchesBrand && matchesCategory && matchesCondition && matchesPrice && matchesCC;
+            });
+
+            renderShowroom(filtered);
+        }
+
+        function setConditionFilter(cond) {
+            selectedConditionFilter = cond;
+            document.querySelectorAll('.cond-btn').forEach(btn => {
+                if (btn.getAttribute('data-cond') === cond) {
+                    btn.className = "cond-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all bg-racing-orange text-black";
+                } else {
+                    btn.className = "cond-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all text-zinc-300 hover:text-white";
+                }
+            });
+            applyShowroomFilters();
+        }
+
+        function resetShowroomFilters() {
+            document.getElementById('filter-search').value = '';
+            document.getElementById('filter-brand').value = 'all';
+            document.getElementById('filter-category').value = 'all';
+            document.getElementById('filter-cc').value = 'all';
+            document.getElementById('filter-max-price').value = 350000;
+            setConditionFilter('all');
+        }
+
+        // ==========================================================
+        // 2. FICHA TÉCNICA DETALLADA Y PERSONALIZADOR RÁPIDO (MODAL)
+        // ==========================================================
+        function openBikeDetail(bikeId) {
+            const bike = motorcycles.find(b => b.id === bikeId);
+            if (!bike) return;
+
+            modalSelectedBikeId = bike.id;
+            modalSelectedColor = bike.colors[0].name;
+            modalSelectedAccessories = [];
+
+            renderBikeDetailModalContent(bike);
+            const modal = document.getElementById('bike-detail-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            lucide.createIcons();
+        }
+
+        function renderBikeDetailModalContent(bike) {
+            const accTotal = modalSelectedAccessories.reduce((sum, id) => {
+                const item = accessoryPackages.find(a => a.id === id);
+                return sum + (item ? item.price : 0);
+            }, 0);
+            const totalConfiguredPrice = bike.price + accTotal;
+
+            const container = document.getElementById('bike-detail-content');
+            container.innerHTML = `
+                <!-- Cabecera Imagen -->
+                <div class="relative h-72 sm:h-80 bg-showroom-900">
+                    <img src="${bike.image}" alt="${bike.model}" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-showroom-800 via-showroom-950/50 to-transparent"></div>
+                    <button onclick="closeBikeDetail()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-showroom-950/80 hover:bg-racing-red text-white flex items-center justify-center transition-colors">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+
+                    <div class="absolute bottom-5 left-6 right-6 flex flex-wrap items-end justify-between gap-4">
+                        <div>
+                            <div class="flex flex-wrap items-center gap-2 mb-2">
+                                <span class="px-3 py-1 rounded-md bg-racing-red text-white text-xs font-display font-bold uppercase tracking-wider">
+                                    ${bike.category}
+                                </span>
+                                <span class="px-3 py-1 rounded-md bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-bold">
+                                    ${bike.condition}
+                                </span>
+                            </div>
+                            <h2 class="text-3xl sm:text-4xl font-racing uppercase text-white">${bike.brand} ${bike.model} <span class="text-racing-orange">${bike.year}</span></h2>
+                        </div>
+                        <div class="bg-showroom-950/90 border border-racing-orange/50 px-4 py-2.5 rounded-2xl text-right">
+                            <span class="text-[10px] font-bold uppercase text-zinc-400 block">Precio Configurado</span>
+                            <span id="modal-live-price" class="text-2xl font-racing text-racing-orange">${formatMXN(totalConfiguredPrice)}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cuerpo del Modal -->
+                <div class="p-6 sm:p-8 space-y-6">
+                    <p class="text-sm text-zinc-300 leading-relaxed bg-showroom-900 p-4 rounded-2xl border border-showroom-700">
+                        ${bike.description}
+                    </p>
+
+                    <!-- Especificaciones Técnicas Completas (8 Parámetros) -->
+                    <div>
+                        <h3 class="text-xs font-bold uppercase tracking-widest text-racing-orange mb-3">Ficha Técnica Oficial de Ingeniería</h3>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                            <div class="p-3.5 rounded-2xl bg-showroom-900 border border-showroom-700">
+                                <span class="text-zinc-500 font-bold uppercase block">Cilindrada</span>
+                                <strong class="text-white text-sm mt-0.5 block">${bike.cc} cc</strong>
+                            </div>
+                            <div class="p-3.5 rounded-2xl bg-showroom-900 border border-showroom-700">
+                                <span class="text-zinc-500 font-bold uppercase block">Potencia Máxima</span>
+                                <strong class="text-white text-sm mt-0.5 block">${bike.hp}</strong>
+                            </div>
+                            <div class="p-3.5 rounded-2xl bg-showroom-900 border border-showroom-700">
+                                <span class="text-zinc-500 font-bold uppercase block">Torque Motor</span>
+                                <strong class="text-white text-sm mt-0.5 block">${bike.torque}</strong>
+                            </div>
+                            <div class="p-3.5 rounded-2xl bg-showroom-900 border border-showroom-700">
+                                <span class="text-zinc-500 font-bold uppercase block">Enfriamiento</span>
+                                <strong class="text-white text-sm mt-0.5 block">${bike.cooling}</strong>
+                            </div>
+                            <div class="p-3.5 rounded-2xl bg-showroom-900 border border-showroom-700">
+                                <span class="text-zinc-500 font-bold uppercase block">Sistema de Frenos</span>
+                                <strong class="text-white text-sm mt-0.5 block">${bike.brakes}</strong>
+                            </div>
+                            <div class="p-3.5 rounded-2xl bg-showroom-900 border border-showroom-700">
+                                <span class="text-zinc-500 font-bold uppercase block">Rendimiento</span>
+                                <strong class="text-emerald-400 text-sm mt-0.5 block">${bike.fuelConsumption}</strong>
+                            </div>
+                            <div class="p-3.5 rounded-2xl bg-showroom-900 border border-showroom-700">
+                                <span class="text-zinc-500 font-bold uppercase block">Peso en Orden</span>
+                                <strong class="text-white text-sm mt-0.5 block">${bike.weight}</strong>
+                            </div>
+                            <div class="p-3.5 rounded-2xl bg-showroom-900 border border-showroom-700">
+                                <span class="text-zinc-500 font-bold uppercase block">Altura Asiento / Vel.</span>
+                                <strong class="text-white text-sm mt-0.5 block">${bike.seatHeight} • ${bike.topSpeed}</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Personalizador Rápido: Color / Wrap y Paquetes de Accesorios -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                        <!-- Selector de Color / Acabado -->
+                        <div class="p-5 rounded-2xl carbon-surface border border-showroom-700">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-white mb-3 flex items-center gap-2">
+                                <i data-lucide="palette" class="w-4 h-4 text-racing-orange"></i> 1. Elige Color o Acabado Wrap
+                            </h4>
+                            <div class="space-y-2">
+                                ${bike.colors.map(col => `
+                                    <button type="button" onclick="selectModalColor('${col.name}')" class="w-full p-3 rounded-xl border text-left flex items-center justify-between transition-all ${modalSelectedColor === col.name ? 'border-racing-orange bg-racing-orange/15 text-white' : 'border-showroom-600 bg-showroom-900 text-zinc-300 hover:border-zinc-500'}">
+                                        <span class="flex items-center gap-2.5 text-xs font-bold">
+                                            <span class="w-4 h-4 rounded-full border border-white/40" style="background-color: ${col.hex}"></span>
+                                            ${col.name}
+                                        </span>
+                                        ${modalSelectedColor === col.name ? '<span class="text-[10px] font-extrabold uppercase text-racing-orange">Seleccionado</span>' : ''}
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <!-- Paquetes de Accesorios -->
+                        <div class="p-5 rounded-2xl carbon-surface border border-showroom-700">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-white mb-3 flex items-center gap-2">
+                                <i data-lucide="package-plus" class="w-4 h-4 text-racing-red"></i> 2. Agregar Accesorios a la Cotización
+                            </h4>
+                            <div class="space-y-2">
+                                ${accessoryPackages.map(acc => {
+                                    const isChecked = modalSelectedAccessories.includes(acc.id);
+                                    return `
+                                        <button type="button" onclick="toggleModalAccessory('${acc.id}')" class="w-full p-2.5 rounded-xl border text-left flex items-center justify-between text-xs transition-all ${isChecked ? 'border-emerald-400 bg-emerald-500/15 text-white' : 'border-showroom-600 bg-showroom-900 text-zinc-300 hover:border-zinc-500'}">
+                                            <span class="font-semibold pr-2">${isChecked ? '✅ ' : '+ '} ${acc.name}</span>
+                                            <span class="font-extrabold text-racing-orange shrink-0">+$${acc.price.toLocaleString('es-MX')}</span>
+                                        </button>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botones de Acción Finales del Modal -->
+                    <div class="pt-4 border-t border-showroom-700 flex flex-col sm:flex-row items-center justify-end gap-3">
+                        <button onclick="closeBikeDetail(); prefillTestRide('${bike.brand} ${bike.model}');" class="w-full sm:w-auto px-5 py-3 rounded-xl bg-showroom-700 hover:bg-showroom-600 text-white font-display font-bold uppercase tracking-wider text-xs sm:text-sm flex items-center justify-center gap-2">
+                            <i data-lucide="compass" class="w-4 h-4 text-racing-orange"></i>
+                            Agendar Prueba de Manejo
+                        </button>
+                        <button onclick="sendConfiguredBikeToQuote(${bike.id})" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-racing-red to-racing-orange hover:from-red-600 hover:to-orange-500 text-white font-display font-bold uppercase tracking-wider text-xs sm:text-sm shadow-lg shadow-racing-red/25 flex items-center justify-center gap-2">
+                            <i data-lucide="calculator" class="w-4 h-4"></i>
+                            Financiar con esta Configuración (${formatMXN(totalConfiguredPrice)})
+                        </button>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        function selectModalColor(colorName) {
+            modalSelectedColor = colorName;
+            const bike = motorcycles.find(b => b.id === modalSelectedBikeId);
+            if (bike) renderBikeDetailModalContent(bike);
+        }
+
+        function toggleModalAccessory(accId) {
+            const idx = modalSelectedAccessories.indexOf(accId);
+            if (idx === -1) modalSelectedAccessories.push(accId);
+            else modalSelectedAccessories.splice(idx, 1);
+
+            const bike = motorcycles.find(b => b.id === modalSelectedBikeId);
+            if (bike) renderBikeDetailModalContent(bike);
+        }
+
+        function closeBikeDetail() {
+            const modal = document.getElementById('bike-detail-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function sendConfiguredBikeToQuote(bikeId) {
+            configuredAccessoriesTotal = modalSelectedAccessories.reduce((sum, id) => {
+                const item = accessoryPackages.find(a => a.id === id);
+                return sum + (item ? item.price : 0);
+            }, 0);
+            closeBikeDetail();
+            document.getElementById('calc-bike-select').value = bikeId;
+            updateFinanceSimulation();
+            document.getElementById('cotizador').scrollIntoView({ behavior: 'smooth' });
+            showToast(`Configuración cargada en el cotizador (+$${configuredAccessoriesTotal.toLocaleString('es-MX')} en accesorios).`, 'calculator');
+        }
+
+        // ==========================================================
+        // 3. COTIZADOR Y SIMULADOR DE FINANCIAMIENTO EN TIEMPO REAL
+        // ==========================================================
+        function populateCalculatorSelect() {
+            const select = document.getElementById('calc-bike-select');
+            select.innerHTML = motorcycles.map(b => `
+                <option value="${b.id}">${b.brand} ${b.model} (${b.year}) — ${formatMXN(b.price)} [${b.condition}]</option>
+            `).join('');
+        }
+
+        function loadBikeIntoCalculator(bikeId) {
+            configuredAccessoriesTotal = 0;
+            document.getElementById('calc-bike-select').value = bikeId;
+            updateFinanceSimulation();
+            document.getElementById('cotizador').scrollIntoView({ behavior: 'smooth' });
+            const bike = motorcycles.find(b => b.id === bikeId);
+            if (bike) showToast(`Cotizando ${bike.brand} ${bike.model}. Ajusta tu enganche abajo.`, 'calculator');
+        }
+
+        function setFinanceTerm(months) {
+            activeFinanceTerm = months;
+            document.querySelectorAll('.term-btn').forEach(btn => {
+                if (parseInt(btn.getAttribute('data-term'), 10) === months) {
+                    btn.className = "term-btn py-3 rounded-xl font-display font-bold text-sm uppercase border border-racing-orange bg-racing-orange text-black shadow-lg shadow-racing-orange/20 transition-all";
+                } else {
+                    btn.className = "term-btn py-3 rounded-xl font-display font-bold text-sm uppercase border border-showroom-600 bg-showroom-900 text-zinc-300 hover:border-racing-orange transition-all";
+                }
+            });
+            updateFinanceSimulation();
+        }
+
+        function updateFinanceSimulation() {
+            const bikeId = parseInt(document.getElementById('calc-bike-select').value, 10) || 1;
+            const bike = motorcycles.find(b => b.id === bikeId) || motorcycles[0];
+
+            const downPercent = parseInt(document.getElementById('calc-downpayment-slider').value, 10);
+            const insuranceType = document.getElementById('calc-insurance-type').value;
+            const monthlyInsurance = insuranceType === 'amplia' ? 690 : 420;
+
+            const totalVehicleAndAcc = bike.price + configuredAccessoriesTotal;
+            const downPaymentCash = Math.round(totalVehicleAndAcc * (downPercent / 100));
+
+            // Monto a financiar descontando enganche y toma a cuenta
+            const netFinanced = Math.max(0, totalVehicleAndAcc - downPaymentCash - appliedTradeInAmount);
+            const openingFee = Math.round(netFinanced * 0.025);
+
+            // Cálculo financiero con tasa anual fija del 13.9%
+            const annualRate = 0.139;
+            const monthlyRate = annualRate / 12;
+            let baseMonthly = 0;
+            if (netFinanced > 0) {
+                baseMonthly = (netFinanced * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -activeFinanceTerm));
+            }
+            const totalMonthlyPayment = Math.round(baseMonthly + monthlyInsurance);
+            const totalInitialOutlay = downPaymentCash + openingFee;
+
+            // Actualizar etiquetas UI
+            document.getElementById('calc-downpayment-badge').textContent = `${downPercent}% (${formatMXN(downPaymentCash)})`;
+            document.getElementById('summary-bike-name').textContent = `${bike.brand} ${bike.model}`;
+            document.getElementById('summary-bike-condition').textContent = bike.condition;
+            document.getElementById('summary-monthly-payment').innerHTML = `$${totalMonthlyPayment.toLocaleString('es-MX')} <span class="text-base text-zinc-300">MXN/mes</span>`;
+            document.getElementById('summary-term-note').textContent = `Durante ${activeFinanceTerm} meses • Incluye seguro ($${monthlyInsurance}/mes)`;
+
+            document.getElementById('summary-cash-price').textContent = formatMXN(bike.price);
+            document.getElementById('summary-accessories-price').textContent = `+$${configuredAccessoriesTotal.toLocaleString('es-MX')} MXN`;
+            document.getElementById('summary-downpayment').textContent = `-${formatMXN(downPaymentCash)}`;
+            document.getElementById('summary-tradein').textContent = `-${formatMXN(appliedTradeInAmount)}`;
+            document.getElementById('summary-opening-fee').textContent = formatMXN(openingFee);
+            document.getElementById('summary-total-initial').textContent = formatMXN(totalInitialOutlay);
+            document.getElementById('summary-financed-amount').textContent = formatMXN(netFinanced);
+        }
+
+        function openPreApprovalModal() {
+            const bikeId = parseInt(document.getElementById('calc-bike-select').value, 10) || 1;
+            const bike = motorcycles.find(b => b.id === bikeId) || motorcycles[0];
+            const monthlyText = document.getElementById('summary-monthly-payment').innerText;
+            const initialText = document.getElementById('summary-total-initial').innerText;
+            const folio = 'APX-' + Math.floor(100000 + Math.random() * 900000);
+
+            const modal = document.getElementById('preapproval-modal');
+            const content = document.getElementById('preapproval-content');
+
+            content.innerHTML = `
+                <div class="text-center mb-5">
+                    <div class="w-14 h-14 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center mx-auto mb-3">
+                        <i data-lucide="badge-check" class="w-8 h-8"></i>
+                    </div>
+                    <span class="px-3 py-1 rounded-full bg-racing-orange/20 text-racing-orange text-xs font-extrabold uppercase">Folio Oficial: ${folio}</span>
+                    <h3 class="text-2xl font-racing uppercase text-white mt-2">Pre-Aprobación Lista</h3>
+                    <p class="text-xs text-zinc-400 mt-1">Presenta este folio en cualquiera de nuestras sucursales Apex MotoHaus.</p>
+                </div>
+
+                <div class="p-4 rounded-2xl bg-showroom-900 border border-showroom-700 space-y-2.5 text-xs mb-6">
+                    <div class="flex justify-between">
+                        <span class="text-zinc-400">Unidad Reservada:</span>
+                        <strong class="text-white uppercase">${bike.brand} ${bike.model} (${bike.year})</strong>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-zinc-400">Mensualidad Estimada:</span>
+                        <strong class="text-racing-orange">${monthlyText}</strong>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-zinc-400">Plazo Seleccionado:</span>
+                        <strong class="text-white">${activeFinanceTerm} Meses</strong>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-zinc-400">Pago Inicial Total:</span>
+                        <strong class="text-emerald-400">${initialText}</strong>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-zinc-400">Vigencia de Tasa (13.9%):</span>
+                        <strong class="text-white">7 Días Naturales</strong>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <button onclick="copyPreApprovalFolio('${folio}')" class="flex-1 py-3 rounded-xl bg-showroom-700 hover:bg-showroom-600 text-white font-display font-bold uppercase text-xs tracking-wider flex items-center justify-center gap-1.5">
+                        <i data-lucide="copy" class="w-4 h-4 text-racing-orange"></i> Copiar Folio
+                    </button>
+                    <button onclick="closePreApprovalModal()" class="flex-1 py-3 rounded-xl bg-gradient-to-r from-racing-red to-racing-orange text-white font-display font-bold uppercase text-xs tracking-wider">
+                        Entendido
+                    </button>
+                </div>
+            `;
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            lucide.createIcons();
+        }
+
+        function copyPreApprovalFolio(folio) {
+            const tempInput = document.createElement('input');
+            tempInput.value = folio;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            showToast(`Folio ${folio} copiado al portapapeles.`, 'check-circle-2');
+        }
+
+        function closePreApprovalModal() {
+            const modal = document.getElementById('preapproval-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // ==========================================================
+        // 4. COMPARADOR DE MOTOS LADO A LADO (HASTA 3 MOTOS)
+        // ==========================================================
+        function toggleCompare(bikeId) {
+            const idx = compareIds.indexOf(bikeId);
+            const bike = motorcycles.find(b => b.id === bikeId);
+
+            if (idx === -1) {
+                if (compareIds.length >= 3) {
+                    showToast('Máximo 3 motocicletas en el comparador lado a lado.', 'alert-circle');
+                    return;
+                }
+                compareIds.push(bikeId);
+                showToast(`${bike.brand} ${bike.model} añadida al comparador.`, 'git-compare');
+            } else {
+                compareIds.splice(idx, 1);
+                showToast(`${bike.brand} ${bike.model} retirada del comparador.`, 'info');
+            }
+
+            updateCompareUI();
+            applyShowroomFilters();
+        }
+
+        function clearComparison() {
+            compareIds = [];
+            updateCompareUI();
+            applyShowroomFilters();
+        }
+
+        function updateCompareUI() {
+            document.getElementById('compare-badge').textContent = compareIds.length;
+            document.getElementById('compare-bar-count').textContent = compareIds.length;
+
+            const floatingBar = document.getElementById('compare-floating-bar');
+            const chipsContainer = document.getElementById('compare-bar-chips');
+
+            if (compareIds.length === 0) {
+                floatingBar.classList.add('hidden');
+                return;
+            }
+
+            floatingBar.classList.remove('hidden');
+            chipsContainer.innerHTML = compareIds.map(id => {
+                const b = motorcycles.find(m => m.id === id);
+                if (!b) return '';
+                return `
+                    <span class="px-2.5 py-1 rounded-lg bg-showroom-800 border border-showroom-600 text-zinc-200 text-xs font-bold flex items-center gap-1.5">
+                        ${b.brand} ${b.model}
+                        <button onclick="toggleCompare(${b.id})" class="text-zinc-400 hover:text-racing-red">×</button>
+                    </span>
+                `;
+            }).join('');
+        }
+
+        function openCompareModal() {
+            const modal = document.getElementById('compare-modal');
+            const body = document.getElementById('compare-modal-body');
+
+            const selectedBikes = compareIds.map(id => motorcycles.find(b => b.id === id)).filter(Boolean);
+
+            if (selectedBikes.length === 0) {
+                body.innerHTML = `
+                    <div class="text-center py-12">
+                        <p class="text-lg font-racing uppercase text-white mb-2">No has seleccionado motocicletas para comparar</p>
+                        <p class="text-xs text-zinc-400 mb-5">Haz clic en el botón "Comparar" de hasta 3 motos en el catálogo.</p>
+                        <button onclick="closeCompareModal()" class="px-5 py-2.5 rounded-xl bg-racing-orange text-black font-bold text-xs uppercase">Ir al Catálogo</button>
+                    </div>
+                `;
+            } else {
+                body.innerHTML = `
+                    <table class="w-full text-left border-collapse min-w-[640px]">
+                        <thead>
+                            <tr class="border-b border-showroom-700">
+                                <th class="p-3 text-xs font-bold uppercase text-zinc-400 w-44">Especificación</th>
+                                ${selectedBikes.map(b => `
+                                    <th class="p-3 align-top">
+                                        <div class="bg-showroom-900 p-3 rounded-2xl border border-showroom-700">
+                                            <img src="${b.image}" class="w-full h-28 object-cover rounded-xl mb-2">
+                                            <span class="text-[10px] font-bold uppercase text-racing-orange block">${b.brand} • ${b.condition}</span>
+                                            <p class="text-base font-racing uppercase text-white">${b.model}</p>
+                                            <p class="text-sm font-extrabold text-emerald-400 mt-1">${formatMXN(b.price)}</p>
+                                        </div>
+                                    </th>
+                                `).join('')}
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-showroom-700 text-xs">
+                            <tr>
+                                <td class="p-3 font-bold text-zinc-400 uppercase">Categoría</td>
+                                ${selectedBikes.map(b => `<td class="p-3 font-bold text-white">${b.category}</td>`).join('')}
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-zinc-400 uppercase">Cilindrada</td>
+                                ${selectedBikes.map(b => `<td class="p-3 font-bold text-racing-orange">${b.cc} cc</td>`).join('')}
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-zinc-400 uppercase">Potencia (HP)</td>
+                                ${selectedBikes.map(b => `<td class="p-3 text-zinc-200 font-semibold">${b.hp}</td>`).join('')}
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-zinc-400 uppercase">Torque</td>
+                                ${selectedBikes.map(b => `<td class="p-3 text-zinc-200 font-semibold">${b.torque}</td>`).join('')}
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-zinc-400 uppercase">Sistema de Frenos</td>
+                                ${selectedBikes.map(b => `<td class="p-3 text-zinc-200">${b.brakes}</td>`).join('')}
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-zinc-400 uppercase">Consumo Combustible</td>
+                                ${selectedBikes.map(b => `<td class="p-3 font-bold text-emerald-400">${b.fuelConsumption}</td>`).join('')}
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-zinc-400 uppercase">Peso / Altura Asiento</td>
+                                ${selectedBikes.map(b => `<td class="p-3 text-zinc-200">${b.weight} / ${b.seatHeight}</td>`).join('')}
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-zinc-400 uppercase">Acción</td>
+                                ${selectedBikes.map(b => `
+                                    <td class="p-3">
+                                        <button onclick="closeCompareModal(); loadBikeIntoCalculator(${b.id});" class="w-full py-2 rounded-xl bg-gradient-to-r from-racing-red to-racing-orange text-white font-display font-bold uppercase text-xs">
+                                            Cotizar Esta Moto
+                                        </button>
+                                    </td>
+                                `).join('')}
+                            </tr>
+                        </tbody>
+                    </table>
+                `;
+            }
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            lucide.createIcons();
+        }
+
+        function closeCompareModal() {
+            const modal = document.getElementById('compare-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // ==========================================================
+        // 5. TOMA A CUENTA (CALCULADORA DE VALUACIÓN)
+        // ==========================================================
+        function setTradeCondition(cond) {
+            currentTradeCondition = cond;
+            document.querySelectorAll('.trade-cond-btn').forEach(btn => {
+                if (btn.getAttribute('data-tcond') === cond) {
+                    btn.className = "trade-cond-btn py-2.5 px-3 rounded-xl border border-racing-orange bg-racing-orange text-black font-bold text-xs uppercase";
+                } else {
+                    btn.className = "trade-cond-btn py-2.5 px-3 rounded-xl border border-showroom-600 bg-showroom-900 text-zinc-300 font-bold text-xs uppercase";
+                }
+            });
+            calculateTradeIn();
+        }
+
+        function calculateTradeIn() {
+            const year = parseInt(document.getElementById('trade-year').value, 10);
+            const cc = parseInt(document.getElementById('trade-cc').value, 10);
+            const km = document.getElementById('trade-km').value;
+
+            let baseVal = 22000;
+            if (cc === 150) baseVal = 19500;
+            else if (cc === 250) baseVal = 31000;
+            else if (cc === 400) baseVal = 58000;
+            else if (cc === 650) baseVal = 96000;
+
+            // Ajuste por año
+            const agePenalty = (2026 - year) * 0.08;
+            baseVal = baseVal * Math.max(0.5, 1 - agePenalty);
+
+            // Ajuste por kilometraje
+            if (km === 'low') baseVal *= 1.06;
+            else if (km === 'high') baseVal *= 0.88;
+
+            // Ajuste por condición estética
+            if (currentTradeCondition === 'bueno') baseVal *= 0.92;
+            else if (currentTradeCondition === 'regular') baseVal *= 0.80;
+
+            currentTradeEstimatedValue = Math.round(baseVal / 500) * 500;
+            document.getElementById('trade-estimated-value').textContent = formatMXN(currentTradeEstimatedValue);
+        }
+
+        function applyTradeInToQuote() {
+            appliedTradeInAmount = currentTradeEstimatedValue;
+            document.getElementById('calc-tradein-applied').textContent = formatMXN(appliedTradeInAmount);
+            updateFinanceSimulation();
+            document.getElementById('cotizador').scrollIntoView({ behavior: 'smooth' });
+            showToast(`Se abonaron ${formatMXN(appliedTradeInAmount)} de tu Toma a Cuenta al cotizador.`, 'repeat');
+        }
+
+        function clearTradeInFromQuote() {
+            appliedTradeInAmount = 0;
+            document.getElementById('calc-tradein-applied').textContent = '$0 MXN';
+            updateFinanceSimulation();
+            showToast('Se retiró el abono de Toma a Cuenta del cotizador.', 'info');
+        }
+
+        // ==========================================================
+        // 6. AGENDAR TEST RIDE Y CITA DE TALLER / WRAP STUDIO
+        // ==========================================================
+        function switchBookingTab(tab) {
+            const btnTest = document.getElementById('tab-btn-testride');
+            const btnWork = document.getElementById('tab-btn-workshop');
+            const dynamicField = document.getElementById('booking-dynamic-field');
+            const bookingTypeInput = document.getElementById('booking-type');
+
+            if (tab === 'testride') {
+                bookingTypeInput.value = 'Prueba de Manejo (Test Ride)';
+                btnTest.className = "py-4 font-racing uppercase text-sm tracking-wider bg-racing-orange text-black flex items-center justify-center gap-2 transition-all";
+                btnWork.className = "py-4 font-racing uppercase text-sm tracking-wider bg-showroom-900 text-zinc-400 hover:text-white flex items-center justify-center gap-2 transition-all";
+
+                dynamicField.innerHTML = `
+                    <label class="block text-xs font-bold uppercase text-zinc-300 mb-1">Motocicleta que deseas probar *</label>
+                    <select id="book-model" class="w-full px-3.5 py-2.5 bg-showroom-900 border border-showroom-600 rounded-xl text-sm text-white focus:outline-none focus:border-racing-orange">
+                        <option value="Italika 280Z (Custom Wrap)">Italika 280Z (Custom Wrap Negro Mate & Rojo)</option>
+                        <option value="Bajaj Pulsar N250 UG">Bajaj Pulsar N250 UG ABS</option>
+                        <option value="CFMoto 250 NK">CFMoto 250 NK</option>
+                        <option value="Morbidelli T250X">Morbidelli T250X Adventure</option>
+                        <option value="Yamaha FZ25 ABS">Yamaha FZ25 ABS</option>
+                        <option value="KTM Duke 390">KTM Duke 390 NG</option>
+                        <option value="Yamaha YZF-R6">Yamaha YZF-R6 (Cita Especial)</option>
+                        <option value="BMW F 850 GS">BMW F 850 GS Adventure</option>
+                    </select>
+                `;
+            } else {
+                bookingTypeInput.value = 'Servicio de Taller / Wrap Studio';
+                btnWork.className = "py-4 font-racing uppercase text-sm tracking-wider bg-racing-orange text-black flex items-center justify-center gap-2 transition-all";
+                btnTest.className = "py-4 font-racing uppercase text-sm tracking-wider bg-showroom-900 text-zinc-400 hover:text-white flex items-center justify-center gap-2 transition-all";
+
+                dynamicField.innerHTML = `
+                    <label class="block text-xs font-bold uppercase text-zinc-300 mb-1">Tipo de Servicio Mecánico o Estético *</label>
+                    <select id="book-model" class="w-full px-3.5 py-2.5 bg-showroom-900 border border-showroom-600 rounded-xl text-sm text-white focus:outline-none focus:border-racing-orange">
+                        <option value="Servicio Mayor / Garantía Oficial (Aceite Sintético + Frenos)">Servicio Mayor / Garantía Oficial (Aceite Sintético + Frenos)</option>
+                        <option value="Instalación de Vinil / Wrap Personalizado (Negro Mate / Racing)">Instalación de Vinil / Wrap Personalizado (Negro Mate / Racing)</option>
+                        <option value="Instalación de Sliders, Escape Deportivo o Luces Auxiliares">Instalación de Sliders, Escape Deportivo o Luces Auxiliares</option>
+                        <option value="Diagnóstico por Escáner y Revisión Pre-Ruta">Diagnóstico por Escáner y Revisión Pre-Ruta</option>
+                    </select>
+                `;
+            }
+            lucide.createIcons();
+        }
+
+        function prefillTestRide(bikeTitle) {
+            switchBookingTab('testride');
+            document.getElementById('citas-servicio').scrollIntoView({ behavior: 'smooth' });
+            showToast(`Selecciona fecha y hora para tu Test Ride en la ${bikeTitle}.`, 'compass');
+        }
+
+        function handleBookingSubmit(e) {
+            e.preventDefault();
+            const type = document.getElementById('booking-type').value;
+            const name = document.getElementById('book-name').value.trim();
+            const modelOrService = document.getElementById('book-model').value;
+            const branch = document.getElementById('book-branch').value;
+            const date = document.getElementById('book-date').value;
+            const time = document.getElementById('book-time').value;
+            const code = 'PASS-' + Math.floor(1000 + Math.random() * 9000);
+
+            const container = document.getElementById('confirmed-bookings-container');
+            const list = document.getElementById('confirmed-bookings-list');
+
+            container.classList.remove('hidden');
+            list.innerHTML = `
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                        <span class="font-extrabold uppercase text-emerald-400">✅ ${type} Confirmada (${code})</span>
+                        <p class="text-white font-bold mt-0.5">${name} — ${modelOrService}</p>
+                        <p class="text-zinc-300">${branch} • Fecha: ${date} a las ${time}</p>
+                    </div>
+                    <span class="px-3 py-1.5 rounded-xl bg-showroom-900 border border-emerald-500/40 font-racing text-emerald-300 text-xs">
+                        PASE VIP ACTIVO
+                    </span>
+                </div>
+            `;
+
+            document.getElementById('booking-form').reset();
+            document.getElementById('book-date').value = '2026-10-24';
+            showToast(`¡Cita confirmada (${code})! Te esperamos en ${branch}.`, 'calendar-check-2');
+        }
+
+        // Notificaciones Toast
+        function showToast(message, iconName = 'zap') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = "pointer-events-auto bg-showroom-950 text-white px-4 py-3.5 rounded-2xl shadow-2xl border border-racing-orange/60 flex items-center gap-3 text-xs sm:text-sm font-semibold transition-all duration-300";
+            toast.innerHTML = `
+                <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-racing-red to-racing-orange flex items-center justify-center text-white shrink-0">
+                    <i data-lucide="${iconName}" class="w-4 h-4"></i>
+                </div>
+                <span>${message}</span>
+            `;
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        // Inicialización al cargar la página
+        window.onload = function () {
+            populateCalculatorSelect();
+            renderShowroom(motorcycles);
+            updateFinanceSimulation();
+            calculateTradeIn();
+            updateCompareUI();
+            lucide.createIcons();
+        };
+    </script>
+</body>
+</html>

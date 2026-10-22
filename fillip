@@ -1,0 +1,263 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amor & Familia | Crear perfil</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-pink-50 min-h-screen">
+
+    <header class="bg-white shadow p-5 text-center">
+        <h1 class="text-3xl font-bold text-pink-600">
+            Amor & Familia
+        </h1>
+        <p class="text-gray-600">
+            Comunidad para compartir experiencias familiares
+        </p>
+    </header>
+
+    <main class="max-w-xl mx-auto mt-10 bg-white p-8 rounded-2xl shadow-lg">
+
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">
+            Crear mi perfil
+        </h2>
+
+        <form id="profileForm">
+
+            <!-- NOMBRE -->
+            <div class="mb-5">
+                <label class="block font-semibold mb-2">
+                    Nombre completo
+                </label>
+
+                <input
+                    type="text"
+                    id="nombre"
+                    required
+                    class="w-full border rounded-lg p-3"
+                    placeholder="Escribe tu nombre"
+                >
+            </div>
+
+            <!-- EDAD -->
+            <div class="mb-5">
+                <label class="block font-semibold mb-2">
+                    Edad
+                </label>
+
+                <input
+                    type="number"
+                    id="edad"
+                    min="1"
+                    max="120"
+                    required
+                    class="w-full border rounded-lg p-3"
+                    placeholder="Escribe tu edad"
+                >
+            </div>
+
+            <!-- PREGUNTA PRINCIPAL -->
+            <div class="mb-5">
+
+                <label class="block font-semibold mb-2">
+                    ¿Tienes hijos?
+                </label>
+
+                <select
+                    id="tieneHijos"
+                    required
+                    onchange="mostrarPreguntasHijos()"
+                    class="w-full border rounded-lg p-3"
+                >
+                    <option value="">
+                        Selecciona una opción
+                    </option>
+
+                    <option value="si">
+                        Sí, tengo hijos
+                    </option>
+
+                    <option value="no">
+                        No tengo hijos
+                    </option>
+                </select>
+
+            </div>
+
+            <!-- PREGUNTAS CONDICIONALES -->
+            <div id="preguntasHijos" class="hidden">
+
+                <div class="mb-5">
+
+                    <label class="block font-semibold mb-2">
+                        ¿Cuántos hijos tienes?
+                    </label>
+
+                    <select
+                        id="cantidadHijos"
+                        class="w-full border rounded-lg p-3"
+                    >
+                        <option value="">
+                            Selecciona una cantidad
+                        </option>
+
+                        <option value="1">1 hijo</option>
+                        <option value="2">2 hijos</option>
+                        <option value="3">3 hijos</option>
+                        <option value="4">4 hijos</option>
+                        <option value="5">5 o más hijos</option>
+                    </select>
+
+                </div>
+
+                <div class="mb-5">
+
+                    <label class="block font-semibold mb-2">
+                        ¿Qué edades tienen tus hijos?
+                    </label>
+
+                    <input
+                        type="text"
+                        id="edadesHijos"
+                        class="w-full border rounded-lg p-3"
+                        placeholder="Ejemplo: 3, 7 y 12 años"
+                    >
+
+                </div>
+
+            </div>
+
+            <!-- BOTÓN -->
+            <button
+                type="submit"
+                class="w-full bg-pink-600 text-white font-bold p-3 rounded-lg hover:bg-pink-700"
+            >
+                Guardar perfil
+            </button>
+
+        </form>
+
+        <!-- RESULTADO -->
+        <div
+            id="resultado"
+            class="hidden mt-8 bg-pink-100 p-5 rounded-xl"
+        ></div>
+
+    </main>
+
+    <script>
+
+        function mostrarPreguntasHijos() {
+
+            const respuesta = document.getElementById("tieneHijos").value;
+
+            const preguntas = document.getElementById("preguntasHijos");
+
+            const cantidad = document.getElementById("cantidadHijos");
+
+            const edades = document.getElementById("edadesHijos");
+
+            if (respuesta === "si") {
+
+                preguntas.classList.remove("hidden");
+
+                cantidad.required = true;
+                edades.required = true;
+
+            } else {
+
+                preguntas.classList.add("hidden");
+
+                cantidad.required = false;
+                edades.required = false;
+
+                cantidad.value = "";
+                edades.value = "";
+
+            }
+        }
+
+        document.getElementById("profileForm").addEventListener(
+            "submit",
+            function(event) {
+
+                event.preventDefault();
+
+                const nombre = document.getElementById("nombre").value;
+
+                const edad = document.getElementById("edad").value;
+
+                const tieneHijos = document.getElementById("tieneHijos").value;
+
+                let cantidadHijos = "0";
+                let edadesHijos = "Sin hijos";
+
+                if (tieneHijos === "si") {
+
+                    cantidadHijos = document.getElementById("cantidadHijos").value;
+
+                    edadesHijos = document.getElementById("edadesHijos").value;
+
+                }
+
+                const perfil = {
+                    nombre: nombre,
+                    edad: edad,
+                    tieneHijos: tieneHijos,
+                    cantidadHijos: cantidadHijos,
+                    edadesHijos: edadesHijos
+                };
+
+                const resultado = document.getElementById("resultado");
+
+                resultado.classList.remove("hidden");
+
+                resultado.innerHTML = `
+                    <h3 class="text-xl font-bold mb-3">
+                        Perfil registrado
+                    </h3>
+
+                    <p><strong>Nombre:</strong> ${escaparHTML(perfil.nombre)}</p>
+
+                    <p><strong>Edad:</strong> ${escaparHTML(perfil.edad)}</p>
+
+                    <p><strong>¿Tiene hijos?:</strong>
+                        ${perfil.tieneHijos === "si" ? "Sí" : "No"}
+                    </p>
+
+                    <p><strong>Cantidad de hijos:</strong>
+                        ${escaparHTML(perfil.cantidadHijos)}
+                    </p>
+
+                    <p><strong>Edades:</strong>
+                        ${escaparHTML(perfil.edadesHijos)}
+                    </p>
+                `;
+
+                console.log("Perfil creado:", perfil);
+
+            }
+        );
+
+        function escaparHTML(valor) {
+            return String(valor).replace(/[&<>"']/g, function(caracter) {
+                const equivalencias = {
+                    "&": "&amp;",
+                    "<": "&lt;",
+                    ">": "&gt;",
+                    '"': "&quot;",
+                    "'": "&#39;"
+                };
+
+                return equivalencias[caracter];
+            });
+        }
+
+    </script>
+
+</body>
+</html>

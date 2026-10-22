@@ -1,0 +1,1643 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BikerMatch & Ruta | Comunidad Motera, Copilotos y Rodadas</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Russo One, Oswald & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Russo+One&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        display: ['"Oswald"', 'sans-serif'],
+                        racing: ['"Russo One"', 'sans-serif'],
+                    },
+                    colors: {
+                        carbon: {
+                            950: '#0a0a0a',
+                            900: '#121212',
+                            800: '#1E1E1E',
+                            700: '#2A2A2A',
+                            600: '#383838',
+                        },
+                        racing: {
+                            red: '#E63946',
+                            orange: '#FF6B00',
+                            neon: '#FF8500'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #121212;
+            color: #f3f4f6;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(230, 57, 70, 0.08) 0%, transparent 35%),
+                radial-gradient(circle at 85% 80%, rgba(255, 107, 0, 0.08) 0%, transparent 35%);
+        }
+        /* Patrón sutil de fibra de carbono en tarjetas destacadas */
+        .carbon-pattern {
+            background-color: #181818;
+            background-image: linear-gradient(45deg, #1e1e1e 25%, transparent 25%), 
+                              linear-gradient(-45deg, #1e1e1e 25%, transparent 25%), 
+                              linear-gradient(45deg, transparent 75%, #1e1e1e 75%), 
+                              linear-gradient(-45deg, transparent 75%, #1e1e1e 75%);
+            background-size: 8px 8px;
+            background-position: 0 0, 0 4px, 4px -4px, -4px 0;
+        }
+        .glass-dark {
+            background: rgba(18, 18, 18, 0.88);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+        .neon-border-hover:hover {
+            box-shadow: 0 0 25px -4px rgba(255, 107, 0, 0.35), 0 0 10px -2px rgba(230, 57, 70, 0.4);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #121212;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #383838;
+            border-radius: 9999px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #FF6B00;
+        }
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.75; transform: scale(1.04); }
+        }
+        .animate-rpm {
+            animation: pulseGlow 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-racing-orange selection:text-black">
+
+    <!-- Contenedor de Notificaciones Toast -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2.5 pointer-events-none"></div>
+
+    <!-- Barra de Navegación Superior -->
+    <header class="sticky top-0 z-40 glass-dark border-b border-carbon-700/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-3">
+            <!-- Logo BikerMatch -->
+            <a href="#" class="flex items-center gap-3 group focus:outline-none">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-racing-red to-racing-orange flex items-center justify-center text-white shadow-lg shadow-racing-red/30 group-hover:rotate-6 transition-transform">
+                    <i data-lucide="flame" class="w-7 h-7 fill-white/20"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-xl sm:text-2xl font-racing tracking-wider text-white uppercase">
+                            BIKER<span class="text-racing-orange">MATCH</span>
+                        </span>
+                        <span class="px-1.5 py-0.5 text-[10px] font-bold bg-racing-red text-white rounded uppercase tracking-wider">& RUTA</span>
+                    </div>
+                    <span class="block text-[11px] font-semibold uppercase tracking-widest text-zinc-400">
+                        Pareja • Mochila • Rodadas
+                    </span>
+                </div>
+            </a>
+
+            <!-- Enlaces Centrales Desktop -->
+            <nav class="hidden lg:flex items-center gap-7 text-sm font-bold uppercase tracking-wider text-zinc-300 font-display">
+                <a href="#garaje-bikers" class="hover:text-racing-orange transition-colors flex items-center gap-1.5">
+                    <i data-lucide="compass" class="w-4 h-4 text-racing-red"></i> Explorar Bikers
+                </a>
+                <a href="#rodadas-eventos" class="hover:text-racing-orange transition-colors flex items-center gap-1.5">
+                    <i data-lucide="map-pinned" class="w-4 h-4 text-racing-orange"></i> Próximas Rodadas
+                    <span id="nav-rides-count" class="px-1.5 py-0.2 bg-carbon-700 text-racing-orange text-xs rounded-md">4</span>
+                </a>
+                <a href="#codigo-ruta" class="hover:text-racing-orange transition-colors flex items-center gap-1.5">
+                    <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i> Código de Ruta
+                </a>
+            </nav>
+
+            <!-- Botones de Acción Derecha -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <!-- Botón Mis Ráfagas / Favoritos -->
+                <button onclick="toggleFavoritesDrawer()" class="relative p-2.5 sm:px-3.5 sm:py-2.5 rounded-xl bg-carbon-800 hover:bg-carbon-700 text-zinc-100 font-bold text-xs sm:text-sm flex items-center gap-2 transition-all border border-carbon-600" title="Mis Ráfagas y Matches">
+                    <span class="text-base leading-none">✌️</span>
+                    <span class="hidden sm:inline font-display tracking-wide uppercase">Ráfagas</span>
+                    <span id="favorites-badge" class="px-1.5 py-0.5 text-xs rounded-full bg-racing-orange text-black font-extrabold">2</span>
+                </button>
+
+                <!-- Botón Intercomunicador / Chat -->
+                <button onclick="openChatDrawer()" class="relative p-2.5 sm:px-3.5 sm:py-2.5 rounded-xl bg-carbon-800 hover:bg-carbon-700 text-zinc-100 font-bold text-xs sm:text-sm flex items-center gap-2 transition-all border border-carbon-600" title="Abrir Intercomunicador Chat">
+                    <i data-lucide="headset" class="w-4 h-4 text-racing-red"></i>
+                    <span class="hidden sm:inline font-display tracking-wide uppercase">Intercom</span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 ring-4 ring-emerald-400/20"></span>
+                </button>
+
+                <!-- Botón Registrar mi Moto / Perfil -->
+                <button onclick="openCreateProfileModal()" class="px-3.5 sm:px-4 py-2.5 rounded-xl bg-gradient-to-r from-racing-red to-racing-orange hover:from-red-600 hover:to-orange-500 text-white font-display font-bold uppercase tracking-wider text-xs sm:text-sm shadow-lg shadow-racing-red/25 flex items-center gap-2 transition-all active:scale-95">
+                    <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                    <span>Registrar Moto</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sección Hero Racing -->
+    <section class="relative overflow-hidden py-10 md:py-16 border-b border-carbon-700/80">
+        <!-- Luces de fondo estilo neón -->
+        <div class="absolute -top-24 left-1/4 w-96 h-96 bg-racing-red/15 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-0 right-10 w-96 h-96 bg-racing-orange/15 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+                <!-- Columna Izquierda: Texto e Impacto -->
+                <div class="lg:col-span-7 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-carbon-800 border border-racing-orange/40 text-racing-orange text-xs font-bold uppercase tracking-widest mb-5">
+                        <span class="w-2 h-2 rounded-full bg-racing-orange animate-ping"></span>
+                        Comunidad Biker Verificada • CDMX, EdoMéx y Centro
+                    </div>
+
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-racing uppercase tracking-tight text-white leading-none mb-5">
+                        LA VIDA ES MEJOR <span class="bg-gradient-to-r from-racing-red via-racing-orange to-amber-400 bg-clip-text text-transparent">SOBRE DOS RUEDAS</span> Y BIEN ACOMPAÑADO.
+                    </h1>
+
+                    <p class="text-base sm:text-lg text-zinc-300 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                        Encuentra a tu <strong class="text-white">pareja motera</strong>, tu <strong class="text-racing-orange">copiloto ("mochila")</strong> con casco listo o compañeros para salir a curvear este fin de semana. Filtra por cilindrada, estilo de moto y ritmo de manejo.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                        <a href="#garaje-bikers" class="w-full sm:w-auto px-7 py-4 rounded-2xl bg-gradient-to-r from-racing-red to-racing-orange hover:from-red-600 hover:to-orange-500 text-white font-display font-bold uppercase tracking-wider text-base shadow-xl shadow-racing-red/25 flex items-center justify-center gap-2.5 transition-all hover:-translate-y-0.5">
+                            <i data-lucide="gauge" class="w-5 h-5"></i>
+                            Explorar Garaje y Perfiles
+                        </a>
+                        <a href="#rodadas-eventos" class="w-full sm:w-auto px-7 py-4 rounded-2xl bg-carbon-800 hover:bg-carbon-700 text-zinc-100 font-display font-bold uppercase tracking-wider text-base border border-carbon-600 flex items-center justify-center gap-2.5 transition-all">
+                            <i data-lucide="calendar-check-2" class="w-5 h-5 text-racing-orange"></i>
+                            Ver Rodadas de la Semana
+                        </a>
+                    </div>
+
+                    <!-- Telemetría / Estadísticas de la Comunidad -->
+                    <div class="mt-10 pt-7 border-t border-carbon-700/80 grid grid-cols-3 gap-4 max-w-xl mx-auto lg:mx-0">
+                        <div class="bg-carbon-800/70 p-3.5 rounded-2xl border border-carbon-700">
+                            <p class="text-2xl sm:text-3xl font-racing text-racing-orange">+8,400</p>
+                            <p class="text-xs text-zinc-400 font-medium uppercase tracking-wider">Pilotos & Mochilas</p>
+                        </div>
+                        <div class="bg-carbon-800/70 p-3.5 rounded-2xl border border-carbon-700">
+                            <p class="text-2xl sm:text-3xl font-racing text-racing-red">100%</p>
+                            <p class="text-xs text-zinc-400 font-medium uppercase tracking-wider">Casco Certificado</p>
+                        </div>
+                        <div class="bg-carbon-800/70 p-3.5 rounded-2xl border border-carbon-700">
+                            <p class="text-2xl sm:text-3xl font-racing text-emerald-400">+120</p>
+                            <p class="text-xs text-zinc-400 font-medium uppercase tracking-wider">Rutas al Mes</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Tarjeta Hero Biker Destacado -->
+                <div class="lg:col-span-5 relative">
+                    <div class="relative mx-auto max-w-md">
+                        <div class="rounded-3xl overflow-hidden shadow-2xl border-2 border-racing-orange/50 carbon-pattern relative group">
+                            <img src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=900&q=80" alt="Motociclista en ruta" class="w-full h-[430px] object-cover object-center group-hover:scale-105 transition-transform duration-700" onerror="this.src='https://placehold.co/600x750/1e1e1e/ff6b00?text=BikerMatch+Ruta'">
+                            <div class="absolute inset-0 bg-gradient-to-t from-carbon-950 via-carbon-950/45 to-transparent"></div>
+
+                            <!-- Badge Superior -->
+                            <div class="absolute top-4 left-4 right-4 flex items-center justify-between">
+                                <span class="px-3 py-1 rounded-full bg-carbon-900/90 border border-emerald-500/40 text-emerald-400 text-xs font-bold flex items-center gap-1.5 backdrop-blur-md">
+                                    <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Casco Verificado
+                                </span>
+                                <span class="px-3 py-1 rounded-full bg-racing-red text-white text-xs font-display font-bold uppercase tracking-wider shadow-lg">
+                                    🔥 Perfil Destacado
+                                </span>
+                            </div>
+
+                            <!-- Info Inferior en Tarjeta Hero -->
+                            <div class="absolute bottom-0 inset-x-0 p-6">
+                                <div class="flex flex-wrap items-center gap-2 mb-2">
+                                    <span class="px-2.5 py-0.5 rounded-md bg-racing-orange text-black text-xs font-extrabold uppercase">
+                                        Naked • 280cc
+                                    </span>
+                                    <span class="px-2.5 py-0.5 rounded-md bg-white/15 backdrop-blur-md text-white text-xs font-semibold">
+                                        Trae Casco Extra + Intercom
+                                    </span>
+                                </div>
+                                <h3 class="text-2xl font-racing text-white uppercase">Ángel "Vortex", 26</h3>
+                                <p class="text-xs text-racing-orange font-bold uppercase tracking-wider mt-0.5">
+                                    🏍️ Italika 280Z / Wrap Negro Mate & Rojo • Tecámac / CDMX
+                                </p>
+                                <p class="text-xs text-zinc-300 line-clamp-2 mt-2">
+                                    "Domingos de desayunar en Tres Marías o rodar hacia las Pirámides. Busco copiloto o chica biker para compartir kilómetros, buen café y pláticas."
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Medidor Flotante RPM / Ritmo -->
+                        <div class="animate-rpm hidden sm:flex absolute -left-6 top-16 bg-carbon-900/95 backdrop-blur-md p-3.5 rounded-2xl shadow-2xl border border-carbon-600 items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-racing-red/20 border border-racing-red/40 text-racing-red flex items-center justify-center">
+                                <i data-lucide="gauge" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <p class="text-[11px] font-bold uppercase text-zinc-400">Ritmo Preferido</p>
+                                <p class="text-xs font-extrabold text-white">Medio / Curvas Seguras</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================================
+         SECCIÓN 1: FILTROS EN TIEMPO REAL Y GALERÍA DE BIKERS
+    =========================================================== -->
+    <main id="garaje-bikers" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 w-full">
+        <!-- Encabezado -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+            <div>
+                <span class="text-xs font-bold uppercase tracking-widest text-racing-orange block mb-1">Garaje & Comunidad Activa</span>
+                <h2 class="text-3xl sm:text-4xl font-racing uppercase text-white tracking-wide">Encuentra tu Match de Ruta</h2>
+            </div>
+            <div class="flex items-center gap-3">
+                <button id="btn-only-favorites" onclick="toggleOnlyFavoritesFilter()" class="px-4 py-2.5 rounded-xl bg-carbon-800 hover:bg-carbon-700 border border-carbon-600 text-xs font-bold uppercase tracking-wider text-zinc-200 flex items-center gap-2 transition-all">
+                    <span>✌️</span>
+                    <span>Ver Solo Mis Ráfagas</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Panel de Telemetría de Filtros -->
+        <div class="bg-carbon-800 rounded-3xl p-5 sm:p-6 shadow-2xl border border-carbon-700 mb-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                <!-- 1. Buscador por nombre, moto o ruta -->
+                <div>
+                    <label class="block text-[11px] font-bold text-zinc-400 uppercase tracking-wider mb-1.5">Buscar Moto, Nombre o Ruta</label>
+                    <div class="relative">
+                        <i data-lucide="search" class="w-4 h-4 text-zinc-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                        <input type="text" id="filter-search" oninput="applyFilters()" placeholder="Ej. 280Z, Pulsar, Tres Marías..." class="w-full pl-10 pr-3 py-2.5 bg-carbon-900 border border-carbon-600 rounded-xl text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-racing-orange transition-all">
+                    </div>
+                </div>
+
+                <!-- 2. Estilo de Moto -->
+                <div>
+                    <label class="block text-[11px] font-bold text-zinc-400 uppercase tracking-wider mb-1.5">Estilo de Moto</label>
+                    <select id="filter-style" onchange="applyFilters()" class="w-full px-3.5 py-2.5 bg-carbon-900 border border-carbon-600 rounded-xl text-sm text-white focus:outline-none focus:border-racing-orange transition-all">
+                        <option value="all">Todos los estilos</option>
+                        <option value="Naked">Naked / Streetfighter</option>
+                        <option value="Deportiva">Deportiva / Racing</option>
+                        <option value="Doble Propósito / Adventure">Doble Propósito / Adventure</option>
+                        <option value="Chopper / Cruiser">Chopper / Cruiser</option>
+                        <option value="Scooter">Scooter / Urbana</option>
+                    </select>
+                </div>
+
+                <!-- 3. Cilindrada -->
+                <div>
+                    <label class="block text-[11px] font-bold text-zinc-400 uppercase tracking-wider mb-1.5">Cilindrada (CC)</label>
+                    <select id="filter-cc" onchange="applyFilters()" class="w-full px-3.5 py-2.5 bg-carbon-900 border border-carbon-600 rounded-xl text-sm text-white focus:outline-none focus:border-racing-orange transition-all">
+                        <option value="all">Cualquier cilindrada</option>
+                        <option value="150cc - 250cc">150cc - 250cc</option>
+                        <option value="250cc - 400cc">250cc - 400cc</option>
+                        <option value="500cc - 900cc">500cc - 900cc</option>
+                        <option value="+1000cc">+1000cc (Alto Cilindraje)</option>
+                    </select>
+                </div>
+
+                <!-- 4. Rol / Qué busca -->
+                <div>
+                    <label class="block text-[11px] font-bold text-zinc-400 uppercase tracking-wider mb-1.5">Rol / ¿Qué busca?</label>
+                    <select id="filter-role" onchange="applyFilters()" class="w-full px-3.5 py-2.5 bg-carbon-900 border border-carbon-600 rounded-xl text-sm text-white focus:outline-none focus:border-racing-orange transition-all">
+                        <option value="all">Todos los roles</option>
+                        <option value="Busco Copiloto / Mochila">Busco Copiloto / Mochila</option>
+                        <option value="Busco Piloto">Busco Piloto (Soy Mochila)</option>
+                        <option value="Cita / Pareja Biker">Cita / Pareja Biker</option>
+                        <option value="Compañeros de Ruta">Compañeros de Ruta</option>
+                    </select>
+                </div>
+
+                <!-- 5. Ubicación -->
+                <div>
+                    <label class="block text-[11px] font-bold text-zinc-400 uppercase tracking-wider mb-1.5">Ubicación / Zona</label>
+                    <select id="filter-location" onchange="applyFilters()" class="w-full px-3.5 py-2.5 bg-carbon-900 border border-carbon-600 rounded-xl text-sm text-white focus:outline-none focus:border-racing-orange transition-all">
+                        <option value="all">Todas las zonas</option>
+                        <option value="EdoMéx / Zona Norte">EdoMéx / Zona Norte (Tecámac, Ecatepec, Coacalco)</option>
+                        <option value="CDMX">CDMX (Todas las alcaldías)</option>
+                        <option value="Morelos / Tres Marías">Morelos / Cuernavaca</option>
+                        <option value="Querétaro">Querétaro, Qro.</option>
+                        <option value="Puebla / Cholula">Puebla / Cholula</option>
+                        <option value="Hidalgo / Pachuca">Hidalgo / Real del Monte</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Barra Inferior de Filtros Rápidos por Ritmo de Manejo -->
+            <div class="mt-5 pt-4 border-t border-carbon-700 flex flex-wrap items-center justify-between gap-3">
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="text-xs font-bold text-zinc-400 mr-1 flex items-center gap-1 uppercase">
+                        <i data-lucide="gauge" class="w-3.5 h-3.5 text-racing-orange"></i> Ritmo:
+                    </span>
+                    <button onclick="setPaceFilter('all')" data-pace="all" class="pace-chip px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all bg-racing-orange text-black">
+                        Todos
+                    </button>
+                    <button onclick="setPaceFilter('Tranquilo / Paseo')" data-pace="Tranquilo / Paseo" class="pace-chip px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all bg-carbon-900 text-zinc-300 hover:bg-carbon-700 border border-carbon-600">
+                        ☕ Tranquilo / Paseo
+                    </button>
+                    <button onclick="setPaceFilter('Medio / Carretera')" data-pace="Medio / Carretera" class="pace-chip px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all bg-carbon-900 text-zinc-300 hover:bg-carbon-700 border border-carbon-600">
+                        🛣️ Medio / Carretera
+                    </button>
+                    <button onclick="setPaceFilter('Rápido / Curvas')" data-pace="Rápido / Curvas" class="pace-chip px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all bg-carbon-900 text-zinc-300 hover:bg-carbon-700 border border-carbon-600">
+                        🔥 Rápido / Curvas
+                    </button>
+                </div>
+
+                <div class="flex items-center gap-4 ml-auto">
+                    <span id="results-counter" class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Mostrando 8 bikers</span>
+                    <button onclick="resetAllFilters()" class="text-xs font-bold text-racing-red hover:text-racing-orange underline uppercase tracking-wider">
+                        Limpiar Filtros
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grid de Perfiles Biker -->
+        <div id="bikers-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Renderizado dinámicamente por JS -->
+        </div>
+
+        <!-- Estado Vacío -->
+        <div id="empty-state" class="hidden bg-carbon-800 rounded-3xl p-12 text-center border border-carbon-700 my-8 max-w-lg mx-auto">
+            <div class="w-16 h-16 rounded-2xl bg-carbon-900 text-racing-orange flex items-center justify-center mx-auto mb-4 border border-carbon-600">
+                <i data-lucide="wrench" class="w-8 h-8"></i>
+            </div>
+            <h3 class="text-xl font-racing uppercase text-white mb-2">Sin pilotos en este radar</h3>
+            <p class="text-sm text-zinc-400 mb-6">Prueba cambiando la cilindrada, el estilo de moto o limpiando los filtros activos.</p>
+            <button onclick="resetAllFilters()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-racing-red to-racing-orange text-white font-display font-bold uppercase tracking-wider text-sm">
+                Mostrar todo el Garaje
+            </button>
+        </div>
+    </main>
+
+    <!-- ==========================================================
+         SECCIÓN 2: PRÓXIMAS RODADAS Y EVENTOS MOTEROS
+    =========================================================== -->
+    <section id="rodadas-eventos" class="py-16 bg-carbon-950 border-t border-b border-carbon-700/80 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+                <div>
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-racing-red/15 border border-racing-red/40 text-racing-red text-xs font-bold uppercase tracking-widest mb-2">
+                        <i data-lucide="calendar-clock" class="w-3.5 h-3.5"></i> Calendario Oficial de Ruta
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl font-racing uppercase text-white">Rodadas Grupales & Citas en Ruta</h2>
+                </div>
+                <p class="text-sm text-zinc-400 max-w-md">
+                    Únete a una salida grupal para conocer a otros pilotos y mochilas en un ambiente seguro, con barredora y puntos de reunión verificados.
+                </p>
+            </div>
+
+            <!-- Contenedor de Tarjetas de Rodadas -->
+            <div id="rides-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Renderizado dinámicamente por JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================================
+         SECCIÓN 3: CÓDIGO DE RUTA Y SEGURIDAD PARA COPILOTOS
+    =========================================================== -->
+    <section id="codigo-ruta" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-12">
+            <span class="text-xs font-bold uppercase tracking-widest text-racing-orange">Seguridad ante todo</span>
+            <h2 class="text-3xl sm:text-4xl font-racing uppercase text-white mt-1">Código de Honor Piloto & Mochila</h2>
+            <p class="text-sm text-zinc-400 mt-2">
+                En BikerMatch & Ruta cuidamos a nuestra comunidad. Estas son las reglas de oro para cada cita o salida a carretera.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="bg-carbon-800 border border-carbon-700 rounded-3xl p-6 hover:border-racing-orange/50 transition-all">
+                <div class="w-12 h-12 rounded-2xl bg-racing-red/15 border border-racing-red/30 text-racing-red flex items-center justify-center mb-4">
+                    <i data-lucide="shield-alert" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-lg font-display font-bold uppercase text-white mb-2">Casco Certificado Obligatorio</h3>
+                <p class="text-sm text-zinc-400 leading-relaxed">
+                    Ningún copiloto sube sin casco certificado (DOT / ECE 22.06), chamarra, guantes y calzado cerrado. Revisa en el perfil si el piloto cuenta con casco extra.
+                </p>
+            </div>
+
+            <div class="bg-carbon-800 border border-carbon-700 rounded-3xl p-6 hover:border-racing-orange/50 transition-all">
+                <div class="w-12 h-12 rounded-2xl bg-racing-orange/15 border border-racing-orange/30 text-racing-orange flex items-center justify-center mb-4">
+                    <i data-lucide="handshake" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-lg font-display font-bold uppercase text-white mb-2">Acuerdo de Ritmo Previo</h3>
+                <p class="text-sm text-zinc-400 leading-relaxed">
+                    Antes de arrancar, acuerden señales con las manos o conecten su intercomunicador. El piloto siempre debe adaptar su manejo a la comodidad de su mochila.
+                </p>
+            </div>
+
+            <div class="bg-carbon-800 border border-carbon-700 rounded-3xl p-6 hover:border-racing-orange/50 transition-all">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mb-4">
+                    <i data-lucide="map-pin" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-lg font-display font-bold uppercase text-white mb-2">Primera Cita en Punto Biker</h3>
+                <p class="text-sm text-zinc-400 leading-relaxed">
+                    Inicien con un café en puntos clásicos y concurridos o sumándose a una de nuestras rodadas oficiales antes de emprender viajes largos.
+                </p>
+            </div>
+
+            <div class="bg-carbon-800 border border-carbon-700 rounded-3xl p-6 hover:border-racing-orange/50 transition-all">
+                <div class="w-12 h-12 rounded-2xl bg-sky-500/15 border border-sky-500/30 text-sky-400 flex items-center justify-center mb-4">
+                    <i data-lucide="wrench" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-lg font-display font-bold uppercase text-white mb-2">Moto al 100% Mecánicamente</h3>
+                <p class="text-sm text-zinc-400 leading-relaxed">
+                    Presión de llantas para dos personas, cadena lubricada, luces y frenos revisados antes de pasar por tu cita o salir a carretera.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-carbon-950 border-t border-carbon-800 py-10 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-racing-red to-racing-orange flex items-center justify-center text-white">
+                    <i data-lucide="flame" class="w-5 h-5"></i>
+                </div>
+                <span class="font-racing uppercase tracking-wider text-white text-sm">BIKERMATCH & RUTA • COMUNIDAD MOTERA</span>
+            </div>
+            <p class="text-xs text-zinc-500 text-center">
+                © 2026 BikerMatch & Ruta. Buenas rutas, casco puesto y regreso seguro a casa. ✌️🏍️
+            </p>
+        </div>
+    </footer>
+
+    <!-- ==========================================================
+         MODAL 1: VISTA DETALLADA DE PERFIL Y GARAJE (FICHA TÉCNICA)
+    =========================================================== -->
+    <div id="profile-detail-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+        <div class="bg-carbon-800 rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl border border-carbon-600 max-h-[92vh] flex flex-col">
+            <div id="profile-modal-content" class="overflow-y-auto custom-scrollbar">
+                <!-- Poblado dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================================
+         MODAL 2: REGISTRAR MI MOTO / CREAR PERFIL BIKER
+    =========================================================== -->
+    <div id="create-profile-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+        <div class="bg-carbon-800 rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl border border-carbon-600 max-h-[92vh] flex flex-col">
+            <!-- Cabecera -->
+            <div class="px-6 py-5 bg-gradient-to-r from-carbon-950 via-carbon-900 to-racing-red/40 border-b border-carbon-700 text-white flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-racing-orange/20 border border-racing-orange/40 text-racing-orange flex items-center justify-center">
+                        <i data-lucide="gauge" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-racing uppercase tracking-wide">Registrar mi Moto y Perfil</h3>
+                        <p class="text-xs text-zinc-400">Sube tu máquina al garaje y conecta para salir a rodar</p>
+                    </div>
+                </div>
+                <button onclick="closeCreateProfileModal()" class="p-2 rounded-xl bg-carbon-700 hover:bg-carbon-600 text-zinc-300 transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Formulario -->
+            <form id="create-profile-form" onsubmit="handleCreateProfile(event)" class="p-6 overflow-y-auto custom-scrollbar space-y-5">
+                <!-- Selector de Foto de Moto/Piloto -->
+                <div>
+                    <label class="block text-xs font-bold text-zinc-300 uppercase tracking-wider mb-2">1. Elige una foto biker o pega el URL de tu foto</label>
+                    <div class="flex items-center gap-3 mb-3 overflow-x-auto pb-2">
+                        <button type="button" onclick="selectPresetPhoto('https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=700&q=80')" class="preset-avatar shrink-0 w-16 h-16 rounded-2xl overflow-hidden ring-4 ring-racing-orange transition-all">
+                            <img src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=200&q=80" class="w-full h-full object-cover" alt="Biker 1">
+                        </button>
+                        <button type="button" onclick="selectPresetPhoto('https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&w=700&q=80')" class="preset-avatar shrink-0 w-16 h-16 rounded-2xl overflow-hidden ring-2 ring-transparent hover:ring-racing-orange transition-all">
+                            <img src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&w=200&q=80" class="w-full h-full object-cover" alt="Biker 2">
+                        </button>
+                        <button type="button" onclick="selectPresetPhoto('https://images.unsplash.com/photo-1609630875171-b1321377ee65?auto=format&fit=crop&w=700&q=80')" class="preset-avatar shrink-0 w-16 h-16 rounded-2xl overflow-hidden ring-2 ring-transparent hover:ring-racing-orange transition-all">
+                            <img src="https://images.unsplash.com/photo-1609630875171-b1321377ee65?auto=format&fit=crop&w=200&q=80" class="w-full h-full object-cover" alt="Biker 3">
+                        </button>
+                        <button type="button" onclick="selectPresetPhoto('https://images.unsplash.com/photo-1591637333184-19aa84b3e01f?auto=format&fit=crop&w=700&q=80')" class="preset-avatar shrink-0 w-16 h-16 rounded-2xl overflow-hidden ring-2 ring-transparent hover:ring-racing-orange transition-all">
+                            <img src="https://images.unsplash.com/photo-1591637333184-19aa84b3e01f?auto=format&fit=crop&w=200&q=80" class="w-full h-full object-cover" alt="Biker 4">
+                        </button>
+                        <button type="button" onclick="selectPresetPhoto('https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=700&q=80')" class="preset-avatar shrink-0 w-16 h-16 rounded-2xl overflow-hidden ring-2 ring-transparent hover:ring-racing-orange transition-all">
+                            <img src="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=200&q=80" class="w-full h-full object-cover" alt="Biker 5">
+                        </button>
+                    </div>
+                    <input type="url" id="new-photo" value="https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=700&q=80" placeholder="https://..." class="w-full px-3.5 py-2 bg-carbon-900 border border-carbon-600 rounded-xl text-xs text-zinc-300 focus:outline-none focus:border-racing-orange">
+                </div>
+
+                <!-- Nombre / Apodo, Edad y Ubicación -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="sm:col-span-2">
+                        <label class="block text-xs font-bold text-zinc-300 uppercase tracking-wider mb-1">Nombre o Apodo Biker *</label>
+                        <input type="text" id="new-name" required placeholder="Ej. Adrián 'Nitro' / Daniela R." class="w-full px-3.5 py-2.5 bg-carbon-900 border border-carbon-600 rounded-xl text-sm text-white focus:outline-none focus:border-racing-orange">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-zinc-300 uppercase tracking-wider mb-1">Edad *</label>
+                        <input type="number" id="new-age" required min="18" max="75" value="27" class="w-full px-3.5 py-2.5 bg-carbon-900 border border-carbon-600 rounded-xl text-sm text-white focus:outline-none focus:border-racing-orange">
+                    </div>
+                </div>
+
+                <!-- Modelo de Moto y Modificaciones -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-zinc-300 uppercase tracking-wider mb-1">Marca y Modelo de tu Moto *</label>
+                        <input type="text" id="new-bike-model" required placeholder="Ej. Italika 280Z / Pulsar N250 / MT-07" class="w-full px-3.5 py-2.5 bg-carbon-900 border border-carbon-600 rounded-xl text-sm text-white focus:outline-none focus:border-racing-orange">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-zinc-300 uppercase tracking-wider mb-1">Modificaciones / Extras *</label>
+                        <input type="text" id="new-bike-mods" required placeholder="Ej. Wrap negro mate, sliders, escape SC" class="w-full px-3.5 py-2.5 bg-carbon-900 border border-carbon-600 rounded-xl text-sm text-white focus:outline-none focus:border-racing-orange">
+                    </div>
+                </div>
+
+                <!-- Estilo, Cilindrada y Ritmo -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-zinc-300 uppercase tracking-wider mb-1">Estilo de Moto *</label>
+                        <select id="new-style" class="w-full px-3.5 py-2.5 bg-carbon-900 border border-carbon-600 rounded-xl text-sm text-white focus:outline-none focus:border-racing-orange">
+                            <option value="Naked">Naked</option>
+                            <option value="Deportiva">Deportiva</option>
+                            <option value="Doble Propósito / Adventure">Doble Propósito / Adventure</option>
+                            <option value="Chopper / Cruiser">Chopper / Cruiser</option>
+                            <option value="Scooter">Scooter</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-zinc-300 uppercase tracking-wider mb-1">Cilindrada *</label>
+                        <select id="new-cc" class="w-full px-3.5 py-2.5 bg-carbon-900 border border-carbon-600 rounded-xl text-sm text-white focus:outline-none focus:border-racing-orange">
+                            <option value="150cc - 250cc">150cc - 250cc</option>
+                            <option value="250cc - 400cc" selected>250cc - 400cc</option>
+                            <option value="500cc - 900cc">500cc - 900cc</option>
+                            <option value="+1000cc">+1000cc</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-zinc-300 uppercase tracking-wider mb-1">Ritmo de Manejo *</label>
+                        <select id="new-pace" class="w-full px-3.5 py-2.5 bg-carbon-900 border border-carbon-600 rounded-xl text-sm text-white focus:outline-none focus:border-racing-orange">
+                            <option value="Tranquilo / Paseo">Tranquilo / Paseo</option>
+                            <option value="Medio / Carretera" selected>Medio / Carretera</option>
+                            <option value="Rápido / Curvas">Rápido / Curvas</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Ubicación, Qué busca y Ruta Favorita -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-zinc-300 uppercase tracking-wider mb-1">Ubicación *</label>
+                        <select id="new-location" class="w-full px-3.5 py-2.5 bg-carbon-900 border border-carbon-600 rounded-xl text-sm text-white focus:outline-none focus:border-racing-orange">
+                            <option value="EdoMéx / Zona Norte">EdoMéx / Zona Norte</option>
+                            <option value="CDMX">CDMX</option>
+                            <option value="Morelos / Tres Marías">Morelos / Tres Marías</option>
+                            <option value="Querétaro">Querétaro</option>
+                            <option value="Puebla / Cholula">Puebla / Cholula</option>
+                            <option value="Hidalgo / Pachuca">Hidalgo / Pachuca</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-zinc-300 uppercase tracking-wider mb-1">¿Qué buscas? *</label>
+                        <select id="new-role" class="w-full px-3.5 py-2.5 bg-carbon-900 border border-carbon-600 rounded-xl text-sm text-white focus:outline-none focus:border-racing-orange">
+                            <option value="Busco Copiloto / Mochila">Busco Copiloto / Mochila</option>
+                            <option value="Cita / Pareja Biker">Cita / Pareja Biker</option>
+                            <option value="Busco Piloto">Busco Piloto (Soy Mochila)</option>
+                            <option value="Compañeros de Ruta">Compañeros de Ruta</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-zinc-300 uppercase tracking-wider mb-1">Ruta Favorita *</label>
+                        <input type="text" id="new-route" required placeholder="Ej. Pirámides / Tres Marías" class="w-full px-3.5 py-2.5 bg-carbon-900 border border-carbon-600 rounded-xl text-sm text-white focus:outline-none focus:border-racing-orange">
+                    </div>
+                </div>
+
+                <!-- Equipo de Seguridad Disponible -->
+                <div>
+                    <label class="block text-xs font-bold text-zinc-300 uppercase tracking-wider mb-2">Equipo de seguridad con el que cuentas</label>
+                    <div class="flex flex-wrap gap-2" id="new-gear-container">
+                        <label class="cursor-pointer">
+                            <input type="checkbox" name="gear" value="Casco Extra Certificado" checked class="peer sr-only">
+                            <span class="px-3 py-1.5 rounded-xl text-xs font-bold bg-carbon-900 border border-carbon-600 text-zinc-300 peer-checked:bg-racing-orange peer-checked:text-black peer-checked:border-racing-orange transition-all inline-block">🪖 Casco Extra Certificado</span>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="checkbox" name="gear" value="Intercomunicador Bluetooth" checked class="peer sr-only">
+                            <span class="px-3 py-1.5 rounded-xl text-xs font-bold bg-carbon-900 border border-carbon-600 text-zinc-300 peer-checked:bg-racing-orange peer-checked:text-black peer-checked:border-racing-orange transition-all inline-block">🎧 Intercomunicador Dúo</span>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="checkbox" name="gear" value="Chamarra con Protecciones" checked class="peer sr-only">
+                            <span class="px-3 py-1.5 rounded-xl text-xs font-bold bg-carbon-900 border border-carbon-600 text-zinc-300 peer-checked:bg-racing-orange peer-checked:text-black peer-checked:border-racing-orange transition-all inline-block">🧥 Chamarra con Protecciones</span>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="checkbox" name="gear" value="Cámara de Acción 360/GoPro" class="peer sr-only">
+                            <span class="px-3 py-1.5 rounded-xl text-xs font-bold bg-carbon-900 border border-carbon-600 text-zinc-300 peer-checked:bg-racing-orange peer-checked:text-black peer-checked:border-racing-orange transition-all inline-block">📷 Cámara GoPro / Insta360</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Bio -->
+                <div>
+                    <label class="block text-xs font-bold text-zinc-300 uppercase tracking-wider mb-1">Sobre mí y mi plan ideal de rodada *</label>
+                    <textarea id="new-bio" required rows="3" placeholder="Cuéntanos qué música escuchas al rodar, a dónde te gusta ir por un café o qué buscas en tu próximo copiloto/pareja..." class="w-full px-3.5 py-2.5 bg-carbon-900 border border-carbon-600 rounded-xl text-sm text-white focus:outline-none focus:border-racing-orange"></textarea>
+                </div>
+
+                <div class="pt-2 flex items-center justify-end gap-3">
+                    <button type="button" onclick="closeCreateProfileModal()" class="px-5 py-2.5 rounded-xl bg-carbon-700 hover:bg-carbon-600 text-zinc-200 font-bold text-sm transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-racing-red to-racing-orange hover:from-red-600 hover:to-orange-500 text-white font-display font-bold uppercase tracking-wider text-sm shadow-lg shadow-racing-red/30 flex items-center gap-2 transition-all">
+                        <i data-lucide="flame" class="w-4 h-4"></i>
+                        Publicar en el Garaje
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==========================================================
+         DRAWER LATERAL 1: MIS RÁFAGAS ✌️ / MATCHES
+    =========================================================== -->
+    <div id="favorites-drawer" class="fixed inset-0 z-50 hidden">
+        <div onclick="toggleFavoritesDrawer()" class="fixed inset-0 bg-black/70 backdrop-blur-sm"></div>
+        <div class="fixed inset-y-0 right-0 max-w-md w-full bg-carbon-800 border-l border-carbon-700 shadow-2xl z-10 flex flex-col">
+            <div class="p-6 bg-gradient-to-r from-carbon-950 to-carbon-800 border-b border-carbon-700 text-white flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl">✌️</span>
+                    <div>
+                        <h3 class="text-lg font-racing uppercase tracking-wide">Mis Ráfagas Biker</h3>
+                        <p class="text-xs text-zinc-400">Pilotos y mochilas con los que hiciste saludo</p>
+                    </div>
+                </div>
+                <button onclick="toggleFavoritesDrawer()" class="p-2 rounded-xl bg-carbon-700 hover:bg-carbon-600 text-zinc-300">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div id="favorites-list" class="p-6 flex-1 overflow-y-auto custom-scrollbar space-y-4">
+                <!-- Poblado dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================================
+         DRAWER LATERAL 2: INTERCOMUNICADOR CHAT BIKER CON ROMPEHIELOS
+    =========================================================== -->
+    <div id="chat-drawer" class="fixed inset-0 z-50 hidden">
+        <div onclick="closeChatDrawer()" class="fixed inset-0 bg-black/70 backdrop-blur-sm"></div>
+        <div class="fixed inset-y-0 right-0 max-w-lg w-full bg-carbon-800 border-l border-carbon-700 shadow-2xl z-10 flex flex-col">
+            <!-- Cabecera del Intercom -->
+            <div class="px-5 py-4 bg-carbon-950 text-white flex items-center justify-between border-b border-carbon-700">
+                <div class="flex items-center gap-3">
+                    <img id="chat-active-avatar" src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=200&q=80" alt="Avatar" class="w-11 h-11 rounded-full object-cover ring-2 ring-racing-orange">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h3 id="chat-active-name" class="font-display font-bold uppercase tracking-wide text-base">Ángel "Vortex"</h3>
+                            <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase">Canal Abierto</span>
+                        </div>
+                        <p id="chat-active-subtitle" class="text-xs text-racing-orange font-semibold">Italika 280Z • EdoMéx / Zona Norte</p>
+                    </div>
+                </div>
+                <button onclick="closeChatDrawer()" class="p-2 rounded-xl bg-carbon-800 hover:bg-carbon-700 text-zinc-300 transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Barra de canales de pilotos activos -->
+            <div id="chat-contacts-bar" class="px-4 py-2.5 bg-carbon-900 flex items-center gap-2 overflow-x-auto border-b border-carbon-700 custom-scrollbar">
+                <!-- Poblado dinámicamente -->
+            </div>
+
+            <!-- Historial de Mensajes -->
+            <div id="chat-messages" class="flex-1 p-5 overflow-y-auto custom-scrollbar space-y-4 bg-carbon-900/60">
+                <!-- Poblado dinámicamente -->
+            </div>
+
+            <!-- Botones de Rompehielos Rápidos Temáticos -->
+            <div class="px-4 py-2.5 bg-carbon-900 border-t border-carbon-700 flex items-center gap-2 overflow-x-auto custom-scrollbar">
+                <span class="text-[11px] font-bold text-racing-orange uppercase shrink-0">Rompehielos:</span>
+                <button onclick="sendQuickIcebreaker('¿Listo/a para una rodada por un café este fin? ☕🏍️')" class="text-xs bg-carbon-800 hover:bg-carbon-700 border border-carbon-600 text-zinc-200 px-3 py-1.5 rounded-full shrink-0 transition-colors">
+                    ¿Listo/a para una rodada por un café? ☕
+                </button>
+                <button onclick="sendQuickIcebreaker('¿Llevas casco extra o llevo el mío? 🪖✌️')" class="text-xs bg-carbon-800 hover:bg-carbon-700 border border-carbon-600 text-zinc-200 px-3 py-1.5 rounded-full shrink-0 transition-colors">
+                    ¿Llevas casco extra o llevo el mío? 🪖
+                </button>
+                <button onclick="sendQuickIcebreaker('¡Qué buen wrap trae tu moto! ¿Cuándo salimos a ruta? 🔥')" class="text-xs bg-carbon-800 hover:bg-carbon-700 border border-carbon-600 text-zinc-200 px-3 py-1.5 rounded-full shrink-0 transition-colors">
+                    ¡Qué buen wrap trae tu moto! ¿Cuándo salimos? 🔥
+                </button>
+            </div>
+
+            <!-- Input de Envío -->
+            <form onsubmit="handleSendMessage(event)" class="p-4 bg-carbon-950 border-t border-carbon-700 flex items-center gap-2.5">
+                <input type="text" id="chat-input" placeholder="Habla por el intercomunicador..." class="flex-1 px-4 py-3 rounded-2xl bg-carbon-800 border border-carbon-600 focus:border-racing-orange text-white placeholder-zinc-500 text-sm focus:outline-none transition-all">
+                <button type="submit" class="px-5 py-3 rounded-2xl bg-gradient-to-r from-racing-red to-racing-orange hover:from-red-600 hover:to-orange-500 text-white font-display font-bold uppercase tracking-wider text-sm shadow-lg shadow-racing-red/20 flex items-center gap-1.5 transition-all">
+                    <span>Transmitir</span>
+                    <i data-lucide="send" class="w-4 h-4"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==========================================================
+         LÓGICA JAVASCRIPT DE BIKERMATCH & RUTA
+    =========================================================== -->
+    <script>
+        // Base de datos inicial de Perfiles Biker con las motos solicitadas
+        let bikers = [
+            {
+                id: 1,
+                name: 'Ángel "Vortex"',
+                age: 26,
+                location: 'EdoMéx / Zona Norte',
+                role: 'Busco Copiloto / Mochila',
+                bikeModel: 'Italika 280Z',
+                ccCategory: '250cc - 400cc',
+                ccExact: '280cc',
+                style: 'Naked',
+                mods: 'Wrap Negro Mate con detalles Rojo Racing, sliders de jaula, escape SC Project, luces LED hiperblancas',
+                pace: 'Medio / Carretera',
+                favoriteRoute: 'Pirámides de Teotihuacán y Tres Marías',
+                gear: ['Casco Extra Certificado', 'Intercomunicador Bluetooth', 'Chamarra con Protecciones', 'Cámara de Acción 360/GoPro'],
+                bio: 'Me encanta mantener la 280Z impecable y salir a rodar temprano los domingos o noches despejadas. Tengo casco extra talla M certificado e intercomunicador para ir platicando y escuchando música en la ruta.',
+                photo: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=700&q=80',
+                verified: true,
+                online: true
+            },
+            {
+                id: 2,
+                name: 'Valeria "Valkiria"',
+                age: 25,
+                location: 'CDMX',
+                role: 'Cita / Pareja Biker',
+                bikeModel: 'CFMoto 250 NK',
+                ccCategory: '150cc - 250cc',
+                ccExact: '250cc',
+                style: 'Naked',
+                mods: 'Pintura personalizada Azul/Naranja Neón, espejos de puño, manijas ajustables y tank pad',
+                pace: 'Medio / Carretera',
+                favoriteRoute: 'La Marquesa y Desierto de los Leones',
+                gear: ['Intercomunicador Bluetooth', 'Chamarra con Protecciones', 'Cámara de Acción 360/GoPro'],
+                bio: 'Piloto mi propia CFMoto NK 250. Busco un chico biker para rodar cada quien en su moto o turnarnos, ir por unos tacos nocturnos en CDMX y planear viajes a pueblitos mágicos.',
+                photo: 'https://images.unsplash.com/photo-1609630875171-b1321377ee65?auto=format&fit=crop&w=700&q=80',
+                verified: true,
+                online: true
+            },
+            {
+                id: 3,
+                name: 'Sebastián Ríos',
+                age: 29,
+                location: 'EdoMéx / Zona Norte',
+                role: 'Busco Copiloto / Mochila',
+                bikeModel: 'Bajaj Pulsar N250',
+                ccCategory: '150cc - 250cc',
+                ccExact: '250cc',
+                style: 'Naked',
+                mods: 'Frenos ABS doble canal, parrilla con respaldo cómodo para copiloto, exploradoras LED y escape deportivo',
+                pace: 'Tranquilo / Paseo',
+                favoriteRoute: 'Real del Monte y Huasca de Ocampo',
+                gear: ['Casco Extra Certificado', 'Intercomunicador Bluetooth', 'Chamarra con Protecciones'],
+                bio: 'Le puse respaldo a la Pulsar N250 para que mi copiloto vaya súper cómoda y segura. Manejo prudente, cero locuras, ideal para disfrutar el paisaje y desayunar unos pastes en Real del Monte.',
+                photo: 'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&w=700&q=80',
+                verified: true,
+                online: true
+            },
+            {
+                id: 4,
+                name: 'Marco "Trail" Mendoza',
+                age: 31,
+                location: 'Querétaro',
+                role: 'Cita / Pareja Biker',
+                bikeModel: 'Morbidelli T250X',
+                ccCategory: '150cc - 250cc',
+                ccExact: '250cc',
+                style: 'Doble Propósito / Adventure',
+                mods: 'Top case de aluminio, barras de protección altas, parabrisas touring y faros auxiliares',
+                pace: 'Medio / Carretera',
+                favoriteRoute: 'Peña de Bernal y Sierra Gorda',
+                gear: ['Casco Extra Certificado', 'Intercomunicador Bluetooth', 'Chamarra con Protecciones'],
+                bio: 'Amante de las rutas largas y los paisajes de montaña en mi Morbidelli T250X. El asiento doble propósito es comodísimo para viajar en pareja. ¿Quién dice yo para ir por un vino y queso?',
+                photo: 'https://images.unsplash.com/photo-1591637333184-19aa84b3e01f?auto=format&fit=crop&w=700&q=80',
+                verified: true,
+                online: false
+            },
+            {
+                id: 5,
+                name: 'Camila Soto (Mochila Pro)',
+                age: 24,
+                location: 'CDMX',
+                role: 'Busco Piloto',
+                bikeModel: 'Copiloto Equipada (Casco AGV K3)',
+                ccCategory: '250cc - 400cc',
+                ccExact: 'Mochila',
+                style: 'Deportiva',
+                mods: 'Tengo mi propio casco AGV certificado, chamarra Alpinestars, guantes y sé inclinarme bien en las curvas',
+                pace: 'Medio / Carretera',
+                favoriteRoute: 'Tres Marías y Tepoztlán',
+                gear: ['Chamarra con Protecciones', 'Intercomunicador Bluetooth', 'Cámara de Acción 360/GoPro'],
+                bio: 'Soy la mejor copiloto que vas a encontrar: no doy cabezazos al frenar, sé acompañar en las curvas, llevo buenas playlists y tomo videos increíbles con mi Insta360. Busco piloto responsable.',
+                photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=700&q=80',
+                verified: true,
+                online: true
+            },
+            {
+                id: 6,
+                name: 'Diego "Torque" Herrera',
+                age: 28,
+                location: 'Puebla / Cholula',
+                role: 'Compañeros de Ruta',
+                bikeModel: 'Yamaha FZ25 ABS',
+                ccCategory: '150cc - 250cc',
+                ccExact: '250cc',
+                style: 'Naked',
+                mods: 'Llantas Pirelli Diablo Rosso, sliders laterales, puerto USB de carga rápida y calcomanías reflectantes',
+                pace: 'Tranquilo / Paseo',
+                favoriteRoute: 'Paso de Cortés y Atlixco',
+                gear: ['Casco Extra Certificado', 'Chamarra con Protecciones'],
+                bio: 'Confiable y guerrera mi Yamaha FZ25. Salgo casi todos los sábados a desayunar a Atlixco o Cholula. Busco tanto chica copiloto como compas de cilindrada 250cc-400cc para armar buen grupo.',
+                photo: 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=700&q=80',
+                verified: true,
+                online: true
+            },
+            {
+                id: 7,
+                name: 'Alexa "Apex" Domínguez',
+                age: 27,
+                location: 'Morelos / Tres Marías',
+                role: 'Cita / Pareja Biker',
+                bikeModel: 'KTM Duke 390 / Yamaha R6',
+                ccCategory: '500cc - 900cc',
+                ccExact: '390cc / 600cc',
+                style: 'Deportiva',
+                mods: 'Quickshifter+, línea completa Akrapovič, sliders de eje y carenado aerodinámico negro/rojo',
+                pace: 'Rápido / Curvas',
+                favoriteRoute: 'Curvas de Tres Marías y Lagunas de Zempoala',
+                gear: ['Intercomunicador Bluetooth', 'Chamarra con Protecciones', 'Cámara de Acción 360/GoPro'],
+                bio: 'Apasionada del motociclismo deportivo y los track days. Entre semana uso mi Duke 390 y el domingo saco la R6. Busco a alguien que comparta esta pasión con respeto a la carretera.',
+                photo: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=700&q=80',
+                verified: true,
+                online: true
+            },
+            {
+                id: 8,
+                name: 'Roberto "Bóxer" Solís',
+                age: 35,
+                location: 'Hidalgo / Pachuca',
+                role: 'Busco Copiloto / Mochila',
+                bikeModel: 'BMW R 1250 GS Adventure',
+                ccCategory: '+1000cc',
+                ccExact: '1250cc',
+                style: 'Doble Propósito / Adventure',
+                mods: 'Maletas laterales y top case con respaldo acolchado, asientos calefactables, faros antiniebla',
+                pace: 'Medio / Carretera',
+                favoriteRoute: 'Corredor de la Montaña y Huasteca',
+                gear: ['Casco Extra Certificado', 'Intercomunicador Bluetooth', 'Chamarra con Protecciones', 'Cámara de Acción 360/GoPro'],
+                bio: 'Ingeniero y viajero en dos ruedas. Mi GS está equipada para que el copiloto viaje como en primera clase. Busco una compañera de aventuras para pueblear y recorrer México.',
+                photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=700&q=80',
+                verified: true,
+                online: false
+            }
+        ];
+
+        // Lista de Rodadas y Eventos Grupales
+        let groupRides = [
+            {
+                id: 101,
+                title: 'Rodada Nocturna & Café a Teotihuacán',
+                date: 'Viernes 20:30 hrs',
+                meetingPoint: 'Gasolinera sobre Autopista México-Pachuca (Ojo de Agua / Tecámac)',
+                destination: 'Zona Arqueológica de Teotihuacán (Cena y Café Biker)',
+                level: 'Todas las cilindradas (150cc+)',
+                pace: 'Tranquilo / Formación en grupo con barredora',
+                attendees: 28,
+                joined: true,
+                image: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=600&q=80'
+            },
+            {
+                id: 102,
+                title: 'Desayuno Biker & Match en Tres Marías',
+                date: 'Domingo 08:00 hrs',
+                meetingPoint: 'Caseta de Tlalpan (Salida a Cuernavaca)',
+                destination: 'Parador de Tres Marías y Mirador de Zempoala',
+                level: '250cc en adelante',
+                pace: 'Medio / Carretera',
+                attendees: 42,
+                joined: false,
+                image: 'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&w=600&q=80'
+            },
+            {
+                id: 103,
+                title: 'Ruta de Curvas y Pastes hacia Real del Monte',
+                date: 'Sábado 07:30 hrs',
+                meetingPoint: 'Explanada Reloj Monumental / Entrada Pachuca',
+                destination: 'Real del Monte y Mineral del Chico, Hgo.',
+                level: '200cc en adelante',
+                pace: 'Medio / Curvas Escénicas',
+                attendees: 19,
+                joined: false,
+                image: 'https://images.unsplash.com/photo-1591637333184-19aa84b3e01f?auto=format&fit=crop&w=600&q=80'
+            },
+            {
+                id: 104,
+                title: 'Rodada de Parejas y Mochilas a Valle de Bravo',
+                date: 'Domingo 07:00 hrs',
+                meetingPoint: 'Estela de Luz / Salida Santa Fe hacia La Marquesa',
+                destination: 'Embarcadero de Valle de Bravo',
+                level: '250cc en adelante (Especial con Copiloto)',
+                pace: 'Tranquilo / Turístico',
+                attendees: 31,
+                joined: false,
+                image: 'https://images.unsplash.com/photo-1609630875171-b1321377ee65?auto=format&fit=crop&w=600&q=80'
+            }
+        ];
+
+        // Estado de Ráfagas (Favoritos), Filtros y Chat
+        let favoriteIds = [1, 2];
+        let selectedPace = 'all';
+        let onlyFavoritesActive = false;
+        let activeChatBikerId = 1;
+
+        let chatHistories = {
+            1: [
+                { sender: 'them', text: '¡Qué onda! ✌️ Vi tu perfil en BikerMatch. Este domingo salimos hacia las Pirámides en la 280Z.', time: '19:15' },
+                { sender: 'me', text: '¡Buenas rutas Ángel! Qué bien luce el wrap negro mate con rojo en tu moto 🔥', time: '19:17' },
+                { sender: 'them', text: '¡Gracias! Recién se lo puse. Tengo casco extra certificado e intercomunicador listo por si te animas a rodar por un café.', time: '19:18' }
+            ],
+            2: [
+                { sender: 'them', text: '¡Ráfagas! ✌️🏍️ ¿Cuándo armamos rodada nocturna por CDMX?', time: 'Ayer' }
+            ]
+        };
+
+        // Respuestas automáticas temáticas de motos para el simulador de chat
+        const bikerSimulatedReplies = [
+            "¡Eso suena excelente! ✌️ Yo llevo el intercomunicador cargado al 100% para ir platicando y escuchando buena música en el camino.",
+            "¡Trato hecho! 🏍️🔥 Paso a revisar presión de llantas y lubricar cadena para que vayamos al cien. ¿Nos vemos en el punto de encuentro?",
+            "¡Súper bien! Sí cuento con casco extra certificado ECE 22.06 y guantes, así que solo trae buena actitud y chamarra cómoda 🪖✨",
+            "¡Qué buena ruta! Me late un ritmo tranquilo para disfrutar el paisaje y parar por un café de olla y unas fotos con las motos 📸☕"
+        ];
+
+        // Renderizar Galería de Perfiles Biker
+        function renderBikers(list) {
+            const grid = document.getElementById('bikers-grid');
+            const emptyState = document.getElementById('empty-state');
+            const counter = document.getElementById('results-counter');
+
+            counter.textContent = `Mostrando ${list.length} ${list.length === 1 ? 'biker' : 'bikers'}`;
+
+            if (list.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            grid.innerHTML = list.map(biker => {
+                const isFav = favoriteIds.includes(biker.id);
+                return `
+                    <article class="bg-carbon-800 rounded-3xl overflow-hidden border border-carbon-700 neon-border-hover transition-all duration-300 flex flex-col group">
+                        <!-- Cabecera con Foto -->
+                        <div class="relative h-64 overflow-hidden bg-carbon-900">
+                            <img src="${biker.photo}" alt="${biker.name}" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x700/1e1e1e/ff6b00?text=${encodeURIComponent(biker.name)}'">
+                            <div class="absolute inset-0 bg-gradient-to-t from-carbon-900 via-carbon-900/30 to-transparent"></div>
+
+                            <!-- Estado Online + Casco Verificado -->
+                            <div class="absolute top-3.5 left-3.5 flex flex-wrap items-center gap-1.5">
+                                <span class="px-2.5 py-1 rounded-full bg-carbon-950/90 border border-carbon-600 text-zinc-200 text-[11px] font-bold flex items-center gap-1.5 backdrop-blur-md">
+                                    <span class="w-2 h-2 rounded-full ${biker.online ? 'bg-emerald-400' : 'bg-amber-400'}"></span>
+                                    ${biker.online ? 'En Ruta / Online' : 'Activo hoy'}
+                                </span>
+                                ${biker.verified ? `
+                                <span class="px-2.5 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-[10px] font-bold uppercase backdrop-blur-md flex items-center gap-1">
+                                    <i data-lucide="shield-check" class="w-3 h-3"></i> Casco Verificado
+                                </span>` : ''}
+                            </div>
+
+                            <!-- Botón Dar Ráfaga ✌️ (Like/Favorito) -->
+                            <button onclick="toggleFavorite(${biker.id})" class="absolute top-3.5 right-3.5 w-10 h-10 rounded-xl ${isFav ? 'bg-racing-orange text-black ring-2 ring-white' : 'bg-carbon-950/85 text-white hover:bg-racing-red'} backdrop-blur-md flex items-center justify-center shadow-lg transition-all active:scale-90" title="Mandar Ráfagas ✌️">
+                                <span class="text-base leading-none">✌️</span>
+                            </button>
+
+                            <!-- Nombre y Ubicación sobre foto -->
+                            <div class="absolute bottom-3 left-4 right-4">
+                                <span class="inline-block px-2.5 py-0.5 rounded bg-racing-red text-white text-[10px] font-display font-bold uppercase tracking-wider mb-1">
+                                    ${biker.role}
+                                </span>
+                                <h3 class="text-xl font-racing text-white uppercase tracking-wide">${biker.name}, ${biker.age}</h3>
+                                <p class="text-xs text-zinc-300 flex items-center gap-1 mt-0.5">
+                                    <i data-lucide="map-pin" class="w-3.5 h-3.5 text-racing-orange shrink-0"></i> ${biker.location}
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Cuerpo: Ficha Técnica de la Moto -->
+                        <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+                            <div class="space-y-3">
+                                <!-- Bloque Ficha Técnica Destacada -->
+                                <div class="p-3 rounded-2xl bg-carbon-900 border border-carbon-700">
+                                    <div class="flex items-center justify-between gap-2 mb-1">
+                                        <span class="text-xs font-extrabold text-racing-orange uppercase tracking-wider flex items-center gap-1.5">
+                                            <i data-lucide="flame" class="w-3.5 h-3.5 text-racing-red"></i> ${biker.bikeModel}
+                                        </span>
+                                        <span class="px-2 py-0.5 rounded bg-carbon-700 text-zinc-200 text-[11px] font-bold">
+                                            ${biker.ccExact} • ${biker.style}
+                                        </span>
+                                    </div>
+                                    <p class="text-[11px] text-zinc-400 line-clamp-2">
+                                        <strong class="text-zinc-200">Mods:</strong> ${biker.mods}
+                                    </p>
+                                </div>
+
+                                <!-- Ritmo y Ruta Favorita -->
+                                <div class="space-y-1.5 text-xs">
+                                    <div class="flex items-center justify-between text-zinc-300">
+                                        <span class="text-zinc-500 font-semibold flex items-center gap-1">
+                                            <i data-lucide="gauge" class="w-3.5 h-3.5 text-racing-orange"></i> Ritmo:
+                                        </span>
+                                        <span class="font-bold text-white">${biker.pace}</span>
+                                    </div>
+                                    <div class="flex items-center justify-between text-zinc-300">
+                                        <span class="text-zinc-500 font-semibold flex items-center gap-1">
+                                            <i data-lucide="navigation" class="w-3.5 h-3.5 text-racing-red"></i> Ruta Top:
+                                        </span>
+                                        <span class="font-bold text-zinc-200 truncate max-w-[160px]" title="${biker.favoriteRoute}">${biker.favoriteRoute}</span>
+                                    </div>
+                                </div>
+
+                                <!-- Chips de Equipo de Seguridad -->
+                                <div class="flex flex-wrap gap-1.5 pt-1">
+                                    ${biker.gear.slice(0, 3).map(g => `
+                                        <span class="px-2 py-0.5 rounded-md bg-carbon-700/70 text-zinc-300 text-[10px] font-semibold border border-carbon-600">
+                                            ✓ ${g}
+                                        </span>
+                                    `).join('')}
+                                </div>
+                            </div>
+
+                            <!-- Botones de Acción -->
+                            <div class="pt-3 border-t border-carbon-700 grid grid-cols-2 gap-2.5">
+                                <button onclick="openProfileDetail(${biker.id})" class="px-3 py-2.5 rounded-xl bg-carbon-700 hover:bg-carbon-600 text-zinc-100 font-display font-bold uppercase tracking-wider text-xs flex items-center justify-center gap-1.5 transition-colors">
+                                    <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5 text-racing-orange"></i>
+                                    Ver Garaje
+                                </button>
+                                <button onclick="startChatWith(${biker.id})" class="px-3 py-2.5 rounded-xl bg-gradient-to-r from-racing-red to-racing-orange hover:from-red-600 hover:to-orange-500 text-white font-display font-bold uppercase tracking-wider text-xs shadow-md shadow-racing-red/20 flex items-center justify-center gap-1.5 transition-all">
+                                    <i data-lucide="headset" class="w-3.5 h-3.5"></i>
+                                    Invitar a Rodar
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        // Renderizar Tarjetas de Rodadas Grupales
+        function renderRides() {
+            const container = document.getElementById('rides-grid');
+            document.getElementById('nav-rides-count').textContent = groupRides.length;
+
+            container.innerHTML = groupRides.map(ride => `
+                <div class="bg-carbon-800 rounded-3xl overflow-hidden border ${ride.joined ? 'border-racing-orange' : 'border-carbon-700'} flex flex-col sm:flex-row shadow-xl transition-all">
+                    <div class="sm:w-48 h-48 sm:h-auto relative shrink-0 bg-carbon-900">
+                        <img src="${ride.image}" alt="${ride.title}" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-carbon-950/80 via-transparent to-transparent sm:hidden"></div>
+                        <span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-carbon-950/90 border border-racing-orange/40 text-racing-orange text-[11px] font-bold">
+                            ${ride.date}
+                        </span>
+                    </div>
+                    <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                                <span class="text-[11px] font-bold uppercase tracking-wider text-racing-red">${ride.level}</span>
+                                <span class="px-2.5 py-0.5 rounded-full bg-carbon-900 border border-carbon-600 text-zinc-300 text-xs font-bold flex items-center gap-1">
+                                    🏍️ <strong class="text-racing-orange">${ride.attendees}</strong> confirmados
+                                </span>
+                            </div>
+                            <h3 class="text-xl font-racing uppercase text-white mb-2">${ride.title}</h3>
+                            <div class="space-y-1.5 text-xs text-zinc-300 mb-4">
+                                <p class="flex items-start gap-2">
+                                    <i data-lucide="map-pin" class="w-4 h-4 text-racing-orange shrink-0 mt-0.5"></i>
+                                    <span><strong class="text-white">Salida:</strong> ${ride.meetingPoint}</span>
+                                </p>
+                                <p class="flex items-start gap-2">
+                                    <i data-lucide="flag" class="w-4 h-4 text-racing-red shrink-0 mt-0.5"></i>
+                                    <span><strong class="text-white">Destino:</strong> ${ride.destination}</span>
+                                </p>
+                                <p class="flex items-center gap-2">
+                                    <i data-lucide="gauge" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                                    <span><strong class="text-white">Ritmo:</strong> ${ride.pace}</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="pt-3 border-t border-carbon-700 flex items-center justify-between gap-3">
+                            <span class="text-[11px] text-zinc-400 font-medium">
+                                ${ride.joined ? '✅ Estás apuntado en la lista de salida' : 'Casco y equipo obligatorio'}
+                            </span>
+                            <button onclick="toggleJoinRide(${ride.id})" class="px-4 py-2.5 rounded-xl font-display font-bold uppercase tracking-wider text-xs transition-all flex items-center gap-1.5 ${ride.joined ? 'bg-emerald-500/20 border border-emerald-500/50 text-emerald-300 hover:bg-emerald-500/30' : 'bg-gradient-to-r from-racing-red to-racing-orange text-white shadow-lg shadow-racing-red/20'}">
+                                <i data-lucide="${ride.joined ? 'check-circle-2' : 'plus-circle'}" class="w-4 h-4"></i>
+                                <span>${ride.joined ? 'Confirmado en Ruta' : 'Unirse a la Rodada'}</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            lucide.createIcons();
+        }
+
+        // Unirse o salir de una Rodada Grupal con contador dinámico
+        function toggleJoinRide(rideId) {
+            const ride = groupRides.find(r => r.id === rideId);
+            if (!ride) return;
+
+            if (ride.joined) {
+                ride.joined = false;
+                ride.attendees -= 1;
+                showToast(`Saliste de la lista para "${ride.title}".`, 'info');
+            } else {
+                ride.joined = true;
+                ride.attendees += 1;
+                showToast(`¡Te uniste a "${ride.title}"! Prepara el casco 🏍️🔥`, 'flame');
+            }
+            renderRides();
+        }
+
+        // Aplicar Filtros en Tiempo Real
+        function applyFilters() {
+            const search = document.getElementById('filter-search').value.toLowerCase().trim();
+            const style = document.getElementById('filter-style').value;
+            const cc = document.getElementById('filter-cc').value;
+            const role = document.getElementById('filter-role').value;
+            const location = document.getElementById('filter-location').value;
+
+            const filtered = bikers.filter(b => {
+                const matchesSearch = !search ||
+                    b.name.toLowerCase().includes(search) ||
+                    b.bikeModel.toLowerCase().includes(search) ||
+                    b.favoriteRoute.toLowerCase().includes(search) ||
+                    b.mods.toLowerCase().includes(search) ||
+                    b.location.toLowerCase().includes(search);
+
+                const matchesStyle = style === 'all' || b.style === style;
+                const matchesCC = cc === 'all' || b.ccCategory === cc;
+                const matchesRole = role === 'all' || b.role === role;
+                const matchesLocation = location === 'all' || b.location === location;
+                const matchesPace = selectedPace === 'all' || b.pace === selectedPace;
+                const matchesFavs = !onlyFavoritesActive || favoriteIds.includes(b.id);
+
+                return matchesSearch && matchesStyle && matchesCC && matchesRole && matchesLocation && matchesPace && matchesFavs;
+            });
+
+            renderBikers(filtered);
+        }
+
+        // Filtro por ritmo de manejo
+        function setPaceFilter(pace) {
+            selectedPace = pace;
+            document.querySelectorAll('.pace-chip').forEach(btn => {
+                if (btn.getAttribute('data-pace') === pace) {
+                    btn.className = "pace-chip px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all bg-racing-orange text-black";
+                } else {
+                    btn.className = "pace-chip px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all bg-carbon-900 text-zinc-300 hover:bg-carbon-700 border border-carbon-600";
+                }
+            });
+            applyFilters();
+        }
+
+        // Alternar filtro rápido "Ver Solo Mis Ráfagas"
+        function toggleOnlyFavoritesFilter() {
+            onlyFavoritesActive = !onlyFavoritesActive;
+            const btn = document.getElementById('btn-only-favorites');
+            if (onlyFavoritesActive) {
+                btn.className = "px-4 py-2.5 rounded-xl bg-racing-orange text-black border border-racing-orange text-xs font-extrabold uppercase tracking-wider flex items-center gap-2 transition-all shadow-lg shadow-racing-orange/20";
+            } else {
+                btn.className = "px-4 py-2.5 rounded-xl bg-carbon-800 hover:bg-carbon-700 border border-carbon-600 text-xs font-bold uppercase tracking-wider text-zinc-200 flex items-center gap-2 transition-all";
+            }
+            applyFilters();
+        }
+
+        function resetAllFilters() {
+            document.getElementById('filter-search').value = '';
+            document.getElementById('filter-style').value = 'all';
+            document.getElementById('filter-cc').value = 'all';
+            document.getElementById('filter-role').value = 'all';
+            document.getElementById('filter-location').value = 'all';
+            onlyFavoritesActive = false;
+            document.getElementById('btn-only-favorites').className = "px-4 py-2.5 rounded-xl bg-carbon-800 hover:bg-carbon-700 border border-carbon-600 text-xs font-bold uppercase tracking-wider text-zinc-200 flex items-center gap-2 transition-all";
+            setPaceFilter('all');
+        }
+
+        // Sistema de Ráfagas ✌️ (Favoritos)
+        function toggleFavorite(bikerId) {
+            const biker = bikers.find(b => b.id === bikerId);
+            if (!biker) return;
+
+            const idx = favoriteIds.indexOf(bikerId);
+            if (idx === -1) {
+                favoriteIds.push(bikerId);
+                if (!chatHistories[bikerId]) {
+                    chatHistories[bikerId] = [
+                        { sender: 'them', text: `¡Ráfagas! ✌️🏍️ Qué gusto coincidir por aquí, cuando quieras armamos ruta hacia ${biker.favoriteRoute}.`, time: 'Ahora' }
+                    ];
+                }
+                showToast(`¡Mandaste Ráfagas ✌️ a ${biker.name}! Añadido a tus favoritos.`, 'flame');
+            } else {
+                favoriteIds.splice(idx, 1);
+                showToast(`Quitaste a ${biker.name} de tus Ráfagas.`, 'info');
+            }
+
+            document.getElementById('favorites-badge').textContent = favoriteIds.length;
+            applyFilters();
+            renderFavoritesDrawerList();
+        }
+
+        // Modal de Vista Detallada de Perfil y Garaje
+        function openProfileDetail(bikerId) {
+            const biker = bikers.find(b => b.id === bikerId);
+            if (!biker) return;
+
+            const isFav = favoriteIds.includes(biker.id);
+            const modal = document.getElementById('profile-detail-modal');
+            const content = document.getElementById('profile-modal-content');
+
+            content.innerHTML = `
+                <div class="relative h-80 sm:h-96 bg-carbon-900">
+                    <img src="${biker.photo}" alt="${biker.name}" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-carbon-800 via-carbon-950/40 to-transparent"></div>
+                    <button onclick="closeProfileDetail()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-carbon-950/75 hover:bg-racing-red text-white flex items-center justify-center backdrop-blur-md transition-colors">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                    <div class="absolute bottom-5 left-6 right-6 text-white">
+                        <div class="flex flex-wrap items-center gap-2 mb-2">
+                            <span class="px-3 py-1 rounded-md bg-racing-red text-xs font-display font-bold uppercase tracking-wider">
+                                ${biker.role}
+                            </span>
+                            <span class="px-3 py-1 rounded-md bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-bold backdrop-blur-md">
+                                ✓ Casco y Moto Verificados
+                            </span>
+                            <span class="px-3 py-1 rounded-md bg-carbon-950/80 text-zinc-200 text-xs font-semibold">
+                                📍 ${biker.location}
+                            </span>
+                        </div>
+                        <h2 class="text-3xl font-racing uppercase">${biker.name}, ${biker.age} años</h2>
+                    </div>
+                </div>
+
+                <div class="p-6 sm:p-8 space-y-6">
+                    <!-- Ficha Técnica del Garaje -->
+                    <div class="p-5 rounded-2xl carbon-pattern border border-racing-orange/40">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-3 pb-3 border-b border-carbon-700">
+                            <div>
+                                <span class="text-[10px] font-bold uppercase tracking-widest text-zinc-400 block">Máquina Principal en Garaje</span>
+                                <h3 class="text-xl font-racing text-racing-orange uppercase">${biker.bikeModel}</h3>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="px-3 py-1 rounded-lg bg-carbon-900 border border-carbon-600 text-white text-xs font-bold">${biker.style}</span>
+                                <span class="px-3 py-1 rounded-lg bg-racing-red/20 border border-racing-red/40 text-racing-red text-xs font-extrabold">${biker.ccExact}</span>
+                            </div>
+                        </div>
+                        <p class="text-xs sm:text-sm text-zinc-300 leading-relaxed">
+                            <strong class="text-white uppercase text-xs">Modificaciones y Extras:</strong> ${biker.mods}
+                        </p>
+                    </div>
+
+                    <!-- Ritmo y Ruta -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="p-4 rounded-2xl bg-carbon-900 border border-carbon-700">
+                            <p class="text-[11px] font-bold uppercase text-racing-orange">Ritmo de Manejo</p>
+                            <p class="text-sm font-bold text-white mt-1">⚡ ${biker.pace}</p>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-carbon-900 border border-carbon-700">
+                            <p class="text-[11px] font-bold uppercase text-racing-red">Ruta Favorita para Cita</p>
+                            <p class="text-sm font-bold text-white mt-1">🛣️ ${biker.favoriteRoute}</p>
+                        </div>
+                    </div>
+
+                    <!-- Equipo de Seguridad con el que cuenta -->
+                    <div>
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-2.5">Equipo de Seguridad Disponible</h4>
+                        <div class="flex flex-wrap gap-2">
+                            ${biker.gear.map(item => `
+                                <span class="px-3.5 py-1.5 rounded-xl bg-carbon-900 text-emerald-300 text-xs font-bold border border-emerald-500/30 flex items-center gap-1.5">
+                                    <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> ${item}
+                                </span>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Biografía del Piloto -->
+                    <div>
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-2">Sobre el Piloto y Plan de Rodada</h4>
+                        <p class="text-zinc-200 leading-relaxed text-sm bg-carbon-900 p-4 rounded-2xl border border-carbon-700">
+                            "${biker.bio}"
+                        </p>
+                    </div>
+
+                    <!-- Botones de Acción del Modal -->
+                    <div class="pt-4 border-t border-carbon-700 flex flex-col sm:flex-row items-center justify-end gap-3">
+                        <button onclick="toggleFavorite(${biker.id}); closeProfileDetail();" class="w-full sm:w-auto px-5 py-3 rounded-xl ${isFav ? 'bg-racing-orange text-black' : 'bg-carbon-700 hover:bg-carbon-600 text-white'} font-display font-bold uppercase tracking-wider text-sm flex items-center justify-center gap-2 transition-colors">
+                            <span>✌️</span>
+                            <span>${isFav ? 'En tus Ráfagas' : 'Mandar Ráfagas'}</span>
+                        </button>
+                        <button onclick="closeProfileDetail(); startChatWith(${biker.id});" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-racing-red to-racing-orange hover:from-red-600 hover:to-orange-500 text-white font-display font-bold uppercase tracking-wider text-sm shadow-lg shadow-racing-red/25 flex items-center justify-center gap-2 transition-all">
+                            <i data-lucide="headset" class="w-4 h-4"></i>
+                            <span>Invitar a Rodar a ${biker.name.split(' ')[0]}</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            lucide.createIcons();
+        }
+
+        function closeProfileDetail() {
+            const modal = document.getElementById('profile-detail-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // Drawer de Ráfagas / Favoritos
+        function toggleFavoritesDrawer() {
+            const drawer = document.getElementById('favorites-drawer');
+            if (drawer.classList.contains('hidden')) {
+                renderFavoritesDrawerList();
+                drawer.classList.remove('hidden');
+            } else {
+                drawer.classList.add('hidden');
+            }
+        }
+
+        function renderFavoritesDrawerList() {
+            const container = document.getElementById('favorites-list');
+            const favBikers = bikers.filter(b => favoriteIds.includes(b.id));
+
+            if (favBikers.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12">
+                        <div class="w-14 h-14 rounded-2xl bg-carbon-900 text-racing-orange flex items-center justify-center mx-auto mb-3 border border-carbon-700 text-2xl">
+                            ✌️
+                        </div>
+                        <p class="font-bold text-white">Aún no has mandado Ráfagas</p>
+                        <p class="text-xs text-zinc-400 mt-1">Pulsa el botón ✌️ en cualquier tarjeta para guardar a tus favoritos.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = favBikers.map(b => `
+                <div class="p-3.5 rounded-2xl border border-carbon-700 bg-carbon-900 flex items-center justify-between gap-3 hover:border-racing-orange/50 transition-colors">
+                    <div class="flex items-center gap-3">
+                        <img src="${b.photo}" alt="${b.name}" class="w-14 h-14 rounded-2xl object-cover">
+                        <div>
+                            <h4 class="font-bold text-white text-sm">${b.name}, ${b.age}</h4>
+                            <p class="text-xs text-racing-orange font-bold">${b.bikeModel}</p>
+                            <p class="text-[11px] text-zinc-400">${b.location}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <button onclick="toggleFavoritesDrawer(); startChatWith(${b.id});" class="px-3 py-2 rounded-xl bg-gradient-to-r from-racing-red to-racing-orange text-white text-xs font-display font-bold uppercase tracking-wider flex items-center gap-1">
+                            <i data-lucide="headset" class="w-3.5 h-3.5"></i> Intercom
+                        </button>
+                        <button onclick="toggleFavorite(${b.id})" class="p-2 rounded-xl text-zinc-400 hover:text-racing-red hover:bg-carbon-800 transition-colors" title="Quitar">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            lucide.createIcons();
+        }
+
+        // Intercomunicador Chat Biker
+        function startChatWith(bikerId) {
+            activeChatBikerId = bikerId;
+            if (!favoriteIds.includes(bikerId)) {
+                favoriteIds.push(bikerId);
+                document.getElementById('favorites-badge').textContent = favoriteIds.length;
+                applyFilters();
+            }
+            if (!chatHistories[bikerId]) {
+                const b = bikers.find(item => item.id === bikerId);
+                chatHistories[bikerId] = [
+                    { sender: 'them', text: `¡Qué onda! ✌️ Soy ${b ? b.name : ''}. Mi ${b ? b.bikeModel : 'moto'} está lista para salir a ruta.`, time: 'Ahora' }
+                ];
+            }
+            openChatDrawer();
+        }
+
+        function openChatDrawer() {
+            document.getElementById('chat-drawer').classList.remove('hidden');
+            renderChatWindow();
+        }
+
+        function closeChatDrawer() {
+            document.getElementById('chat-drawer').classList.add('hidden');
+        }
+
+        function renderChatWindow() {
+            const activeBiker = bikers.find(b => b.id === activeChatBikerId) || bikers[0];
+            document.getElementById('chat-active-avatar').src = activeBiker.photo;
+            document.getElementById('chat-active-name').textContent = activeBiker.name;
+            document.getElementById('chat-active-subtitle').textContent = `${activeBiker.bikeModel} • ${activeBiker.location}`;
+
+            const contactsBar = document.getElementById('chat-contacts-bar');
+            const chatIds = Array.from(new Set([...favoriteIds, activeChatBikerId]));
+            contactsBar.innerHTML = chatIds.map(id => {
+                const prof = bikers.find(b => b.id === id);
+                if (!prof) return '';
+                const isCurrent = id === activeChatBikerId;
+                return `
+                    <button onclick="startChatWith(${prof.id})" class="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold shrink-0 transition-all ${isCurrent ? 'bg-racing-orange text-black shadow-sm' : 'bg-carbon-800 text-zinc-300 hover:bg-carbon-700 border border-carbon-600'}">
+                        <img src="${prof.photo}" class="w-5 h-5 rounded-full object-cover">
+                        <span>${prof.name.split(' ')[0]}</span>
+                    </button>
+                `;
+            }).join('');
+
+            const messagesContainer = document.getElementById('chat-messages');
+            const history = chatHistories[activeChatBikerId] || [];
+
+            messagesContainer.innerHTML = history.map(msg => {
+                if (msg.sender === 'me') {
+                    return `
+                        <div class="flex justify-end">
+                            <div class="max-w-[82%] bg-gradient-to-r from-racing-red to-racing-orange text-white rounded-2xl rounded-br-xs px-4 py-2.5 shadow-md">
+                                <p class="text-sm leading-relaxed">${msg.text}</p>
+                                <span class="block text-[10px] text-orange-100 text-right mt-1">${msg.time}</span>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    return `
+                        <div class="flex items-end gap-2.5">
+                            <img src="${activeBiker.photo}" class="w-7 h-7 rounded-full object-cover shrink-0 ring-1 ring-racing-orange">
+                            <div class="max-w-[82%] bg-carbon-800 text-zinc-100 rounded-2xl rounded-bl-xs px-4 py-2.5 shadow-sm border border-carbon-700">
+                                <p class="text-sm leading-relaxed">${msg.text}</p>
+                                <span class="block text-[10px] text-zinc-500 mt-1">${msg.time}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+            }).join('');
+
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            lucide.createIcons();
+        }
+
+        function handleSendMessage(e) {
+            e.preventDefault();
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            appendUserMessage(text);
+            input.value = '';
+        }
+
+        function sendQuickIcebreaker(text) {
+            appendUserMessage(text);
+        }
+
+        function appendUserMessage(text) {
+            if (!chatHistories[activeChatBikerId]) {
+                chatHistories[activeChatBikerId] = [];
+            }
+
+            const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            chatHistories[activeChatBikerId].push({
+                sender: 'me',
+                text: text,
+                time: timeStr
+            });
+
+            renderChatWindow();
+
+            const targetId = activeChatBikerId;
+            setTimeout(() => {
+                const reply = bikerSimulatedReplies[Math.floor(Math.random() * bikerSimulatedReplies.length)];
+                chatHistories[targetId].push({
+                    sender: 'them',
+                    text: reply,
+                    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                });
+                if (!document.getElementById('chat-drawer').classList.contains('hidden')) {
+                    renderChatWindow();
+                }
+            }, 1000);
+        }
+
+        // Modal Registrar Moto / Crear Perfil
+        function openCreateProfileModal() {
+            const modal = document.getElementById('create-profile-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeCreateProfileModal() {
+            const modal = document.getElementById('create-profile-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function selectPresetPhoto(url) {
+            document.getElementById('new-photo').value = url;
+            document.querySelectorAll('.preset-avatar').forEach(btn => {
+                const img = btn.querySelector('img');
+                if (img && url.includes(img.src.split('?')[0])) {
+                    btn.className = "preset-avatar shrink-0 w-16 h-16 rounded-2xl overflow-hidden ring-4 ring-racing-orange transition-all";
+                } else {
+                    btn.className = "preset-avatar shrink-0 w-16 h-16 rounded-2xl overflow-hidden ring-2 ring-transparent hover:ring-racing-orange transition-all";
+                }
+            });
+        }
+
+        function handleCreateProfile(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('new-name').value.trim();
+            const age = parseInt(document.getElementById('new-age').value, 10) || 26;
+            const bikeModel = document.getElementById('new-bike-model').value.trim();
+            const mods = document.getElementById('new-bike-mods').value.trim();
+            const style = document.getElementById('new-style').value;
+            const ccCategory = document.getElementById('new-cc').value;
+            const pace = document.getElementById('new-pace').value;
+            const location = document.getElementById('new-location').value;
+            const role = document.getElementById('new-role').value;
+            const favoriteRoute = document.getElementById('new-route').value.trim();
+            const bio = document.getElementById('new-bio').value.trim();
+            const photo = document.getElementById('new-photo').value.trim() || 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=700&q=80';
+
+            const checkedGear = Array.from(document.querySelectorAll('#new-gear-container input[name="gear"]:checked'))
+                .map(cb => cb.value);
+
+            const newBiker = {
+                id: Date.now(),
+                name,
+                age,
+                location,
+                role,
+                bikeModel,
+                ccCategory,
+                ccExact: ccCategory.split(' ')[0],
+                style,
+                mods,
+                pace,
+                favoriteRoute,
+                gear: checkedGear.length > 0 ? checkedGear : ['Casco Extra Certificado', 'Chamarra con Protecciones'],
+                bio,
+                photo,
+                verified: true,
+                online: true
+            };
+
+            bikers.unshift(newBiker);
+            resetAllFilters();
+            closeCreateProfileModal();
+            document.getElementById('create-profile-form').reset();
+
+            showToast(`¡Ráfagas ${name}! Tu ${bikeModel} ya está en el Garaje.`, 'flame');
+            document.getElementById('garaje-bikers').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Notificaciones Toast estilo Racing
+        function showToast(message, iconName = 'flame') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = "pointer-events-auto bg-carbon-950 text-white px-4 py-3.5 rounded-2xl shadow-2xl border border-racing-orange/50 flex items-center gap-3 text-sm font-semibold transition-all duration-300";
+            toast.innerHTML = `
+                <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-racing-red to-racing-orange flex items-center justify-center text-white shrink-0">
+                    <i data-lucide="${iconName}" class="w-4 h-4"></i>
+                </div>
+                <span>${message}</span>
+            `;
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        // Inicialización
+        window.onload = function () {
+            renderBikers(bikers);
+            renderRides();
+            lucide.createIcons();
+        };
+    </script>
+</body>
+</html>
